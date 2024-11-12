@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Database Application</title>
+  </head>
+  <body>
+    <h1>
+      Database Connection Status:
+      <span id="dbStatus"></span>
+      <img
+        id="loadingGif"
+        class="loading-gif"
+        src="loading_100px.gif"
+        alt="Loading..."
+      />
+    </h1>
+
+    <br />
+    <hr />
+    <br />
+
+    <h2>Show All Event Records</h2>
+    <table id="demotable" border="1">
+      <thead>
+        <tr>
+          <th>Event ID</th>
+          <th>Event Title</th>
+          <th>Event Date</th>
+          <th>Event Instruction</th>
+          <th>Event Observation</th>
+          <th>Batch ID</th>
+          <th>User ID</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <br />
+    <hr />
+    <br />
+
+    <h2>Reset Event Records</h2>
+    <button id="resetDemotable">Reset</button>
+    <div id="resetResultMsg"></div>
+
+    <br />
+    <hr />
+    <br />
+
+    <h2>Insert New Event Record</h2>
+    <form id="insertDemotable">
+      Event Title:
+      <input
+        type="text"
+        id="insertEventTitle"
+        placeholder="Enter Event Title"
+        maxlength="50"
+        required
+      />
+      <br /><br />
+      Event Date: <input type="date" id="insertEventDate" required />
+      <br /><br />
+      Event Instruction:
+      <input
+        type="text"
+        id="insertEventInstruction"
+        placeholder="Enter Instruction"
+        maxlength="255"
+      />
+      <br /><br />
+      Event Observation:
+      <input
+        type="text"
+        id="insertEventObservation"
+        placeholder="Enter Observation"
+        maxlength="255"
+      />
+      <br /><br />
+      Batch ID:
+      <input
+        type="number"
+        id="insertBatchId"
+        placeholder="Enter Batch ID"
+        required
+      />
+      <br /><br />
+      User ID:
+      <input
+        type="number"
+        id="insertUserId"
+        placeholder="Enter User ID"
+        required
+      />
+      <br /><br />
+      <button type="submit">Insert</button>
+    </form>
+    <div id="insertResultMsg"></div>
+
+    <br />
+    <hr />
+    <br />
+
+    <h2>Update Event Record</h2>
+    <form id="updateDemotable">
+      Event ID:
+      <input
+        type="number"
+        id="updateEventId"
+        placeholder="Enter Event ID"
+        required
+      />
+      <br /><br />
+      New Event Title:
+      <input
+        type="text"
+        id="updateEventTitle"
+        placeholder="Enter New Event Title"
+        maxlength="50"
+      />
+      <br /><br />
+      New Event Date: <input type="date" id="updateEventDate" /> <br /><br />
+      New Event Instruction:
+      <input
+        type="text"
+        id="updateEventInstruction"
+        placeholder="Enter New Instruction"
+        maxlength="255"
+      />
+      <br /><br />
+      New Event Observation:
+      <input
+        type="text"
+        id="updateEventObservation"
+        placeholder="Enter New Observation"
+        maxlength="255"
+      />
+      <br /><br />
+      New Batch ID:
+      <input
+        type="number"
+        id="updateBatchId"
+        placeholder="Enter New Batch ID"
+      />
+      <br /><br />
+      New User ID:
+      <input type="number" id="updateUserId" placeholder="Enter New User ID" />
+      <br /><br />
+      <button type="submit">Update</button>
+    </form>
+    <div id="updateResultMsg"></div>
+
+    <br />
+    <hr />
+    <br />
+
+    <h2>Delete an Event Record</h2>
+    <form id="deleteDemotable">
+      Event ID:
+      <input
+        type="number"
+        id="deleteEventId"
+        placeholder="Enter Event ID to Delete"
+        required
+      />
+      <br /><br />
+      <button type="submit">Delete</button>
+    </form>
+    <div id="deleteResultMsg"></div>
+
+    <br />
+    <hr />
+    <br />
+
+    <h2>Count the Event Records</h2>
+    <button id="countDemotable">Count</button>
+    <div id="countResultMsg"></div>
+
+    <script src="scripts.js"></script>
+  </body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Database Application</title>
+  </head>
+  <body>
+    <h1>
+      Database Connection Status:
+      <span id="dbStatus"></span>
+      <img
+        id="loadingGif"
+        class="loading-gif"
+        src="loading_100px.gif"
+        alt="Loading..."
+      />
+    </h1>
+
+    <br />
+    <hr />
+    <br />
+
+    <h2>Show All Locations</h2>
+    <table id="demotable" border="1">
+      <thead>
+        <tr>
+          <th>Field Name</th>
+          <th>Zone ID</th>
+          <th>Is Outdoor</th>
+          <th>Is Irrigated</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <br />
+    <hr />
+    <br />
+
+    <h2>Reset All Locations</h2>
+    <p>
+      If you wish to reset the table, press the reset button. If this is the
+      first time you're running this page, you MUST use reset.
+    </p>
+    <button id="resetDemotable">Reset</button>
+    <div id="resetResultMsg"></div>
+
+    <br />
+    <hr />
+    <br />
+
+    <h2>Insert Values into Locations</h2>
+    <form id="insertDemotable">
+      Field Name:
+      <input
+        type="text"
+        id="insertFieldName"
+        placeholder="Enter Field Name"
+        required
+      />
+      <br /><br />
+      Zone ID:
+      <input
+        type="number"
+        id="insertZoneId"
+        placeholder="Enter Zone ID"
+        required
+      />
+      <br /><br />
+      Is Outdoor: <input type="checkbox" id="insertIsOutdoor" /> <br /><br />
+      Is Irrigated: <input type="checkbox" id="insertIsIrrigated" />
+      <br /><br />
+      <button type="submit">Insert</button>
+    </form>
+    <div id="insertResultMsg"></div>
+
+    <br />
+    <hr />
+    <br />
+
+    <h2>Update Location Details</h2>
+    <form id="updateLocationDemotable">
+      Field Name:
+      <input
+        type="text"
+        id="updateFieldName"
+        placeholder="Enter Field Name"
+        required
+      />
+      <br /><br />
+      Zone ID:
+      <input
+        type="number"
+        id="updateZoneId"
+        placeholder="Enter Zone ID"
+        required
+      />
+      <br /><br />
+      New Is Outdoor: <input type="checkbox" id="updateIsOutdoor" />
+      <br /><br />
+      New Is Irrigated: <input type="checkbox" id="updateIsIrrigated" />
+      <br /><br />
+      <button type="submit">Update</button>
+    </form>
+    <div id="updateResultMsg"></div>
+
+    <br />
+    <hr />
+    <br />
+
+    <h2>Delete a Location</h2>
+    <form id="deleteLocationDemotable">
+      Field Name:
+      <input
+        type="text"
+        id="deleteFieldName"
+        placeholder="Enter Field Name to Delete"
+        required
+      />
+      <br /><br />
+      Zone ID:
+      <input
+        type="number"
+        id="deleteZoneId"
+        placeholder="Enter Zone ID to Delete"
+        required
+      />
+      <br /><br />
+      <button type="submit">Delete</button>
+    </form>
+    <div id="deleteResultMsg"></div>
+
+    <br />
+    <hr />
+    <br />
+
+    <h2>Count the Tuples in Locations</h2>
+    <button id="countDemotable">Count</button>
+    <div id="countResultMsg"></div>
+
+    <script src="scripts.js"></script>
+  </body>
+</html>
