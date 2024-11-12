@@ -33,14 +33,22 @@ async function fetchAndDisplayLocations() {
 
   // Clear existing table rows
   tableBody.innerHTML = "";
+  console.log(demotableContent);
 
   // Populate the table with data
   demotableContent.forEach((location) => {
     const row = tableBody.insertRow();
 
-    ["field_name", "zone_id", "is_outdoor", "is_irrigated"].forEach((field) => {
+    // ["field_name", "zone_id", "is_outdoor", "is_irrigated"].forEach((field, index) => {
+    //   // console.log(location[index]);
+    //   const cell = row.insertCell();
+    //   cell.textContent = location[index]?location[index]:(location[index-1]?0:1);
+    // });
+
+    ["field_name", "zone_id", "is_outdoor"].forEach((field, index) => {
+      // console.log(location[index]);
       const cell = row.insertCell();
-      cell.textContent = location[field];
+      cell.textContent = location[index];
     });
   });
 }
