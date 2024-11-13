@@ -30,6 +30,7 @@ async function fetchAndDisplayLocations() {
 
   const responseData = await response.json();
   const demotableContent = responseData.data;
+  console.log(demotableContent)
 
   // Clear existing table rows
   tableBody.innerHTML = "";

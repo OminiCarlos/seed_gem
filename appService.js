@@ -75,9 +75,7 @@ async function testOracleConnection() {
     });
 }
 
-
-
-
 module.exports = {
     testOracleConnection,
+    withOracleDB
 };
