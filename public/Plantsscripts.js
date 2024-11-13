@@ -21,10 +21,10 @@ async function checkDbConnection() {
 }
 
 // Fetches data from the demotable and displays it.
-async function fetchAndDisplayLocations() {
+async function fetchAndDisplayUsers() {
   const tableBody = document.querySelector("#demotable tbody");
 
-  const response = await fetch("/locations/demotable", {
+  const response = await fetch("/demotable", {
     method: "GET",
   });
 
@@ -35,26 +35,34 @@ async function fetchAndDisplayLocations() {
   tableBody.innerHTML = "";
 
   // Populate the table with data
-  demotableContent.forEach((location) => {
+  demotableContent.forEach((plant) => {
     const row = tableBody.insertRow();
 
-    ["field_name", "zone_id", "is_outdoor", "is_irrigated"].forEach((field) => {
+    // Adjust to the number of columns in the 'Plant' table
+    [
+      "plant_id",
+      "yield_type",
+      "common_name",
+      "scientific_name",
+      "overview_notes",
+      "cultivar_name",
+    ].forEach((field) => {
       const cell = row.insertCell();
-      cell.textContent = location[field];
+      cell.textContent = plant[field];
     });
   });
 }
 
 // This function resets or initializes the demotable.
 async function resetDemotable() {
-  const response = await fetch("/locations/initiate-demotable", {
+  const response = await fetch("/initiate-demotable", {
     method: "POST",
   });
   const responseData = await response.json();
 
   const messageElement = document.getElementById("resetResultMsg");
   messageElement.textContent = responseData.success
-    ? "Demotable initiated successfully!"
+    ? "demotable initiated successfully!"
     : "Error initiating table!";
   fetchTableData();
 }
@@ -63,17 +71,19 @@ async function resetDemotable() {
 async function insertDemotable(event) {
   event.preventDefault();
 
-  const locationData = {
-    field_name: document.getElementById("insertFieldName").value,
-    zone_id: document.getElementById("insertZoneId").value,
-    is_outdoor: document.getElementById("insertIsOutdoor").checked,
-    is_irrigated: document.getElementById("insertIsIrrigated").checked,
+  const plantData = {
+    plant_id: document.getElementById("insertPlantId").value,
+    yield_type: document.getElementById("insertYieldType").value,
+    common_name: document.getElementById("insertCommonName").value,
+    scientific_name: document.getElementById("insertScientificName").value,
+    overview_notes: document.getElementById("insertOverviewNotes").value,
+    cultivar_name: document.getElementById("insertCultivarName").value,
   };
 
-  const response = await fetch("/locations/insert-demotable", {
+  const response = await fetch("/insert-demotable", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(locationData),
+    body: JSON.stringify(plantData),
   });
 
   const responseData = await response.json();
@@ -84,65 +94,63 @@ async function insertDemotable(event) {
   fetchTableData();
 }
 
-// Updates location details in the demotable.
-async function updateLocationDemotable(event) {
+// Updates plant details in the demotable.
+async function updatePlantDemotable(event) {
   event.preventDefault();
 
-  const locationData = {
-    field_name: document.getElementById("updateFieldName").value,
-    zone_id: document.getElementById("updateZoneId").value,
-    is_outdoor: document.getElementById("updateIsOutdoor").checked,
-    is_irrigated: document.getElementById("updateIsIrrigated").checked,
+  const plantData = {
+    plant_id: document.getElementById("updatePlantId").value,
+    yield_type: document.getElementById("updateYieldType").value,
+    common_name: document.getElementById("updateCommonName").value,
+    scientific_name: document.getElementById("updateScientificName").value,
+    overview_notes: document.getElementById("updateOverviewNotes").value,
+    cultivar_name: document.getElementById("updateCultivarName").value,
   };
 
-  const response = await fetch("/locations/update-demotable", {
+  const response = await fetch("/update-plant-demotable", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(locationData),
+    body: JSON.stringify(plantData),
   });
 
   const responseData = await response.json();
   const messageElement = document.getElementById("updateResultMsg");
   messageElement.textContent = responseData.success
-    ? "Location updated successfully!"
-    : "Error updating location!";
+    ? "Plant updated successfully!"
+    : "Error updating plant!";
   fetchTableData();
 }
 
-// Deletes a location from the demotable by Field Name and Zone ID.
-async function deleteLocationDemotable(event) {
+// Deletes a plant from the demotable by Plant ID.
+async function deletePlantDemotable(event) {
   event.preventDefault();
 
-  const fieldName = document.getElementById("deleteFieldName").value;
-  const zoneId = document.getElementById("deleteZoneId").value;
+  const plantId = document.getElementById("deletePlantId").value;
 
-  const response = await fetch(
-    `/location-delete-demotable/${fieldName}/${zoneId}`,
-    {
-      method: "DELETE",
-    }
-  );
+  const response = await fetch(`/delete-plant-demotable/${plantId}`, {
+    method: "DELETE",
+  });
 
   const responseData = await response.json();
   const messageElement = document.getElementById("deleteResultMsg");
   messageElement.textContent = responseData.success
-    ? "Location deleted successfully!"
-    : "Error deleting location!";
+    ? "Plant deleted successfully!"
+    : "Error deleting plant!";
   fetchTableData();
 }
 
-// // Counts rows in the demotable.
-// async function countDemotable() {
-//   const response = await fetch("/locations-count-demotable", {
-//     method: "GET",
-//   });
+// Counts rows in the demotable.
+async function countDemotable() {
+  const response = await fetch("/count-demotable", {
+    method: "GET",
+  });
 
-//   const responseData = await response.json();
-//   const messageElement = document.getElementById("countResultMsg");
-//   messageElement.textContent = responseData.success
-//     ? `The number of tuples in demotable: ${responseData.count}`
-//     : "Error in count demotable!";
-// }
+  const responseData = await response.json();
+  const messageElement = document.getElementById("countResultMsg");
+  messageElement.textContent = responseData.success
+    ? `The number of tuples in demotable: ${responseData.count}`
+    : "Error in count demotable!";
+}
 
 // Initializes the webpage functionalities.
 window.onload = function () {
@@ -155,11 +163,11 @@ window.onload = function () {
     .getElementById("insertDemotable")
     .addEventListener("submit", insertDemotable);
   document
-    .getElementById("updateLocationDemotable")
-    .addEventListener("submit", updateLocationDemotable);
+    .getElementById("updatePlantDemotable")
+    .addEventListener("submit", updatePlantDemotable);
   document
-    .getElementById("deleteLocationDemotable")
-    .addEventListener("submit", deleteLocationDemotable);
+    .getElementById("deletePlantDemotable")
+    .addEventListener("submit", deletePlantDemotable);
   document
     .getElementById("countDemotable")
     .addEventListener("click", countDemotable);
@@ -167,5 +175,5 @@ window.onload = function () {
 
 // General function to refresh the displayed table data.
 function fetchTableData() {
-  fetchAndDisplayLocations();
+  fetchAndDisplayUsers();
 }
