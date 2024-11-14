@@ -39,13 +39,13 @@ async function fetchAndDisplayLocations() {
   demotableContent.forEach((location) => {
     const row = tableBody.insertRow();
 
-    ["field_name", "zone_id", "is_outdoor", "is_irrigated"].forEach((field) => {
+    ["field_name", "zone_id", "is_outdoor", "is_irrigated"].forEach((field,index) => {
       const cell = row.insertCell();
-      cell.textContent = location[field];
+      cell.textContent = location[index];
     });
   });
 }
-
+//
 // This function resets or initializes the demotable.
 async function resetDemotable() {
   const response = await fetch("/locations/initiate-demotable", {
@@ -118,7 +118,7 @@ async function deleteLocationDemotable(event) {
   const zoneId = document.getElementById("deleteZoneId").value;
 
   const response = await fetch(
-    `/location-delete-demotable/${fieldName}/${zoneId}`,
+    `/locations/delete-demotable/${fieldName}/${zoneId}`,
     {
       method: "DELETE",
     }

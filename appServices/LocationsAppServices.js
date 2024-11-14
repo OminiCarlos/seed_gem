@@ -109,7 +109,7 @@ async function insertLocationDemotable(field_name, zone_id, is_outdoor, is_irrig
 
 async function fetchLocationDemotableFromDb() {
     return await withOracleDB(async (connection) => {
-        const result = await connection.execute('SELECT * FROM Location',[],{ outFormat: oracledb.OBJECT });
+        const result = await connection.execute('SELECT * FROM Location');
         return result.rows;
     }).catch(() => {
         return [];
