@@ -18,11 +18,20 @@ async function initiateDemotable() {
             console.log('Table might not exist, proceeding to create...');
         }
 
+        // we can pass a command to read a sql to execute a series of sql tables.
+        // I think it makes sense to intialize the entire ER diagram first, given some tables are dependent
+        // on other tables (foreign keys and total participations.)
+        // Therefore it's important to consider the order of intializing tables.
+        // moreover, the error messages are not very clear (we only know it failed but we don't know why.)
         const result = await connection.execute(`
             CREATE TABLE DEMOTABLE (
                 id NUMBER PRIMARY KEY,
                 name VARCHAR2(20)
-            )
+            );
+            CREATE TABLE Location_irrigation (
+                is_outdoor BOOLEAN PRIMARY KEY,
+                is_irrigated BOOLEAN
+            );
         `);
         return true;
     }).catch(() => {
