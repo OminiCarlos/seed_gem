@@ -118,7 +118,7 @@ async function insertLocationDemotable(field_name, zone_id, is_outdoor, is_irrig
 
 async function fetchLocationDemotableFromDb() {
     return await withOracleDB(async (connection) => {
-        const result = await connection.execute('SELECT * FROM Location');
+        const result = await connection.execute('SELECT * FROM Location'); // replace with a join sql statement
         return result.rows;
     }).catch(() => {
         return [];

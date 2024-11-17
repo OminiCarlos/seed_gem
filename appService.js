@@ -75,6 +75,11 @@ async function testOracleConnection() {
     });
 }
 
+// TODO: add intialize demoTables, which intializes all the tables in ER diagram by running a sql file. 
+
+
+
+
 module.exports = {
     testOracleConnection,
     withOracleDB

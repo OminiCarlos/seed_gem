@@ -1,4 +1,5 @@
 const express = require('express');
+//----------update to correspondant xxxAppService
 const appService = require('../appServices/LocationsAppServices.js'); // replace with the correspondant xxxAppService.js
 const router = express.Router();
 

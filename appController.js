@@ -1,8 +1,9 @@
 const express = require('express');
 const appService = require('./appService'); 
+// ------------------------step 1: import sub appControllers---------
 const locationsController = require('./appControllers/LocationsAppController'); // Import the Locations controller
 
-//------------------load routers below -----------------------
+//------------------step 2: load routers below -----------------------
 const router = express.Router();
 
 router.use('/locations',locationsController) // Mount Locations routes
