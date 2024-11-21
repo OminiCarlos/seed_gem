@@ -22,7 +22,7 @@ async function checkDbConnection() {
 async function fetchAndDisplayUsers() {
   const tableBody = document.querySelector("#demotable tbody");
 
-  const response = await fetch("/demotable", { method: "GET" });
+  const response = await fetch("/batches/demotable", { method: "GET" });
   const responseData = await response.json();
   const demotableContent = responseData.data;
 
@@ -50,7 +50,9 @@ async function fetchAndDisplayUsers() {
 
 // This function resets or initializes the demotable.
 async function resetDemotable() {
-  const response = await fetch("/initiate-demotable", { method: "POST" });
+  const response = await fetch("/batches/initiate-demotable", {
+    method: "POST",
+  });
   const responseData = await response.json();
 
   document.getElementById("resetResultMsg").textContent = responseData.success
@@ -82,9 +84,9 @@ async function insertDemotable(event) {
     body: JSON.stringify(batchData),
   });
 
-  document.getElementById("insertResultMsg").textContent = (
-    await response.json()
-  ).success
+  const responseData = await response.json();
+  const messageElement = document.getElementById("insertResultMsg");
+  messageElement.textContent = responseData.success
     ? "Data inserted successfully!"
     : "Error inserting data!";
   fetchTableData();
@@ -107,17 +109,17 @@ async function updateBatchDemotable(event) {
     zone_id: document.getElementById("updateZoneId").value,
   };
 
-  const response = await fetch("/update-batch-demotable", {
+  const response = await fetch("/batches/update-demotable", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(batchData),
   });
 
-  document.getElementById("updateResultMsg").textContent = (
-    await response.json()
-  ).success
-    ? "Batch updated successfully!"
-    : "Error updating batch!";
+  const responseData = await response.json();
+  const messageElement = document.getElementById("updateResultMsg");
+  messageElement.textContent = responseData.success
+    ? "deleted successfully!"
+    : "Error deleting!";
   fetchTableData();
 }
 
@@ -127,27 +129,16 @@ async function deleteBatchDemotable(event) {
 
   const batchId = document.getElementById("deleteBatchId").value;
 
-  const response = await fetch(`/delete-batch-demotable/${batchId}`, {
+  const response = await fetch(`/batches/delete-demotable/${batchId}`, {
     method: "DELETE",
   });
 
-  document.getElementById("deleteResultMsg").textContent = (
-    await response.json()
-  ).success
-    ? "Batch deleted successfully!"
-    : "Error deleting batch!";
+  const responseData = await response.json();
+  const messageElement = document.getElementById("deleteResultMsg");
+  messageElement.textContent = responseData.success
+    ? "deleted successfully!"
+    : "Error deleting!";
   fetchTableData();
-}
-
-// Counts rows in the demotable.
-async function countDemotable() {
-  const response = await fetch("/count-demotable", { method: "GET" });
-
-  document.getElementById("countResultMsg").textContent = (
-    await response.json()
-  ).success
-    ? `The number of tuples in demotable: ${(await response.json()).count}`
-    : "Error in count demotable!";
 }
 
 // Initializes the webpage functionalities.
