@@ -15,16 +15,16 @@ async function checkDbConnection() {
     .then((text) => {
       statusElem.textContent = text;
     })
-    .catch((error) => {
+    .catch(() => {
       statusElem.textContent = "connection timed out";
     });
 }
 
-// Fetches data from the demotable and displays it.
+// Fetches data from the user table and displays it.
 async function fetchAndDisplayUsers() {
   const tableBody = document.querySelector("#demotable tbody");
 
-  const response = await fetch("/demotable", {
+  const response = await fetch("/users/demotable", {
     method: "GET",
   });
 
@@ -38,7 +38,6 @@ async function fetchAndDisplayUsers() {
   demotableContent.forEach((user) => {
     const row = tableBody.insertRow();
 
-    // Adjust to the number of columns in the 'User' table
     ["user_id", "user_name", "user_note"].forEach((field) => {
       const cell = row.insertCell();
       cell.textContent = user[field];
@@ -46,21 +45,22 @@ async function fetchAndDisplayUsers() {
   });
 }
 
-// This function resets or initializes the demotable.
+// This function resets or initializes the user table.
 async function resetDemotable() {
-  const response = await fetch("/initiate-demotable", {
+  const response = await fetch("/users/initiate-demotable", {
     method: "POST",
   });
+
   const responseData = await response.json();
 
   const messageElement = document.getElementById("resetResultMsg");
   messageElement.textContent = responseData.success
-    ? "demotable initiated successfully!"
+    ? "Demotable initiated successfully!"
     : "Error initiating table!";
   fetchTableData();
 }
 
-// Inserts new records into the demotable.
+// Inserts new user records into the user table.
 async function insertDemotable(event) {
   event.preventDefault();
 
@@ -70,7 +70,7 @@ async function insertDemotable(event) {
     user_note: document.getElementById("insertUserNote").value,
   };
 
-  const response = await fetch("/insert-demotable", {
+  const response = await fetch("/users/insert-demotable", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(userData),
@@ -84,7 +84,7 @@ async function insertDemotable(event) {
   fetchTableData();
 }
 
-// Updates user details in the demotable.
+// Updates user details in the user table.
 async function updateUserDemotable(event) {
   event.preventDefault();
 
@@ -94,7 +94,7 @@ async function updateUserDemotable(event) {
     user_note: document.getElementById("updateUserNote").value,
   };
 
-  const response = await fetch("/update-user-demotable", {
+  const response = await fetch("/users/update-demotable", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(userData),
@@ -108,13 +108,13 @@ async function updateUserDemotable(event) {
   fetchTableData();
 }
 
-// Deletes a user from the demotable by User ID.
+// Deletes a user from the user table by User ID.
 async function deleteUserDemotable(event) {
   event.preventDefault();
 
   const userId = document.getElementById("deleteUserId").value;
 
-  const response = await fetch(`/delete-user-demotable/${userId}`, {
+  const response = await fetch(`/users/delete-demotable/${userId}`, {
     method: "DELETE",
   });
 
@@ -126,9 +126,9 @@ async function deleteUserDemotable(event) {
   fetchTableData();
 }
 
-// Counts rows in the demotable.
+// Counts rows in the user table.
 async function countDemotable() {
-  const response = await fetch("/count-demotable", {
+  const response = await fetch("/users/count-demotable", {
     method: "GET",
   });
 

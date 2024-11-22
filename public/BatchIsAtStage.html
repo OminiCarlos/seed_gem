@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Batch Is At Stage</title>
+  </head>
+  <body>
+    <h1>
+      Database Connection Status:
+      <span id="dbStatus"></span>
+      <img
+        id="loadingGif"
+        class="loading-gif"
+        src="loading_100px.gif"
+        alt="Loading..."
+      />
+    </h1>
+
+    <br />
+    <hr />
+    <br />
+
+    <h2>Batch Is At Stage</h2>
+    <table id="batchIsAtStageTable" border="1">
+      <thead>
+        <tr>
+          <th>Batch ID</th>
+          <th>Plant ID</th>
+          <th>Stage Name</th>
+          <th>Start Date</th>
+          <th>End Date</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <br />
+    <hr />
+    <br />
+
+    <script>
+      // JavaScript code to fetch and populate data in the table
+      document.addEventListener("DOMContentLoaded", function () {
+        const tableBody = document.querySelector("#batchIsAtStageTable tbody");
+
+        // (replace this with actual API/database fetch logic)
+        const exampleData = [
+          {
+            batchID: 1,
+            plantID: 101,
+            stageName: "Germination",
+            startDate: "2024-01-01",
+            endDate: "2024-01-10",
+          },
+          {
+            batchID: 2,
+            plantID: 102,
+            stageName: "Growth",
+            startDate: "2024-01-15",
+            endDate: "2024-02-01",
+          },
+        ];
+
+        exampleData.forEach((row) => {
+          const tr = document.createElement("tr");
+
+          tr.innerHTML = `
+            <td>${row.batchID}</td>
+            <td>${row.plantID}</td>
+            <td>${row.stageName}</td>
+            <td>${row.startDate}</td>
+            <td>${row.endDate}</td>
+          `;
+
+          tableBody.appendChild(tr);
+        });
+      });
+    </script>
+  </body>
+</html>
