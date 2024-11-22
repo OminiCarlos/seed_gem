@@ -41,9 +41,9 @@ async function fetchAndDisplayUsers() {
       "order_id",
       "field_name",
       "zone_id",
-    ].forEach((field) => {
+    ].forEach((field,index) => {
       const cell = row.insertCell();
-      cell.textContent = batch[field];
+      cell.textContent = batch[index];
     });
   });
 }
@@ -157,9 +157,6 @@ window.onload = function () {
   document
     .getElementById("deleteBatchDemotable")
     .addEventListener("submit", deleteBatchDemotable);
-  document
-    .getElementById("countDemotable")
-    .addEventListener("click", countDemotable);
 };
 
 // General function to refresh the displayed table data.
