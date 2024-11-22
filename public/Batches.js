@@ -78,7 +78,7 @@ async function insertDemotable(event) {
     zone_id: document.getElementById("insertZoneId").value,
   };
 
-  const response = await fetch("/insert-demotable", {
+  const response = await fetch("/batches/insert-demotable", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(batchData),
