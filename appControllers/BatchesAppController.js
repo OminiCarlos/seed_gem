@@ -1,67 +1,105 @@
-const express = require('express');
-//----------update to correspondant xxxAppService
-const appService = require('../appServices/BatchesAppServices.js'); // replace with the correspondant xxxAppService.js
+const express = require("express");
+const appService = require("../appServices/BatchesAppServices.js"); // Replace with the appropriate service
 const router = express.Router();
 
 // ----------------------------------------------------------
 // API endpoints
-// start adding new routes here!
-router.get('/demotable', async (req, res) => {
-    const tableContent = await appService.fetchLocationDemotableFromDb();
-    res.json({data: tableContent});
+// Fetch data from the batches table
+router.get("/demotable", async (req, res) => {
+  const tableContent = await appService.fetchBatchDemotableFromDb();
+  res.json({ data: tableContent });
 });
 
-// inititate table
+// Initialize the batches table
 router.post("/initiate-demotable", async (req, res) => {
-    const initiateResult = await appService.initiateLocationDemotable();
-    if (initiateResult) {
-        res.json({ success: true });
-    } else {
-        res.status(500).json({ success: false });
-    }
+  const initiateResult = await appService.initiateBatchDemotable();
+  if (initiateResult) {
+    res.json({ success: true });
+  } else {
+    res.status(500).json({ success: false });
+  }
 });
 
-// insert one entry
+// Insert a new batch record
 router.post("/insert-demotable", async (req, res) => {
-    // console.log("REACHED HERE:")
-    // console.log(req.body);
-    const {field_name, zone_id, is_outdoor, is_irrigated} = req.body;
-    const insertResult = await appService.insertLocationDemotable(field_name, zone_id, is_outdoor?1:0, is_irrigated?1:0);
-    if (insertResult) {
-        res.json({ success: true });
-    } else {
-        res.status(500).json({ success: false });
-    }
+  const {
+    batch_id,
+    care_notes,
+    plant_date,
+    yield_weight,
+    planted_quantity,
+    survived_quantity,
+    item_id,
+    order_id,
+    field_name,
+    zone_id,
+  } = req.body;
+
+  const insertResult = await appService.insertBatchDemotable(
+    batch_id,
+    care_notes,
+    plant_date,
+    yield_weight,
+    planted_quantity,
+    survived_quantity,
+    item_id,
+    order_id,
+    field_name,
+    zone_id
+  );
+
+  if (insertResult) {
+    res.json({ success: true });
+  } else {
+    res.status(500).json({ success: false });
+  }
 });
 
-//update one entry
+// Update an existing batch record
 router.post("/update-demotable", async (req, res) => {
-    
-    const { field_name, zone_id, is_outdoor } = req.body;
-    const updateResult = await appService.updateLocationDemotable(field_name, zone_id, is_outdoor?1:0);
-    console.log(updateResult);
-    if (updateResult) {
-        // console.log("REACHED here");
-        res.json({ success: true });
-    } else {
-        res.status(500).json({ success: false });
-    }
+  const {
+    batch_id,
+    care_notes,
+    plant_date,
+    yield_weight,
+    planted_quantity,
+    survived_quantity,
+    item_id,
+    order_id,
+    field_name,
+    zone_id,
+  } = req.body;
+
+  const updateResult = await appService.updateBatchDemotable(
+    batch_id,
+    care_notes,
+    plant_date,
+    yield_weight,
+    planted_quantity,
+    survived_quantity,
+    item_id,
+    order_id,
+    field_name,
+    zone_id
+  );
+
+  if (updateResult) {
+    res.json({ success: true });
+  } else {
+    res.status(500).json({ success: false });
+  }
 });
 
+// Delete a batch record by batch ID
+router.delete("/delete-demotable/:batch_id", async (req, res) => {
+  const { batch_id } = req.params;
+  const deleteResult = await appService.deleteBatchDemotable(batch_id);
 
-//delete one entry
-router.delete('/delete-demotable/:field_name/:zone_id', async(req, res) => {
-    const {field_name, zone_id} = req.params;
-    // console.log(field_name, zone_id);
-    const deleteResult = await appService.deleteLocationDemotable(field_name, zone_id);
-    if (deleteResult) {
-        res.json({ success: true });
-    } else {
-        res.status(500).json({ success: false });
-    }
+  if (deleteResult) {
+    res.json({ success: true });
+  } else {
+    res.status(500).json({ success: false });
+  }
 });
-
-
-
 
 module.exports = router;
