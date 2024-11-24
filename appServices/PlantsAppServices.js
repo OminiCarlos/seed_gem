@@ -6,8 +6,7 @@ async function fetchDemotableFromDb() {
     const result = await connection.execute(
       // change name to the respective table.
       `SELECT *
-       FROM LOCATION`
-    );
+       FROM DEMOTABLE`);
     return result.rows;
   }).catch(() => {
     return [];
@@ -16,17 +15,15 @@ async function fetchDemotableFromDb() {
 // above should be unchanged
 
 // adding new services from here!
-async function initiateDemotable() {
+async function initiateLocationDemotable() {
   return await withOracleDB(async (connection) => {
     try {
-      // change the table name to drop.
       await connection.execute(`DROP TABLE LOCATION`);
     } catch (err) {
       console.log("Table might not exist, proceeding to create...");
     }
-
+// Change the name of the table
     const result = await connection.execute(
-      // change the table name and field. The order of field names follows that in seed_gem.sql
       `CREATE TABLE LOCATION (
                 field_name VARCHAR2(50), 
                 zone_id INTEGER, 
@@ -35,7 +32,6 @@ async function initiateDemotable() {
             )
         `
     );
-    // change this to your table name
     console.log("LOCATION table created successfully!");
     return true;
   }).catch(() => {
@@ -43,9 +39,7 @@ async function initiateDemotable() {
   });
 }
 
-// 
-async function insertDemotable(
-  // change these to the attributes in your table.
+async function insertLocationDemotable(
   field_name,
   zone_id,
   is_outdoor,
@@ -65,7 +59,7 @@ async function insertDemotable(
   });
 }
 
-async function fetchDemotableFromDb() {
+async function fetchLocationDemotableFromDb() {
   return await withOracleDB(async (connection) => {
     const result = await connection.execute("SELECT * FROM Location"); // replace with a join sql statement
     return result.rows;
@@ -74,7 +68,7 @@ async function fetchDemotableFromDb() {
   });
 }
 
-async function updateDemotable(field_name, zone_id, is_outdoor) {
+async function updateLocationDemotable(field_name, zone_id, is_outdoor) {
   return await withOracleDB(async (connection) => {
     const result = await connection.execute(
       `UPDATE LOCATION SET is_outdoor = :is_outdoor 
@@ -93,7 +87,7 @@ async function updateDemotable(field_name, zone_id, is_outdoor) {
   });
 }
 
-async function deleteDemotable(field_name, zone_id) {
+async function deleteLocationDemotable(field_name, zone_id) {
   zone_id = parseInt(zone_id);
   return await withOracleDB(async (connection) => {
     const result = await connection.execute(
@@ -112,9 +106,9 @@ async function deleteDemotable(field_name, zone_id) {
 
 module.exports = {
   fetchDemotableFromDb,
-  initiateDemotable: initiateDemotable,
-  insertDemotable: insertDemotable,
-  fetchDemotableFromDb: fetchDemotableFromDb,
-  updateDemotable: updateDemotable,
-  deleteDemotable: deleteDemotable,
+  initiateLocationDemotable,
+  insertLocationDemotable,
+  fetchLocationDemotableFromDb,
+  updateLocationDemotable,
+  deleteLocationDemotable,
 };

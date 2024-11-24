@@ -8,7 +8,7 @@ const batchesController = require('./appControllers/BatchesAppController'); // I
 const router = express.Router();
 
 router.use('/locations',locationsController) // Mount Locations routes
-router.use('/batches',batchesController) // Mount Locations routes
+router.use('/batches',batchesController) // Mount Batches routes
 
 // ----------------------------------------------------------
 // API endpoints
@@ -21,5 +21,8 @@ router.get('/check-db-connection', async (req, res) => {
         res.send('unable to connect');
     }
 });
+
+// TODO: add the system level sql load.
+
 
 module.exports = router;
