@@ -47,4 +47,17 @@ At this point, you can access the sample project via the provided URL.
 
 David add some changes to main to make it the commit version again.
 
-change A
+## How to add a frontend backend instance?
+
+### Step 1: Duplicate Frontend Files
+Make a copy of Locations.html and Locations.js
+Change respective fetch strings: xxx -> yyy
+
+### Step 2: Duplicate Backend Files
+Make a copy of Locations AppController.js
+Make a copy of Locations AppServices.js
+
+Change the strings.
+
+### Step 3: mount the sub-appController to the main appController.
+Follow the instructions in the main app Controller.
