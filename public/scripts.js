@@ -163,7 +163,7 @@ window.onload = function() {
     fetchTableData();
     document.getElementById("resetDemotable").addEventListener("click", resetDemotable);
     document.getElementById("insertDemotable").addEventListener("submit", insertDemotable);
-    document.getElementById("updataNameDemotable").addEventListener("submit", updateNameDemotable);
+    document.getElementById("updataNameDemotable").addEventListener("submit", updateNameDemotable); //updata typo
     document.getElementById("countDemotable").addEventListener("click", countDemotable);
 };
 
