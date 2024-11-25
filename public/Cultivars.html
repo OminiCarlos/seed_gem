@@ -31,6 +31,7 @@
           <th>Common Name</th>
           <th>Scientific Name</th>
           <th>Overview Notes</th>
+          <th>Cultivar Name</th>
         </tr>
       </thead>
       <tbody></tbody>
@@ -94,6 +95,14 @@
         maxlength="255"
       />
       <br /><br />
+      Cultivar Name:
+      <input
+        type="text"
+        id="insertCultivarName"
+        placeholder="Enter Cultivar Name"
+        maxlength="50"
+      />
+      <br /><br />
       <button type="submit">Insert</button>
     </form>
     <div id="insertResultMsg"></div>
@@ -144,6 +153,14 @@
         maxlength="255"
       />
       <br /><br />
+      New Cultivar Name:
+      <input
+        type="text"
+        id="updateCultivarName"
+        placeholder="Enter New Cultivar Name"
+        maxlength="50"
+      />
+      <br /><br />
       <button type="submit">Update</button>
     </form>
     <div id="updateResultMsg"></div>
@@ -174,6 +191,6 @@
     <button id="countDemotable">Count</button>
     <div id="countResultMsg"></div>
 
-    <script src="scripts.js"></script>
+    <script src="Cultivars.js"></script>
   </body>
 </html>

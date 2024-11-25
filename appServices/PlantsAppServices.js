@@ -1,55 +1,83 @@
 const oracledb = require("oracledb");
 const { withOracleDB } = require("../appService.js");
 
+// above should be unchanged
+
+// adding new services from here!
+
 async function fetchDemotableFromDb() {
   return await withOracleDB(async (connection) => {
     const result = await connection.execute(
-      // change name to the respective table.
-      `SELECT *
-       FROM DEMOTABLE`);
+      `SELECT * 
+       FROM Plant`
+    ); // replace with a join sql statement
     return result.rows;
   }).catch(() => {
     return [];
   });
 }
-// above should be unchanged
 
-// adding new services from here!
-async function initiateLocationDemotable() {
+async function initiateDemotable() {
   return await withOracleDB(async (connection) => {
     try {
+      // change the table name to drop.
       await connection.execute(`DROP TABLE LOCATION`);
     } catch (err) {
-      console.log("Table might not exist, proceeding to create...");
+      // put the respective table name to help debugging.
+      console.log("Plant Table might not exist, proceeding to create...");
     }
-// Change the name of the table
+
     const result = await connection.execute(
-      `CREATE TABLE LOCATION (
-                field_name VARCHAR2(50), 
-                zone_id INTEGER, 
-                is_outdoor NUMBER(1), 
-                PRIMARY KEY (field_name, zone_id)
-            )
-        `
+      // change the table name and field. The order of field names follows that in seed_gem.sql
+      `
+      CREATE TABLE Plant (
+        plant_ID INTEGER PRIMARY KEY,
+        yield_type VARCHAR(50),
+        common_name VARCHAR(50) UNIQUE,
+        scientific_name VARCHAR(50) UNIQUE,
+        overview_notes VARCHAR(3000)
+        );
+      `
     );
-    console.log("LOCATION table created successfully!");
+    // change this to your table name
+    console.log("Plant table created successfully!");
     return true;
   }).catch(() => {
     return false;
   });
 }
 
-async function insertLocationDemotable(
-  field_name,
-  zone_id,
-  is_outdoor,
-  is_irrigated
+// 
+async function insertDemotable(
+  // change these to the attributes in your table.
+  plant_id,
+  yield_type,
+  common_name,
+  scientific_name,
+  overview_notes
 ) {
   return await withOracleDB(async (connection) => {
     const result = await connection.execute(
-      `INSERT INTO LOCATION (field_name, zone_id, is_outdoor) 
-                        VALUES (:field_name, :zone_id, :is_outdoor)`,
-      [field_name, zone_id, is_outdoor],
+      // change the attributes and the variable names.
+      `INSERT INTO Plant (
+        plant_ID,
+        yield_type,
+        common_name,
+        scientific_name,
+        overview_notes)
+      VALUES (
+        :plant_id,
+        :yield_type,
+        :common_name,
+        :scientific_name,
+        :overview_notes
+      )`,
+      // these are the data you passed in. 
+      [ plant_id,
+        yield_type,
+        common_name,
+        scientific_name,
+        overview_notes ],
       { autoCommit: true }
     );
 
@@ -59,42 +87,44 @@ async function insertLocationDemotable(
   });
 }
 
-async function fetchLocationDemotableFromDb() {
-  return await withOracleDB(async (connection) => {
-    const result = await connection.execute("SELECT * FROM Location"); // replace with a join sql statement
-    return result.rows;
-  }).catch(() => {
-    return [];
-  });
-}
-
-async function updateLocationDemotable(field_name, zone_id, is_outdoor) {
+async function updateDemotable(
+  plant_id,
+  yield_type,
+  common_name,
+  scientific_name,
+  overview_notes
+) {
   return await withOracleDB(async (connection) => {
     const result = await connection.execute(
-      `UPDATE LOCATION SET is_outdoor = :is_outdoor 
-                WHERE field_name=:field_name
-                AND   zone_id = :zone_id  `,
-      [is_outdoor, field_name, zone_id],
+      // change to the respective sql query.
+      `UPDATE LOCATION SET
+                  plant_ID = :plant_id,
+                  yield_type = :yield_type,
+                  common_name = :common_name,
+                  scientific_name = :scientific_name,
+                  overview_notes = :overview_notes 
+      WHERE plant_ID=:plant_id`,
+      [ plant_id,
+        yield_type,
+        common_name,
+        scientific_name,
+        overview_notes ],
       { autoCommit: true }
     );
-    // console.log(result.rowsAffected);
-    // console.log(result.rowsAffected && result.rowsAffected > 0);
-
-    // return result.rowsAffected && result.rowsAffected > 0;
     return result.rowsAffected && result.rowsAffected > 0;
   }).catch(() => {
     return false;
   });
 }
 
-async function deleteLocationDemotable(field_name, zone_id) {
+async function deleteDemotable(plant_id) {
   zone_id = parseInt(zone_id);
   return await withOracleDB(async (connection) => {
     const result = await connection.execute(
-      `
-            DELETE FROM LOCATION 
-            WHERE field_name = :field_name 
-            AND zone_id = :zone_id`,
+      // replace with the query in your table. 
+       `DELETE FROM LOCATION 
+        WHERE field_name = :field_name 
+        AND zone_id = :zone_id`,
       [field_name, zone_id],
       { autoCommit: true }
     );
@@ -105,10 +135,9 @@ async function deleteLocationDemotable(field_name, zone_id) {
 }
 
 module.exports = {
-  fetchDemotableFromDb,
-  initiateLocationDemotable,
-  insertLocationDemotable,
-  fetchLocationDemotableFromDb,
-  updateLocationDemotable,
-  deleteLocationDemotable,
+  initiateDemotable: initiateDemotable,
+  insertDemotable: insertDemotable,
+  fetchDemotableFromDb: fetchDemotableFromDb,
+  updateDemotable: updateDemotable,
+  deleteDemotable: deleteDemotable,
 };

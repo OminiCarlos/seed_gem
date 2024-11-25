@@ -21,7 +21,7 @@ async function checkDbConnection() {
 }
 
 // Fetches data from the demotable and displays it.
-async function fetchAndDisplayPlants() {
+async function fetchAndDisplayUsers() {
   const tableBody = document.querySelector("#demotable tbody");
 
   const response = await fetch("/plants/demotable", {
@@ -45,9 +45,9 @@ async function fetchAndDisplayPlants() {
       "common_name",
       "scientific_name",
       "overview_notes",
-    ].forEach((field, index) => {
+    ].forEach((field) => {
       const cell = row.insertCell();
-      cell.textContent = plant[index];
+      cell.textContent = plant[field];
     });
   });
 }
@@ -78,7 +78,7 @@ async function insertDemotable(event) {
     overview_notes: document.getElementById("insertOverviewNotes").value,
   };
 
-  const response = await fetch("/plants/insert-demotable", {
+  const response = await fetch("/insert-demotable", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(plantData),
@@ -102,9 +102,10 @@ async function updatePlantDemotable(event) {
     common_name: document.getElementById("updateCommonName").value,
     scientific_name: document.getElementById("updateScientificName").value,
     overview_notes: document.getElementById("updateOverviewNotes").value,
+    cultivar_name: document.getElementById("updateCultivarName").value,
   };
 
-  const response = await fetch("/plants/update-demotable", {
+  const response = await fetch("/update-plant-demotable", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(plantData),
@@ -124,7 +125,7 @@ async function deletePlantDemotable(event) {
 
   const plantId = document.getElementById("deletePlantId").value;
 
-  const response = await fetch(`/plants/delete-demotable/${plantId}`, {
+  const response = await fetch(`/delete-plant-demotable/${plantId}`, {
     method: "DELETE",
   });
 

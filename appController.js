@@ -3,12 +3,14 @@ const appService = require('./appService');
 // ------------------------step 1: import sub appControllers---------
 const locationsController = require('./appControllers/LocationsAppController'); // Import the Locations controller
 const batchesController = require('./appControllers/BatchesAppController'); // Import the Batches controller
+const plantsController = require('./appControllers/PlantsAppController'); // Import the plants controller
 
 //------------------step 2: load routers below -----------------------
 const router = express.Router();
 
 router.use('/locations',locationsController) // Mount Locations routes
 router.use('/batches',batchesController) // Mount Batches routes
+router.use('/plants',plantsController) // Mount plants routes
 
 // ----------------------------------------------------------
 // API endpoints
