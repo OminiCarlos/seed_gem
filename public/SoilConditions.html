@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Soil Condition Management</title>
+  </head>
+  <body>
+    <h1>
+      Database Connection Status:
+      <span id="dbStatus"></span>
+      <img
+        id="loadingGif"
+        class="loading-gif"
+        src="loading_100px.gif"
+        alt="Loading..."
+      />
+    </h1>
+
+    <br />
+    <hr />
+    <br />
+
+    <h2>Show All Soil Conditions</h2>
+    <table id="soilTable" border="1">
+      <thead>
+        <tr>
+          <th>Soil Type</th>
+          <th>pH</th>
+          <th>Organic Matter Concentration (%)</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <br />
+    <hr />
+    <br />
+
+    <h2>Reset All Soil Conditions</h2>
+    <p>
+      If you wish to reset the table, press the reset button. If this is the
+      first time you're running this page, you MUST use reset.
+    </p>
+    <button id="resetSoilTable">Reset</button>
+    <div id="resetResultMsg"></div>
+
+    <br />
+    <hr />
+    <br />
+
+    <h2>Insert Values into Soil Condition</h2>
+    <form id="insertSoilForm">
+      Soil Type:
+      <input
+        type="text"
+        id="insertSoilType"
+        placeholder="Enter Soil Type"
+        required
+      />
+      <br /><br />
+      pH:
+      <input
+        type="number"
+        id="insertSoilPh"
+        placeholder="Enter pH Value"
+        step="0.01"
+        min="0"
+        max="14"
+        required
+      />
+      <br /><br />
+      Organic Matter Concentration (%):
+      <input
+        type="number"
+        id="insertOrganicMatter"
+        placeholder="Enter Organic Matter %"
+        step="0.01"
+        min="0"
+        max="100"
+        required
+      />
+      <br /><br />
+      <button type="submit">Insert</button>
+    </form>
+    <div id="insertResultMsg"></div>
+
+    <br />
+    <hr />
+    <br />
+
+    <h2>Update Soil Condition</h2>
+    <form id="updateSoilForm">
+      Soil Type:
+      <input
+        type="text"
+        id="updateSoilType"
+        placeholder="Enter Soil Type"
+        required
+      />
+      <br /><br />
+      New pH:
+      <input
+        type="number"
+        id="updateSoilPh"
+        placeholder="Enter New pH Value"
+        step="0.01"
+        min="0"
+        max="14"
+      />
+      <br /><br />
+      New Organic Matter Concentration (%):
+      <input
+        type="number"
+        id="updateOrganicMatter"
+        placeholder="Enter New Organic Matter %"
+        step="0.01"
+        min="0"
+        max="100"
+      />
+      <br /><br />
+      <button type="submit">Update</button>
+    </form>
+    <div id="updateResultMsg"></div>
+
+    <br />
+    <hr />
+    <br />
+
+    <h2>Delete a Soil Condition</h2>
+    <form id="deleteSoilForm">
+      Soil Type:
+      <input
+        type="text"
+        id="deleteSoilType"
+        placeholder="Enter Soil Type to Delete"
+        required
+      />
+      <br /><br />
+      <button type="submit">Delete</button>
+    </form>
+    <div id="deleteResultMsg"></div>
+
+    <br />
+    <hr />
+    <br />
+
+    <!-- <h2>Count the Soil Conditions</h2>
+    <button id="countSoilTable">Count</button>
+    <div id="countResultMsg"></div> -->
+
+    <script src="SoilConditions.js"></script>
+  </body>
+</html>

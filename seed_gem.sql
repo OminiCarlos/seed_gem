@@ -72,6 +72,12 @@ CREATE TABLE Location_irrigation (
 	is_irrigated INTEGER
 );
 
+INSERT INTO Location_irrigation (is_outdoor, is_irrigated)
+VALUES (1, 0);
+
+INSERT INTO Location_irrigation (is_outdoor, is_irrigated)
+VALUES (0, 1);
+
 CREATE TABLE Soil_condition (
     soil_type VARCHAR(50) PRIMARY KEY,
     pH NUMBER(5, 2),

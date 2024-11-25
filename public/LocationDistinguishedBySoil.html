@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Location Distinguished by Soil</title>
+  </head>
+  <body>
+    <h1>
+      Database Connection Status:
+      <span id="dbStatus"></span>
+      <img
+        id="loadingGif"
+        class="loading-gif"
+        src="loading_100px.gif"
+        alt="Loading..."
+      />
+    </h1>
+
+    <br />
+    <hr />
+    <br />
+
+    <h2>Show All Locations Distinguished by Soil</h2>
+    <table id="locationSoilTable" border="1">
+      <thead>
+        <tr>
+          <th>Field Name</th>
+          <th>Zone ID</th>
+          <th>Soil Type</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <br />
+    <hr />
+    <br />
+
+    <h2>Reset Locations Distinguished by Soil</h2>
+    <p>
+      If you wish to reset the table, press the reset button. If this is the
+      first time you're running this page, you MUST use reset.
+    </p>
+    <button id="resetLocationSoilTable">Reset</button>
+    <div id="resetResultMsg"></div>
+
+    <br />
+    <hr />
+    <br />
+
+    <h2>Insert Values into Location Distinguished by Soil</h2>
+    <form id="insertLocationSoilForm">
+      Field Name:
+      <input
+        type="text"
+        id="insertFieldName"
+        placeholder="Enter Field Name"
+        required
+      />
+      <br /><br />
+      Zone ID:
+      <input
+        type="number"
+        id="insertZoneId"
+        placeholder="Enter Zone ID"
+        required
+      />
+      <br /><br />
+      Soil Type:
+      <input
+        type="text"
+        id="insertSoilType"
+        placeholder="Enter Soil Type"
+        required
+      />
+      <br /><br />
+      <button type="submit">Insert</button>
+    </form>
+    <div id="insertResultMsg"></div>
+
+    <br />
+    <hr />
+    <br />
+
+    <h2>Update Location Distinguished by Soil</h2>
+    <form id="updateLocationSoilForm">
+      Field Name:
+      <input
+        type="text"
+        id="updateFieldName"
+        placeholder="Enter Field Name"
+        required
+      />
+      <br /><br />
+      Zone ID:
+      <input
+        type="number"
+        id="updateZoneId"
+        placeholder="Enter Zone ID"
+        required
+      />
+      <br /><br />
+      Old Soil Type:
+      <input
+        type="text"
+        id="updateOldSoilType"
+        placeholder="Enter Old Soil Type"
+        required
+      />
+      <br /><br />
+      New Soil Type:
+      <input
+        type="text"
+        id="updateNewSoilType"
+        placeholder="Enter New Soil Type"
+        required
+      />
+      <br /><br />
+      <button type="submit">Update</button>
+    </form>
+    <div id="updateResultMsg"></div>
+
+    <br />
+    <hr />
+    <br />
+
+    <h2>Delete a Location Distinguished by Soil</h2>
+    <form id="deleteLocationSoilForm">
+      Field Name:
+      <input
+        type="text"
+        id="deleteFieldName"
+        placeholder="Enter Field Name"
+        required
+      />
+      <br /><br />
+      Zone ID:
+      <input
+        type="number"
+        id="deleteZoneId"
+        placeholder="Enter Zone ID"
+        required
+      />
+      <br /><br />
+      Soil Type:
+      <input
+        type="text"
+        id="deleteSoilType"
+        placeholder="Enter Soil Type"
+        required
+      />
+      <br /><br />
+      <button type="submit">Delete</button>
+    </form>
+    <div id="deleteResultMsg"></div>
+
+    <br />
+    <hr />
+    <br />
+
+    <h2>Count Locations Distinguished by Soil</h2>
+    <button id="countLocationSoilTable">Count</button>
+    <div id="countResultMsg"></div>
+
+    <script src="LocationDistinguishedBySoil.js"></script>
+  </body>
+</html>
