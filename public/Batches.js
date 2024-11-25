@@ -41,9 +41,15 @@ async function fetchAndDisplayUsers() {
       "order_id",
       "field_name",
       "zone_id",
-    ].forEach((field,index) => {
+    ].forEach((field, index) => {
       const cell = row.insertCell();
-      cell.textContent = batch[index];
+      if (field === "plant_date") {
+        // Format the date field
+        const date = new Date(batch[index]);
+        cell.textContent = date.toISOString().split("T")[0]; // Extract YYYY-MM-DD
+      } else {
+        cell.textContent = batch[index];
+      }
     });
   });
 }
