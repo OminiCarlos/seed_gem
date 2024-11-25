@@ -3,6 +3,7 @@ const appService = require('./appService');
 // ------------------------step 1: import sub appControllers---------
 const locationsController = require('./appControllers/LocationsAppController'); // Import the Locations controller
 const batchesController = require('./appControllers/BatchesAppController'); // Import the Batches controller
+const plantsController = require('./appControllers/PlantsAppController'); // Import the plants controller
 console.log("REACHED HERE")
 const soilConditionsController = require('./appControllers/SoilConditionsAppController'); 
 const distinguishedByAppController = require('./appControllers/DistinguishedByAppController'); 
@@ -13,6 +14,7 @@ const router = express.Router();
 
 router.use('/locations',locationsController) // Mount Locations routes
 router.use('/batches',batchesController) // Mount Batches routes
+router.use('/plants',plantsController) // Mount plants routes
 router.use('/soilconditions',soilConditionsController) // Mount Soil routes
 router.use('/locdistinguishedbysoil',distinguishedByAppController) 
 router.use('/cultivars',cultivarsByAppController) 

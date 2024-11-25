@@ -10,12 +10,14 @@ async function initiateDemotable() {
       // change the table name to drop.
       await connection.execute(`DROP TABLE LOCATION`);
     } catch (err) {
-      console.log("Table might not exist, proceeding to create...");
+      // put the respective table name to help debugging.
+      console.log("Location Table might not exist, proceeding to create...");
     }
 
     const result = await connection.execute(
       // change the table name and field. The order of field names follows that in seed_gem.sql
-      `CREATE TABLE LOCATION (
+      `
+      CREATE TABLE LOCATION (
                 field_name VARCHAR2(50), 
                 zone_id INTEGER, 
                 is_outdoor NUMBER(1), 

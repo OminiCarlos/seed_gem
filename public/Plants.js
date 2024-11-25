@@ -21,10 +21,10 @@ async function checkDbConnection() {
 }
 
 // Fetches data from the demotable and displays it.
-async function fetchAndDisplayUsers() {
+async function fetchAndDisplayPlants() {
   const tableBody = document.querySelector("#demotable tbody");
 
-  const response = await fetch("/demotable", {
+  const response = await fetch("/plants/demotable", {
     method: "GET",
   });
 
@@ -45,25 +45,24 @@ async function fetchAndDisplayUsers() {
       "common_name",
       "scientific_name",
       "overview_notes",
-      "cultivar_name",
-    ].forEach((field) => {
+    ].forEach((field, index) => {
       const cell = row.insertCell();
-      cell.textContent = plant[field];
+      cell.textContent = plant[index];
     });
   });
 }
 
 // This function resets or initializes the demotable.
 async function resetDemotable() {
-  const response = await fetch("/initiate-demotable", {
+  const response = await fetch("/plants/initiate-demotable", {
     method: "POST",
   });
   const responseData = await response.json();
 
   const messageElement = document.getElementById("resetResultMsg");
   messageElement.textContent = responseData.success
-    ? "demotable initiated successfully!"
-    : "Error initiating table!";
+    ? "plant table initiated successfully!"
+    : "Error initiating plant table!";
   fetchTableData();
 }
 
@@ -77,10 +76,9 @@ async function insertDemotable(event) {
     common_name: document.getElementById("insertCommonName").value,
     scientific_name: document.getElementById("insertScientificName").value,
     overview_notes: document.getElementById("insertOverviewNotes").value,
-    cultivar_name: document.getElementById("insertCultivarName").value,
   };
 
-  const response = await fetch("/insert-demotable", {
+  const response = await fetch("/plants/insert-demotable", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(plantData),
@@ -104,10 +102,9 @@ async function updatePlantDemotable(event) {
     common_name: document.getElementById("updateCommonName").value,
     scientific_name: document.getElementById("updateScientificName").value,
     overview_notes: document.getElementById("updateOverviewNotes").value,
-    cultivar_name: document.getElementById("updateCultivarName").value,
   };
 
-  const response = await fetch("/update-plant-demotable", {
+  const response = await fetch("/plants/update-demotable", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(plantData),
@@ -127,7 +124,7 @@ async function deletePlantDemotable(event) {
 
   const plantId = document.getElementById("deletePlantId").value;
 
-  const response = await fetch(`/delete-plant-demotable/${plantId}`, {
+  const response = await fetch(`/plants/delete-demotable/${plantId}`, {
     method: "DELETE",
   });
 
