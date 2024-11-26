@@ -3,6 +3,7 @@ drop trigger enforce_total_participation_location;
 drop trigger prevent_orphaned_location;
 
 drop table Plant_event_records_user_batch;
+
 -- Userr is not a typo; user is a reserved name in Oracle so cannot be used 
 drop table Userr;
 drop table batch_is_at_Stage;
@@ -189,23 +190,23 @@ INSERT INTO distinguished_by (field_name, zone_ID, soil_type) VALUES ('North Fie
 INSERT INTO distinguished_by (field_name, zone_ID, soil_type) VALUES ('South Field', 3, 'Loamy');
 
 
-CREATE OR REPLACE TRIGGER prevent_orphaned_location
-BEFORE DELETE ON distinguished_by
-FOR EACH ROW
-DECLARE
-    v_count NUMBER;
-BEGIN
-    -- Check if the deletion will leave the Location without any distinguished_by entries
-    SELECT COUNT(*) INTO v_count
-    FROM distinguished_by
-    WHERE field_name = :OLD.field_name AND zone_ID = :OLD.zone_ID;
+-- CREATE OR REPLACE TRIGGER prevent_orphaned_location
+-- BEFORE DELETE ON distinguished_by
+-- FOR EACH ROW
+-- DECLARE
+--     v_count NUMBER;
+-- BEGIN
+--     -- Check if the deletion will leave the Location without any distinguished_by entries
+--     SELECT COUNT(*) INTO v_count
+--     FROM distinguished_by
+--     WHERE field_name = :OLD.field_name AND zone_ID = :OLD.zone_ID;
     
-    -- If this is the last entry, raise an error
-    IF v_count = 1 THEN
-        RAISE_APPLICATION_ERROR(-20002, 'Cannot delete the last distinguished_by entry for a Location.');
-    END IF;
-END;
-/
+--     -- If this is the last entry, raise an error
+--     IF v_count = 1 THEN
+--         RAISE_APPLICATION_ERROR(-20002, 'Cannot delete the last distinguished_by entry for a Location.');
+--     END IF;
+-- END;
+-- /
 
 -- !!! This will be prevented due to the trigegr above.
 -- just for testing purposes
@@ -215,20 +216,20 @@ END;
 --   AND zone_ID = 0;
 
 -- !!! Be sure to only enforce it after you have created the first entry of every distinct instance in table Location
-CREATE OR REPLACE TRIGGER enforce_total_participation_location
-AFTER INSERT ON Location
-FOR EACH ROW
-DECLARE
-    v_count NUMBER;
-BEGIN
-    -- Check if the new location has a corresponding entry in soil_condition
-    SELECT COUNT(*) INTO v_count
-    FROM distinguished_by
-    WHERE field_name = :NEW.field_name AND zone_ID = :NEW.zone_ID;
+-- CREATE OR REPLACE TRIGGER enforce_total_participation_location
+-- AFTER INSERT ON Location
+-- FOR EACH ROW
+-- DECLARE
+--     v_count NUMBER;
+-- BEGIN
+--     -- Check if the new location has a corresponding entry in soil_condition
+--     SELECT COUNT(*) INTO v_count
+--     FROM distinguished_by
+--     WHERE field_name = :NEW.field_name AND zone_ID = :NEW.zone_ID;
     
-    -- If no entry exists, raise an error
-    IF v_count = 0 THEN
-        RAISE_APPLICATION_ERROR(-20001, 'Location must be distinguished by at least one soil condition.');
-    END IF;
-END;
-/
+--     -- If no entry exists, raise an error
+--     IF v_count = 0 THEN
+--         RAISE_APPLICATION_ERROR(-20001, 'Location must be distinguished by at least one soil condition.');
+--     END IF;
+-- END;
+-- /
