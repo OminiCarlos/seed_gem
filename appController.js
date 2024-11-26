@@ -4,10 +4,10 @@ const appService = require('./appService');
 const locationsController = require('./appControllers/LocationsAppController'); // Import the Locations controller
 const batchesController = require('./appControllers/BatchesAppController'); // Import the Batches controller
 const plantsController = require('./appControllers/PlantsAppController'); // Import the plants controller
-console.log("REACHED HERE")
 const soilConditionsController = require('./appControllers/SoilConditionsAppController'); 
 const distinguishedByAppController = require('./appControllers/DistinguishedByAppController'); 
 const cultivarsByAppController = require('./appControllers/CultivarsAppController'); 
+console.log("REACHED HERE")
 
 //------------------step 2: load routers below -----------------------
 const router = express.Router();

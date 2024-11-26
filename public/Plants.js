@@ -30,6 +30,7 @@ async function fetchAndDisplayPlants() {
 
   const responseData = await response.json();
   const demotableContent = responseData.data;
+  console.log(demotableContent);
 
   // Clear existing table rows
   tableBody.innerHTML = "";
@@ -172,5 +173,5 @@ window.onload = function () {
 
 // General function to refresh the displayed table data.
 function fetchTableData() {
-  fetchAndDisplayUsers();
+  fetchAndDisplayPlants();
 }

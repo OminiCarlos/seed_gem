@@ -13,6 +13,7 @@ router.get("/demotable", async (req, res) => {
 
 // inititate table
 router.post("/initiate-demotable", async (req, res) => {
+  console.log("initiate-demotable requested");
   const initiateResult = await appService.initiateDemotable();
   if (initiateResult) {
     res.json({ success: true });

@@ -21,7 +21,7 @@ async function initiateDemotable() {
   return await withOracleDB(async (connection) => {
     try {
       // change the table name to drop.
-      await connection.execute(`DROP TABLE LOCATION`);
+      await connection.execute(`DROP TABLE PLANT`);
     } catch (err) {
       // put the respective table name to help debugging.
       console.log("Plant Table might not exist, proceeding to create...");
@@ -31,12 +31,12 @@ async function initiateDemotable() {
       // change the table name and field. The order of field names follows that in seed_gem.sql
       `
       CREATE TABLE Plant (
-        plant_ID INTEGER PRIMARY KEY,
-        yield_type VARCHAR(50),
-        common_name VARCHAR(50) UNIQUE,
-        scientific_name VARCHAR(50) UNIQUE,
-        overview_notes VARCHAR(3000)
-        );
+          plant_ID INTEGER PRIMARY KEY,
+          yield_type VARCHAR(50),
+          common_name VARCHAR(50) UNIQUE,
+          scientific_name VARCHAR(50) UNIQUE,
+          overview_notes VARCHAR(3000)
+      )
       `
     );
     // change this to your table name
@@ -96,8 +96,8 @@ async function updateDemotable(
 ) {
   return await withOracleDB(async (connection) => {
     const result = await connection.execute(
-      // change to the respective sql query.
-      `UPDATE LOCATION SET
+      // change to the respective sql query. Change the table name as well.
+      `UPDATE PLANT SET
                   plant_ID = :plant_id,
                   yield_type = :yield_type,
                   common_name = :common_name,
@@ -118,14 +118,13 @@ async function updateDemotable(
 }
 
 async function deleteDemotable(plant_id) {
-  zone_id = parseInt(zone_id);
+  zone_id = parseInt(plant_id);
   return await withOracleDB(async (connection) => {
     const result = await connection.execute(
       // replace with the query in your table. 
-       `DELETE FROM LOCATION 
-        WHERE field_name = :field_name 
-        AND zone_id = :zone_id`,
-      [field_name, zone_id],
+       `DELETE FROM PLANT 
+        WHERE plant_ID = :plant_id`,
+      [plant_id],
       { autoCommit: true }
     );
     return result.rowsAffected > 0;
