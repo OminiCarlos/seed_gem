@@ -8,6 +8,7 @@ console.log("REACHED HERE")
 const soilConditionsController = require('./appControllers/SoilConditionsAppController'); 
 const distinguishedByAppController = require('./appControllers/DistinguishedByAppController'); 
 const cultivarsByAppController = require('./appControllers/CultivarsAppController'); 
+const plantsController = require('./appControllers/PlantsAppController'); // Import the plants controller
 
 //------------------step 2: load routers below -----------------------
 const router = express.Router();
@@ -18,6 +19,7 @@ router.use('/plants',plantsController) // Mount plants routes
 router.use('/soilconditions',soilConditionsController) // Mount Soil routes
 router.use('/locdistinguishedbysoil',distinguishedByAppController) 
 router.use('/cultivars',cultivarsByAppController) 
+router.use('/plants',plantsController) // Mount plants routes
 
 // ----------------------------------------------------------
 // API endpoints
