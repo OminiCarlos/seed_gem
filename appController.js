@@ -6,6 +6,7 @@ const batchesController = require('./appControllers/BatchesAppController'); // I
 console.log("REACHED HERE")
 const soilConditionsController = require('./appControllers/SoilConditionsAppController'); 
 const distinguishedByAppController = require('./appControllers/DistinguishedByAppController'); 
+const cultivarsByAppController = require('./appControllers/CultivarsAppController'); 
 
 //------------------step 2: load routers below -----------------------
 const router = express.Router();
@@ -14,6 +15,7 @@ router.use('/locations',locationsController) // Mount Locations routes
 router.use('/batches',batchesController) // Mount Batches routes
 router.use('/soilconditions',soilConditionsController) // Mount Soil routes
 router.use('/locdistinguishedbysoil',distinguishedByAppController) 
+router.use('/cultivars',cultivarsByAppController) 
 
 // ----------------------------------------------------------
 // API endpoints

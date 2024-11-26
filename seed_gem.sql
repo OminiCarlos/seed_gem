@@ -31,15 +31,38 @@ CREATE TABLE Plant (
     overview_notes VARCHAR(3000)
 );
 
+INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
+VALUES
+    (1, 'Fruit', 'Apple', 'Malus domestica', 'Apple is a widely cultivated tree known for its sweet, edible fruit.');
+INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
+VALUES    
+    (2, 'Vegetable', 'Carrot', 'Daucus carota', 'Carrots are root vegetables, typically orange in color, known for their high vitamin A content.');
+INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
+VALUES    
+    (3, 'Herb', 'Basil', 'Ocimum basilicum', 'Basil is a culinary herb commonly used in Italian and Southeast Asian cuisines.');
+INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
+VALUES
+    (4, 'Flower', 'Sunflower', 'Helianthus annuus', 'Sunflowers are known for their large, bright yellow flower heads and seeds rich in oil.');
+INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
+VALUES
+    (5, 'Cereal', 'Wheat', 'Triticum aestivum', 'Wheat is a staple cereal grain used worldwide for making bread and other foods.');
+
+
+-- CREATE TABLE Cultivar (
+--     plant_ID INTEGER PRIMARY KEY,
+--     yield_type VARCHAR(50),
+--     common_name VARCHAR(50),
+--     scientific_name VARCHAR(50),
+--     overview_notes VARCHAR(3000),
+--     cultivar_name VARCHAR(50),
+--     FOREIGN KEY (plant_ID) REFERENCES Plant(plant_ID),
+--     UNIQUE (cultivar_name, common_name)
+-- );
+
 CREATE TABLE Cultivar (
     plant_ID INTEGER PRIMARY KEY,
-    yield_type VARCHAR(50),
-    common_name VARCHAR(50),
-    scientific_name VARCHAR(50),
-    overview_notes VARCHAR(3000),
     cultivar_name VARCHAR(50),
-    FOREIGN KEY (plant_ID) REFERENCES Plant(plant_ID),
-    UNIQUE (cultivar_name, common_name)
+    FOREIGN KEY (plant_ID) REFERENCES Plant(plant_ID)
 );
 
 CREATE TABLE Tag (

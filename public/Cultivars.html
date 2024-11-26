@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cultivars Database Application</title>
+  </head>
+  <body>
+    <h1>
+      Cultivar Database Connection Status:
+      <span id="dbStatus"></span>
+      <img
+        id="loadingGif"
+        class="loading-gif"
+        src="loading_100px.gif"
+        alt="Loading..."
+      />
+    </h1>
+
+    <br />
+    <hr />
+    <br />
+
+    <h2>Show All Cultivars</h2>
+    <table id="cultivarTable" border="1">
+      <thead>
+        <tr>
+          <th>Plant ID</th>
+          <th>Yield Type</th>
+          <th>Common name</th>
+          <th>scientific_name</th>
+          <th>overview_notes</th>
+          <th>Cultivar Name</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <br />
+    <hr />
+    <br />
+
+    <h2>Reset All Cultivars</h2>
+    <p>
+      If you wish to reset the table, press the reset button. If this is the
+      first time you're running this page, you MUST use reset.
+    </p>
+    <button id="resetCultivarTable">Reset</button>
+    <div id="resetResultMsg"></div>
+
+    <br />
+    <hr />
+    <br />
+
+    <h2>Insert Values into Cultivars</h2>
+    <form id="insertCultivarTable">
+      Plant ID:
+      <input
+        type="number"
+        id="insertPlantId"
+        placeholder="Enter Plant ID"
+        required
+      />
+      <br /><br />
+      Cultivar Name:
+      <input
+        type="text"
+        id="insertCultivarName"
+        placeholder="Enter Cultivar Name"
+        required
+      />
+      <br /><br />
+      <button type="submit">Insert</button>
+    </form>
+    <div id="insertResultMsg"></div>
+
+    <br />
+    <hr />
+    <br />
+
+    <h2>Update Cultivar Details</h2>
+    <form id="updateCultivarTable">
+      Plant ID:
+      <input
+        type="number"
+        id="updatePlantId"
+        placeholder="Enter Plant ID"
+        required
+      />
+      <br /><br />
+      New Cultivar Name:
+      <input
+        type="text"
+        id="updateCultivarName"
+        placeholder="Enter New Cultivar Name"
+      />
+      <br /><br />
+      <button type="submit">Update</button>
+    </form>
+    <div id="updateResultMsg"></div>
+
+    <br />
+    <hr />
+    <br />
+
+    <h2>Delete a Cultivar</h2>
+    <form id="deleteCultivarTable">
+      Plant ID:
+      <input
+        type="number"
+        id="deletePlantId"
+        placeholder="Enter Plant ID to Delete"
+        required
+      />
+      <br /><br />
+      <button type="submit">Delete</button>
+    </form>
+    <div id="deleteResultMsg"></div>
+
+    <br />
+    <hr />
+    <br />
+
+    <h2>Count the Tuples in Cultivars</h2>
+    <button id="countCultivarTable">Count</button>
+    <div id="countResultMsg"></div>
+
+    <script src="Cultivars.js"></script>
+  </body>
+</html>
