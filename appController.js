@@ -8,7 +8,6 @@ console.log("REACHED HERE")
 const soilConditionsController = require('./appControllers/SoilConditionsAppController'); 
 const distinguishedByAppController = require('./appControllers/DistinguishedByAppController'); 
 const cultivarsByAppController = require('./appControllers/CultivarsAppController'); 
-const plantsController = require('./appControllers/PlantsAppController'); // Import the plants controller
 
 //------------------step 2: load routers below -----------------------
 const router = express.Router();
