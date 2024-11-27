@@ -24,7 +24,7 @@ async function checkDbConnection() {
 async function fetchAndDisplayOrders() {
   const tableBody = document.querySelector("#demotable tbody");
 
-  const response = await fetch("/demotable", {
+  const response = await fetch("/orders/demotable", {
     method: "GET",
   });
 
@@ -48,7 +48,7 @@ async function fetchAndDisplayOrders() {
 
 // This function resets or initializes the order table.
 async function resetDemotable() {
-  const response = await fetch("/initiate-demotable", {
+  const response = await fetch("/orders/initiate-demotable", {
     method: "POST",
   });
   const responseData = await response.json();
@@ -70,7 +70,7 @@ async function insertDemotable(event) {
     order_comment: document.getElementById("insertOrderComment").value,
   };
 
-  const response = await fetch("/insert-demotable", {
+  const response = await fetch("/orders/insert-demotable", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(orderData),
@@ -94,7 +94,7 @@ async function updateOrderDemotable(event) {
     order_comment: document.getElementById("updateOrderComment").value,
   };
 
-  const response = await fetch("/update-order-demotable", {
+  const response = await fetch("/orders/update-order-demotable", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(orderData),
@@ -114,7 +114,7 @@ async function deleteOrderDemotable(event) {
 
   const orderId = document.getElementById("deleteOrderId").value;
 
-  const response = await fetch(`/delete-order-demotable/${orderId}`, {
+  const response = await fetch(`/orders/delete-order-demotable/${orderId}`, {
     method: "DELETE",
   });
 
@@ -126,18 +126,6 @@ async function deleteOrderDemotable(event) {
   fetchTableData();
 }
 
-// Counts rows in the order table.
-async function countDemotable() {
-  const response = await fetch("/count-demotable", {
-    method: "GET",
-  });
-
-  const responseData = await response.json();
-  const messageElement = document.getElementById("countResultMsg");
-  messageElement.textContent = responseData.success
-    ? `The number of orders: ${responseData.count}`
-    : "Error in counting orders!";
-}
 
 // Initializes the webpage functionalities.
 window.onload = function () {
@@ -155,9 +143,6 @@ window.onload = function () {
   document
     .getElementById("deleteOrderDemotable")
     .addEventListener("submit", deleteOrderDemotable);
-  document
-    .getElementById("countDemotable")
-    .addEventListener("click", countDemotable);
 };
 
 // General function to refresh the displayed table data.

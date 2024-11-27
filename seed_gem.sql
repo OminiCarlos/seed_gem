@@ -66,7 +66,7 @@ CREATE TABLE Cultivar (
 );
 
 CREATE TABLE Tag (
-    label VARCHAR(50) PRIMARY KEY
+    tag VARCHAR(50) PRIMARY KEY
 );
 
 CREATE TABLE plant_has_tags (

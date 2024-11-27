@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Database Application</title>
+  </head>
+  <body>
+    <h1>
+      Database Connection Status:
+      <span id="dbStatus"></span>
+      <img
+        id="loadingGif"
+        class="loading-gif"
+        src="loading_100px.gif"
+        alt="Loading..."
+      />
+    </h1>
+
+    <br />
+    <hr />
+    <br />
+
+    <!-- Show 'Demotable'. Data will be fetched and inserted here dynamically using JavaScript. -->
+    <h2>Show All Tags</h2>
+    <table id="demotable" border="1">
+      <thead>
+        <tr>
+          <th>Tag</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <br />
+    <hr />
+    <br />
+
+    <h2>Reset All Tags</h2>
+    <p>
+      If you wish to reset the table, press the reset button. If this is the
+      first time you're running this page, you MUST use reset.
+    </p>
+    <button id="resetDemotable">Reset</button>
+    <div id="resetResultMsg"></div>
+
+    <br />
+    <hr />
+    <br />
+
+    <h2>Create A New Tag</h2>
+    <form id="insertDemotable">
+      Tag:
+      <input
+        type="text"
+        id="insertTag"
+        placeholder="e.g. Cold-resistant, etc."
+        required
+      />
+      <br /><br />
+      
+      <button type="submit">Insert</button>
+    </form>
+    <div id="insertResultMsg"></div>
+
+    <br />
+    <hr />
+    <br />
+
+    <h2>Delete A Tag</h2>
+    <form id="deleteTags">
+      <label for="deleteTag">Tag to delete:</label>
+      <input
+        type="text"
+        id="deleteTag"
+        name="deleteTag"
+        placeholder="e.g. Cold-resistant, etc."
+        required
+      />
+      <br /><br />
+      <button type="submit">Delete</button>
+    </form>
+    <div id="deleteResultMsg"></div>
+
+    <br />
+    <hr />
+    <br />
+
+    <script src="Tags.js"></script>
+  </body>
+</html>

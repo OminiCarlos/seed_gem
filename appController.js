@@ -4,6 +4,7 @@ const appService = require('./appService');
 const locationsController = require('./appControllers/LocationsAppController'); // Import the Locations controller
 const batchesController = require('./appControllers/BatchesAppController'); // Import the Batches controller
 const plantsController = require('./appControllers/PlantsAppController'); // Import the plants controller
+const tagsController = require('./appControllers/TagsAppController'); // Import the Tags controller
 const soilConditionsController = require('./appControllers/SoilConditionsAppController'); 
 const distinguishedByAppController = require('./appControllers/DistinguishedByAppController'); 
 const cultivarsByAppController = require('./appControllers/CultivarsAppController'); 
@@ -15,10 +16,10 @@ const router = express.Router();
 router.use('/locations',locationsController) // Mount Locations routes
 router.use('/batches',batchesController) // Mount Batches routes
 router.use('/plants',plantsController) // Mount plants routes
+router.use('/tags', tagsController) // Mount tags routes
 router.use('/soilconditions',soilConditionsController) // Mount Soil routes
 router.use('/locdistinguishedbysoil',distinguishedByAppController) 
 router.use('/cultivars',cultivarsByAppController) 
-router.use('/plants',plantsController) // Mount plants routes
 
 // ----------------------------------------------------------
 // API endpoints
