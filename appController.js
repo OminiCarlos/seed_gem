@@ -5,6 +5,7 @@ const locationsController = require("./appControllers/LocationsAppController"); 
 const batchesController = require("./appControllers/BatchesAppController"); // Import the Batches controller
 const suppliersController = require("./appControllers/SuppliersAppController"); // Import the Suppliers controller
 const usersController = require("./appControllers/UsersAppController"); // Import the Users controller
+const recordsController = require("./appControllers/RecordsAppController"); // Import the Records controller
 
 //------------------step 2: load routers below -----------------------
 const router = express.Router();
@@ -13,6 +14,7 @@ router.use("/locations", locationsController); // Mount Locations routes
 router.use("/batches", batchesController); // Mount Batches routes
 router.use("/suppliers", suppliersController); // Mount Suppliers routes
 router.use("/users", usersController); // Mount Users routes
+router.use("/records", recordsController); // Mount Records routes
 
 // ----------------------------------------------------------
 // API endpoints

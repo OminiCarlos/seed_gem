@@ -21,7 +21,7 @@
     <hr />
     <br />
 
-    <!-- Display Plant Event Records in a read-only table -->
+    <!-- Display Plant Event Records in a table -->
     <h2>Plant Event Records</h2>
     <table id="eventRecordsTable" border="1">
       <thead>
@@ -42,46 +42,154 @@
     <hr />
     <br />
 
-    <script>
-      // JavaScript to fetch and display data dynamically
-      document.addEventListener("DOMContentLoaded", () => {
-        const tableBody = document.querySelector("#eventRecordsTable tbody");
+    <h2>Reset Plant Event Records</h2>
+    <p>
+      If you wish to reset the table, press the reset button. If this is the
+      first time you're running this page, you MUST use reset.
+    </p>
+    <button id="resetEventRecords">Reset</button>
+    <div id="resetResultMsg"></div>
 
-        // (replace with actual fetch call)
-        const records = [
-          {
-            event_id: 1,
-            event_title: "Planting Day",
-            event_date: "2024-01-15",
-            event_instruction: "Prepare soil and plant seeds.",
-            event_observation: "Healthy soil with sufficient moisture.",
-            batch_ID: 101,
-            user_ID: 5,
-          },
-          {
-            event_id: 2,
-            event_title: "Irrigation Check",
-            event_date: "2024-02-10",
-            event_instruction: "Inspect and water plants.",
-            event_observation: "Plants are thriving.",
-            batch_ID: 102,
-            user_ID: 8,
-          },
-        ];
+    <br />
+    <hr />
+    <br />
 
-        // Populate the table with data
-        records.forEach((record) => {
-          const row = document.createElement("tr");
+    <h2>Insert a New Event Record</h2>
+    <form id="insertEventRecord">
+      Event Title:
+      <input
+        type="text"
+        id="insertEventTitle"
+        placeholder="Enter Event Title"
+        maxlength="100"
+        required
+      />
+      <br /><br />
+      Event Date:
+      <input
+        type="date"
+        id="insertEventDate"
+        placeholder="Enter Event Date"
+        required
+      />
+      <br /><br />
+      Event Instruction:
+      <input
+        type="text"
+        id="insertEventInstruction"
+        placeholder="Enter Event Instruction"
+        maxlength="255"
+      />
+      <br /><br />
+      Event Observation:
+      <input
+        type="text"
+        id="insertEventObservation"
+        placeholder="Enter Event Observation"
+        maxlength="255"
+      />
+      <br /><br />
+      Batch ID:
+      <input
+        type="number"
+        id="insertBatchId"
+        placeholder="Enter Batch ID"
+        required
+      />
+      <br /><br />
+      User ID:
+      <input
+        type="number"
+        id="insertUserId"
+        placeholder="Enter User ID"
+        required
+      />
+      <br /><br />
+      <button type="submit">Insert</button>
+    </form>
+    <div id="insertResultMsg"></div>
 
-          for (const key in record) {
-            const cell = document.createElement("td");
-            cell.textContent = record[key];
-            row.appendChild(cell);
-          }
+    <br />
+    <hr />
+    <br />
 
-          tableBody.appendChild(row);
-        });
-      });
-    </script>
+    <h2>Update Event Record</h2>
+    <form id="updateEventRecord">
+      Event ID:
+      <input
+        type="number"
+        id="updateEventId"
+        placeholder="Enter Event ID"
+        required
+      />
+      <br /><br />
+      New Event Title:
+      <input
+        type="text"
+        id="updateEventTitle"
+        placeholder="Enter New Event Title"
+        maxlength="100"
+      />
+      <br /><br />
+      New Event Date:
+      <input
+        type="date"
+        id="updateEventDate"
+        placeholder="Enter New Event Date"
+      />
+      <br /><br />
+      New Event Instruction:
+      <input
+        type="text"
+        id="updateEventInstruction"
+        placeholder="Enter New Event Instruction"
+        maxlength="255"
+      />
+      <br /><br />
+      New Event Observation:
+      <input
+        type="text"
+        id="updateEventObservation"
+        placeholder="Enter New Event Observation"
+        maxlength="255"
+      />
+      <br /><br />
+      Batch ID:
+      <input
+        type="number"
+        id="updateBatchId"
+        placeholder="Enter New Batch ID"
+      />
+      <br /><br />
+      User ID:
+      <input type="number" id="updateUserId" placeholder="Enter New User ID" />
+      <br /><br />
+      <button type="submit">Update</button>
+    </form>
+    <div id="updateResultMsg"></div>
+
+    <br />
+    <hr />
+    <br />
+
+    <h2>Delete an Event Record</h2>
+    <form id="deleteEventRecord">
+      Event ID:
+      <input
+        type="number"
+        id="deleteEventId"
+        placeholder="Enter Event ID to Delete"
+        required
+      />
+      <br /><br />
+      <button type="submit">Delete</button>
+    </form>
+    <div id="deleteResultMsg"></div>
+
+    <br />
+    <hr />
+    <br />
+
+    <script src="Records.js"></script>
   </body>
 </html>
