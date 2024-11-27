@@ -12,9 +12,10 @@ async function initiateCultivarTable() {
     }
 
     // Create the Cultivar table
+    // TODO: re-visit the logic here. Refer to ER diagram. 
     await connection.execute(
       `CREATE TABLE CULTIVAR (
-         plant_ID INTEGER PRIMARY KEY,
+        plant_ID INTEGER PRIMARY KEY,
         cultivar_name VARCHAR(50),
         FOREIGN KEY (plant_ID) REFERENCES Plant(plant_ID)
       )`
@@ -117,5 +118,5 @@ module.exports = {
   fetchCultivarsFromDb,
   updateCultivar,
   deleteCultivar,
-//   countCultivars,
+  //   countCultivars,
 };
