@@ -10,8 +10,8 @@ drop table batch_is_at_Stage;
 drop table Batch;
 drop table Order_item;
 drop table Supplier;
--- Orderr is not a typo; order is a reserved name in Oracle so cannot be used 
-drop table Orderr;
+-- Orders is not a typo; order is a reserved name in Oracle so cannot be used 
+drop table Orders;
 drop table distinguished_by;
 drop table Soil_condition;
 drop table Location_irrigation;
@@ -117,7 +117,7 @@ CREATE TABLE distinguished_by (
     FOREIGN KEY (field_name, zone_ID) REFERENCES Location(field_name, zone_ID)
 );
 
-CREATE TABLE Orderr (
+CREATE TABLE Orders (
     order_id INTEGER PRIMARY KEY,
     order_date DATE,
     order_comment VARCHAR(3000)
@@ -140,7 +140,7 @@ CREATE TABLE Order_item (
     plant_ID INTEGER NOT NULL,
     supplier_ID INTEGER NOT NULL,
     PRIMARY KEY (order_ID, item_ID),
-    FOREIGN KEY (order_ID) REFERENCES Orderr(order_ID),
+    FOREIGN KEY (order_ID) REFERENCES Orders(order_ID),
     FOREIGN KEY (plant_ID) REFERENCES Plant(plant_ID),
     FOREIGN KEY (supplier_ID) REFERENCES Supplier(supplier_ID)
 );

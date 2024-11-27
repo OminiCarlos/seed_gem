@@ -39,9 +39,9 @@ async function fetchAndDisplayOrders() {
     const row = tableBody.insertRow();
 
     // Adjust to the number of columns in the 'Order' table
-    ["order_id", "order_date", "order_comment"].forEach((field) => {
+    ["order_id", "order_date", "order_comment"].forEach((field, index) => {
       const cell = row.insertCell();
-      cell.textContent = order[field];
+      cell.textContent = order[index];
     });
   });
 }
@@ -87,14 +87,14 @@ async function insertDemotable(event) {
 // Updates order details in the order table.
 async function updateOrderDemotable(event) {
   event.preventDefault();
-
+  console.log("update pressed.")
   const orderData = {
     order_id: document.getElementById("updateOrderId").value,
     order_date: document.getElementById("updateOrderDate").value,
     order_comment: document.getElementById("updateOrderComment").value,
   };
 
-  const response = await fetch("/orders/update-order-demotable", {
+  const response = await fetch("/orders/update-demotable", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(orderData),
@@ -114,7 +114,7 @@ async function deleteOrderDemotable(event) {
 
   const orderId = document.getElementById("deleteOrderId").value;
 
-  const response = await fetch(`/orders/delete-order-demotable/${orderId}`, {
+  const response = await fetch(`/orders/delete-demotable/${orderId}`, {
     method: "DELETE",
   });
 
