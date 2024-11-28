@@ -22,15 +22,14 @@ async function initiateBatchStages() {
 
     const result = await connection.execute(
       `CREATE TABLE BATCH_IS_AT_STAGE (
-          batch_ID NUMBER, 
-          plant_ID NUMBER, 
-          stage_name VARCHAR2(100), 
+          batch_ID VARCHAR2(50), 
+          plant_ID INTEGER, 
+          stage_name VARCHAR(50), 
           start_date DATE, 
           end_date DATE,
           PRIMARY KEY (batch_ID, plant_ID, stage_name),
           FOREIGN KEY (batch_ID) REFERENCES BATCH(batch_id),
-          FOREIGN KEY (plant_ID) REFERENCES PLANT(plant_id),
-          FOREIGN KEY (stage_name) REFERENCES STAGE(stage_name)
+          FOREIGN KEY (plant_ID, stage_name) REFERENCES STAGE(plant_ID, stage_name)
       )`
     );
     console.log("BATCH_IS_AT_STAGE table created successfully!");
