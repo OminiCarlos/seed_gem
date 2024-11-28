@@ -27,6 +27,11 @@ router.use('/stages', stagesController)
 router.use('/soilconditions',soilConditionsController) // Mount Soil routes
 router.use('/locdistinguishedbysoil',distinguishedByAppController) 
 router.use('/cultivars',cultivarsByAppController) 
+router.use("/suppliers", suppliersController); // Mount Suppliers routes
+router.use("/users", usersController); // Mount Users routes
+router.use("/records", recordsController); // Mount Records routes
+router.use("/batchIsAtStage", batchIsAtStageController); // Mount BatchIsAtStage routes
+
 
 // ----------------------------------------------------------
 // API endpoints
