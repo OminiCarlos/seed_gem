@@ -6,6 +6,7 @@ const batchesController = require('./appControllers/BatchesAppController'); // I
 const plantsController = require('./appControllers/PlantsAppController'); // Import the plants controller
 const tagsController = require('./appControllers/TagsAppController'); // Import the Tags controller
 const ordersController = require('./appControllers/OrdersAppController'); // Import the Tags controller
+const stagesController = require('./appControllers/StagesAppController');
 const soilConditionsController = require('./appControllers/SoilConditionsAppController'); 
 const distinguishedByAppController = require('./appControllers/DistinguishedByAppController'); 
 const cultivarsByAppController = require('./appControllers/CultivarsAppController'); 
@@ -18,6 +19,7 @@ router.use('/batches',batchesController) // Mount Batches routes
 router.use('/plants',plantsController) // Mount plants routes
 router.use('/tags', tagsController) // Mount tags routes
 router.use('/orders', ordersController)
+router.use('/stages', stagesController)
 router.use('/soilconditions',soilConditionsController) // Mount Soil routes
 router.use('/locdistinguishedbysoil',distinguishedByAppController) 
 router.use('/cultivars',cultivarsByAppController) 

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Database Application</title>
+  </head>
+  <body>
+    <h1>
+      Database Connection Status:
+      <span id="dbStatus"></span>
+      <img
+        id="loadingGif"
+        class="loading-gif"
+        src="loading_100px.gif"
+        alt="Loading..."
+      />
+    </h1>
+
+    <br />
+    <hr />
+    <br />
+
+    <!-- Show 'Demotable'. Data will be fetched and inserted here dynamically using JavaScript. -->
+    <h2>Show All Plant with Stages</h2>
+    <table id="demotable" border="1">
+      <thead>
+        <tr>
+          <th>Plant ID</th>
+          <th>Common Name</th>
+          <th>Stage</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <br />
+    <hr />
+    <br />
+
+    <h2>Reset All Stages</h2>
+    <p>
+      If you wish to reset the table, press the reset button. If this is the
+      first time you're running this page, you MUST use reset.
+    </p>
+    <button id="resetDemotable">Reset</button>
+    <div id="resetResultMsg"></div>
+
+    <br />
+    <hr />
+    <br />
+
+    <h2>Create A New Stage</h2>
+    <form id="insertDemotable">
+      Plant ID:
+      <input
+        type="number"
+        id="insertPlantId"
+        placeholder="Enter Plant ID"
+        required
+      />
+      <br /><br />
+      Name of Stage:
+      <input
+        type="text"
+        id="insertStageName"
+        placeholder="Enter the name of Stage"
+        maxlength="50"
+      />
+      <br /><br />
+      <button type="submit">Insert</button>
+    </form>
+    <div id="insertResultMsg"></div>
+
+    <br />
+    <hr />
+    <br />
+
+    <h2>Update Name of Stage</h2>
+    <form id="updateDemotable">
+      Plant ID:
+      <input
+        type="number"
+        id="updatePlantId"
+        placeholder="Enter Plant ID"
+        required
+      />
+      <br /><br />
+      New Name of Stage:
+      <input
+        type="text"
+        id="updateStageName"
+        placeholder="Enter New name of Stage"
+        maxlength="50"
+      />
+      <br /><br />
+      <button type="submit">Update</button>
+    </form>
+    <div id="updateResultMsg"></div>
+
+    <br />
+    <hr />
+    <br />
+
+    <h2>Delete a Stage</h2>
+    <form id="deleteDemotable">
+      Plant ID:
+      <input
+        type="number"
+        id="deletePlantId"
+        placeholder="Enter Plant ID to Delete"
+        required
+      />
+      <br /><br />
+      Name of Stage:
+      <input
+        type="text"
+        id="deleteStageName"
+        placeholder="Enter the Name of Stage to Delete"
+        required
+      />
+      <br /><br />
+      <button type="submit">Delete</button>
+    </form>
+    <div id="deleteResultMsg"></div>
+
+    <br />
+    <hr />
+    <br />
+
+    <script src="Stages.js"></script>
+  </body>
+</html>

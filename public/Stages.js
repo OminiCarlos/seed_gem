@@ -21,49 +21,47 @@ async function checkDbConnection() {
 }
 
 // Fetches data from the demotable and displays it.
-async function fetchAndDisplayUsers() {
+async function fetchAndDisplayStages() {
   const tableBody = document.querySelector("#demotable tbody");
 
-  const response = await fetch("/demotable", {
+  const response = await fetch("/stages/demotable", {
     method: "GET",
   });
 
   const responseData = await response.json();
   const demotableContent = responseData.data;
+  console.log(demotableContent);
 
   // Clear existing table rows
   tableBody.innerHTML = "";
 
   // Populate the table with data
-  demotableContent.forEach((plant) => {
+  demotableContent.forEach((stage) => {
     const row = tableBody.insertRow();
 
-    // Adjust to the number of columns in the 'Plant' table
+    // Adjust to the number of columns in the 'stage' table
     [
       "plant_id",
-      "yield_type",
       "common_name",
-      "scientific_name",
-      "overview_notes",
-      "cultivar_name",
-    ].forEach((field) => {
+      "stage_name",
+    ].forEach((field, index) => {
       const cell = row.insertCell();
-      cell.textContent = plant[field];
+      cell.textContent = stage[index];
     });
   });
 }
 
 // This function resets or initializes the demotable.
 async function resetDemotable() {
-  const response = await fetch("/initiate-demotable", {
+  const response = await fetch("/stages/initiate-demotable", {
     method: "POST",
   });
   const responseData = await response.json();
 
   const messageElement = document.getElementById("resetResultMsg");
   messageElement.textContent = responseData.success
-    ? "demotable initiated successfully!"
-    : "Error initiating table!";
+    ? "stage table initiated successfully!"
+    : "Error initiating stagetable!";
   fetchTableData();
 }
 
@@ -71,19 +69,15 @@ async function resetDemotable() {
 async function insertDemotable(event) {
   event.preventDefault();
 
-  const plantData = {
+  const stageData = {
     plant_id: document.getElementById("insertPlantId").value,
-    yield_type: document.getElementById("insertYieldType").value,
-    common_name: document.getElementById("insertCommonName").value,
-    scientific_name: document.getElementById("insertScientificName").value,
-    overview_notes: document.getElementById("insertOverviewNotes").value,
-    cultivar_name: document.getElementById("insertCultivarName").value,
+    stage_name: document.getElementById("insertStageName").value,
   };
 
-  const response = await fetch("/insert-demotable", {
+  const response = await fetch("/stages/insert-demotable", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(plantData),
+    body: JSON.stringify(stageData),
   });
 
   const responseData = await response.json();
@@ -94,62 +88,52 @@ async function insertDemotable(event) {
   fetchTableData();
 }
 
-// Updates plant details in the demotable.
-async function updatePlantDemotable(event) {
+// Updates stage details in the demotable.
+async function updateDemotable(event) {
   event.preventDefault();
 
-  const plantData = {
-    plant_id: document.getElementById("updatePlantId").value,
-    yield_type: document.getElementById("updateYieldType").value,
-    common_name: document.getElementById("updateCommonName").value,
-    scientific_name: document.getElementById("updateScientificName").value,
-    overview_notes: document.getElementById("updateOverviewNotes").value,
-    cultivar_name: document.getElementById("updateCultivarName").value,
+  const stageData = {
+    plant_id: document.getElementById("insertPlantId").value,
+    scientific_name: document.getElementById("insertStageName").value,
   };
 
-  const response = await fetch("/update-plant-demotable", {
+  const response = await fetch("/stages/update-demotable", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(plantData),
+    body: JSON.stringify(stageData),
   });
 
   const responseData = await response.json();
   const messageElement = document.getElementById("updateResultMsg");
   messageElement.textContent = responseData.success
-    ? "Plant updated successfully!"
-    : "Error updating plant!";
+    ? "Stage updated successfully!"
+    : "Error updating stage!";
   fetchTableData();
 }
 
-// Deletes a plant from the demotable by Plant ID.
-async function deletePlantDemotable(event) {
+// Deletes a stage from the demotable by Plant ID + Stage name.
+async function deleteDemotable(event) {
   event.preventDefault();
 
-  const plantId = document.getElementById("deletePlantId").value;
+  const stageData = {
+    plant_id: document.getElementById("deletePlantId").value,
+    stage_name: document.getElementById("deleteStageName").value,
+  };
 
-  const response = await fetch(`/delete-plant-demotable/${plantId}`, {
-    method: "DELETE",
+  console.log(stageData);
+
+  const response = await fetch("/stages/delete-demotable", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(stageData),
   });
 
   const responseData = await response.json();
   const messageElement = document.getElementById("deleteResultMsg");
   messageElement.textContent = responseData.success
-    ? "Plant deleted successfully!"
-    : "Error deleting plant!";
+    ? "Stage deleted successfully!"
+    : "Error deleting Stage!";
   fetchTableData();
-}
-
-// Counts rows in the demotable.
-async function countDemotable() {
-  const response = await fetch("/count-demotable", {
-    method: "GET",
-  });
-
-  const responseData = await response.json();
-  const messageElement = document.getElementById("countResultMsg");
-  messageElement.textContent = responseData.success
-    ? `The number of tuples in demotable: ${responseData.count}`
-    : "Error in count demotable!";
 }
 
 // Initializes the webpage functionalities.
@@ -163,17 +147,14 @@ window.onload = function () {
     .getElementById("insertDemotable")
     .addEventListener("submit", insertDemotable);
   document
-    .getElementById("updatePlantDemotable")
-    .addEventListener("submit", updatePlantDemotable);
+    .getElementById("updateDemotable")
+    .addEventListener("submit", updateDemotable);
   document
-    .getElementById("deletePlantDemotable")
-    .addEventListener("submit", deletePlantDemotable);
-  document
-    .getElementById("countDemotable")
-    .addEventListener("click", countDemotable);
+    .getElementById("deleteDemotable")
+    .addEventListener("submit", deleteDemotable);
 };
 
 // General function to refresh the displayed table data.
 function fetchTableData() {
-  fetchAndDisplayUsers();
+  fetchAndDisplayStages();
 }

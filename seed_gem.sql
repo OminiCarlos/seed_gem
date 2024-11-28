@@ -81,7 +81,7 @@ CREATE TABLE Stage (
     stage_name VARCHAR(50),
     plant_ID INTEGER,
     PRIMARY KEY (stage_name, plant_ID),
-    FOREIGN KEY (plant_ID) REFERENCES Plant(plant_ID)
+    FOREIGN KEY (plant_ID) REFERENCES Plant(plant_ID) ON DELETE CASCADE
 );
 
 CREATE TABLE Location (
