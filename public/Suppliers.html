@@ -1,75 +1,158 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Database Application</title>
-</head>
-<body>
-    <h1>Database Connection Status: 
-        <span id="dbStatus"></span>
-        <img id="loadingGif" class="loading-gif" src="loading_100px.gif" alt="Loading...">
+  </head>
+  <body>
+    <h1>
+      Database Connection Status:
+      <span id="dbStatus"></span>
+      <img
+        id="loadingGif"
+        class="loading-gif"
+        src="loading_100px.gif"
+        alt="Loading..."
+      />
     </h1>
 
-    <br><hr><br>
+    <br />
+    <hr />
+    <br />
 
     <!-- Show 'Supplier' Table -->
     <h2>Show All Suppliers</h2>
     <table id="demotable" border="1">
-        <thead>
-            <tr>
-                <th>Supplier ID</th>
-                <th>Supplier Name</th>
-                <th>Supplier Address</th>
-                <th>Supplier Telephone</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
+      <thead>
+        <tr>
+          <th>Supplier ID</th>
+          <th>Supplier Name</th>
+          <th>Supplier Address</th>
+          <th>Supplier Telephone</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
     </table>
 
-    <br><hr><br>
+    <br />
+    <hr />
+    <br />
 
     <h2>Reset All Suppliers</h2>
-    <p>If you wish to reset the table, press the reset button. If this is the first time you're running this page, you MUST use reset.</p>
+    <p>
+      If you wish to reset the table, press the reset button. If this is the
+      first time you're running this page, you MUST use reset.
+    </p>
     <button id="resetDemotable">Reset</button>
     <div id="resetResultMsg"></div>
 
-    <br><hr><br>
+    <br />
+    <hr />
+    <br />
 
     <h2>Insert New Supplier</h2>
     <form id="insertDemotable">
-        Supplier ID: <input type="number" id="insertSupplierId" placeholder="Enter Supplier ID" required> <br><br>
-        Supplier Name: <input type="text" id="insertSupplierName" placeholder="Enter Supplier Name" maxlength="100"> <br><br>
-        Supplier Address: <input type="text" id="insertSupplierAddress" placeholder="Enter Supplier Address" maxlength="200"> <br><br>
-        Supplier Telephone: <input type="text" id="insertSupplierTel" placeholder="Enter Supplier Telephone" maxlength="20"> <br><br>
-        <button type="submit">Insert</button>
+      Supplier ID:
+      <input
+        type="number"
+        id="insertSupplierId"
+        placeholder="Enter Supplier ID"
+        required
+      />
+      <br /><br />
+      Supplier Name:
+      <input
+        type="text"
+        id="insertSupplierName"
+        placeholder="Enter Supplier Name"
+        maxlength="100"
+      />
+      <br /><br />
+      Supplier Address:
+      <input
+        type="text"
+        id="insertSupplierAddress"
+        placeholder="Enter Supplier Address"
+        maxlength="200"
+      />
+      <br /><br />
+      Supplier Telephone:
+      <input
+        type="text"
+        id="insertSupplierTel"
+        placeholder="Enter Supplier Telephone"
+        maxlength="20"
+      />
+      <br /><br />
+      <button type="submit">Insert</button>
     </form>
     <div id="insertResultMsg"></div>
 
-    <br><hr><br>
+    <br />
+    <hr />
+    <br />
 
     <h2>Update Supplier Details</h2>
     <form id="updateSupplierDemotable">
-        Supplier ID: <input type="number" id="updateSupplierId" placeholder="Enter Supplier ID" required> <br><br>
-        New Supplier Name: <input type="text" id="updateSupplierName" placeholder="Enter New Supplier Name" maxlength="100"> <br><br>
-        New Supplier Address: <input type="text" id="updateSupplierAddress" placeholder="Enter New Supplier Address" maxlength="200"> <br><br>
-        New Supplier Telephone: <input type="text" id="updateSupplierTel" placeholder="Enter New Supplier Telephone" maxlength="20"> <br><br>
-        <button type="submit">Update</button>
+      Supplier ID:
+      <input
+        type="number"
+        id="updateSupplierId"
+        placeholder="Enter Supplier ID"
+        required
+      />
+      <br /><br />
+      New Supplier Name:
+      <input
+        type="text"
+        id="updateSupplierName"
+        placeholder="Enter New Supplier Name"
+        maxlength="100"
+      />
+      <br /><br />
+      New Supplier Address:
+      <input
+        type="text"
+        id="updateSupplierAddress"
+        placeholder="Enter New Supplier Address"
+        maxlength="200"
+      />
+      <br /><br />
+      New Supplier Telephone:
+      <input
+        type="text"
+        id="updateSupplierTel"
+        placeholder="Enter New Supplier Telephone"
+        maxlength="20"
+      />
+      <br /><br />
+      <button type="submit">Update</button>
     </form>
     <div id="updateResultMsg"></div>
 
-    <br><hr><br>
+    <br />
+    <hr />
+    <br />
 
     <h2>Delete a Supplier</h2>
     <form id="deleteSupplierDemotable">
-        Supplier ID: <input type="number" id="deleteSupplierId" placeholder="Enter Supplier ID to Delete" required> <br><br>
-        <button type="submit">Delete</button>
+      Supplier ID:
+      <input
+        type="number"
+        id="deleteSupplierId"
+        placeholder="Enter Supplier ID to Delete"
+        required
+      />
+      <br /><br />
+      <button type="submit">Delete</button>
     </form>
     <div id="deleteResultMsg"></div>
 
-    <br><hr><br>
+    <br />
+    <hr />
+    <br />
 
     <script src="Suppliers.js"></script>
-</body>
+  </body>
 </html>

@@ -28,24 +28,32 @@ async function fetchAndDisplayUsers() {
 
   tableBody.innerHTML = ""; // Clear existing table rows
 
-  demotableContent.forEach((batch) => {
-    const row = tableBody.insertRow();
-    [
-      "batch_id",
-      "care_notes",
-      "plant_date",
-      "yield_weight",
-      "planted_quantity",
-      "survived_quantity",
-      "item_id",
-      "order_id",
-      "field_name",
-      "zone_id",
-    ].forEach((field,index) => {
-      const cell = row.insertCell();
-      cell.textContent = batch[index];
-    });
-  });
+  demotableContent
+    .forEach((batch) => {
+      const row = tableBody.insertRow();
+      [
+        "batch_id",
+        "care_notes",
+        "plant_date",
+        "yield_weight",
+        "planted_quantity",
+        "survived_quantity",
+        "item_id",
+        "order_id",
+        "field_name",
+        "zone_id",
+      ].forEach((field, index) => {
+        const cell = row.insertCell();
+        if (field === "plant_date") {
+          // Format the date field
+          const date = new Date(batch[index]);
+          cell.textContent = date.toISOString().split("T")[0]; // Extract YYYY-MM-DD
+        } else {
+          cell.textContent = batch[index];
+        }
+      });
+    })
+    .catch((error) => console.error("Error fetching table data:", error));
 }
 
 // This function resets or initializes the demotable.

@@ -43,9 +43,9 @@ async function fetchAndDisplaySuppliers() {
       "supplier_name",
       "supplier_address",
       "supplier_tel",
-    ].forEach((field) => {
+    ].forEach((field,index) => {
       const cell = row.insertCell();
-      cell.textContent = supplier[field];
+      cell.textContent = supplier[index];
     });
   });
 }
@@ -149,9 +149,6 @@ window.onload = function () {
   document
     .getElementById("deleteSupplierDemotable")
     .addEventListener("submit", deleteSupplierDemotable);
-  document
-    .getElementById("countDemotable")
-    .addEventListener("click", countDemotable);
 };
 
 // General function to refresh the displayed table data.

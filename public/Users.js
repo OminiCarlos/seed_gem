@@ -38,9 +38,9 @@ async function fetchAndDisplayUsers() {
   demotableContent.forEach((user) => {
     const row = tableBody.insertRow();
 
-    ["user_id", "user_name", "user_note"].forEach((field) => {
+    ["user_id", "user_name", "user_note"].forEach((field, index) => {
       const cell = row.insertCell();
-      cell.textContent = user[field];
+      cell.textContent = user[index];
     });
   });
 }
@@ -126,19 +126,6 @@ async function deleteUserDemotable(event) {
   fetchTableData();
 }
 
-// Counts rows in the user table.
-async function countDemotable() {
-  const response = await fetch("/users/count-demotable", {
-    method: "GET",
-  });
-
-  const responseData = await response.json();
-  const messageElement = document.getElementById("countResultMsg");
-  messageElement.textContent = responseData.success
-    ? `The number of tuples in demotable: ${responseData.count}`
-    : "Error in count demotable!";
-}
-
 // Initializes the webpage functionalities.
 window.onload = function () {
   checkDbConnection();
@@ -155,9 +142,6 @@ window.onload = function () {
   document
     .getElementById("deleteUserDemotable")
     .addEventListener("submit", deleteUserDemotable);
-  document
-    .getElementById("countDemotable")
-    .addEventListener("click", countDemotable);
 };
 
 // General function to refresh the displayed table data.

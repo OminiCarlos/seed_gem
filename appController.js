@@ -1,5 +1,5 @@
-const express = require('express');
-const appService = require('./appService'); 
+const express = require("express");
+const appService = require("./appService");
 // ------------------------step 1: import sub appControllers---------
 const locationsController = require('./appControllers/LocationsAppController'); // Import the Locations controller
 const batchesController = require('./appControllers/BatchesAppController'); // Import the Batches controller
@@ -10,6 +10,10 @@ const stagesController = require('./appControllers/StagesAppController');
 const soilConditionsController = require('./appControllers/SoilConditionsAppController'); 
 const distinguishedByAppController = require('./appControllers/DistinguishedByAppController'); 
 const cultivarsByAppController = require('./appControllers/CultivarsAppController'); 
+const suppliersController = require("./appControllers/SuppliersAppController"); // Import the Suppliers controller
+const usersController = require("./appControllers/UsersAppController"); // Import the Users controller
+const recordsController = require("./appControllers/RecordsAppController"); // Import the Records controller
+const batchIsAtStageController = require("./appControllers/BatchIsAtStageAppController"); // Import the BatchIsAtStage controller
 
 //------------------step 2: load routers below -----------------------
 const router = express.Router();
@@ -27,13 +31,13 @@ router.use('/cultivars',cultivarsByAppController)
 // ----------------------------------------------------------
 // API endpoints
 // system level health check.
-router.get('/check-db-connection', async (req, res) => {
-    const isConnect = await appService.testOracleConnection();
-    if (isConnect) {
-        res.send('connected');
-    } else {
-        res.send('unable to connect');
-    }
+router.get("/check-db-connection", async (req, res) => {
+  const isConnect = await appService.testOracleConnection();
+  if (isConnect) {
+    res.send("connected");
+  } else {
+    res.send("unable to connect");
+  }
 });
 
 // TODO: add the system level sql load.
