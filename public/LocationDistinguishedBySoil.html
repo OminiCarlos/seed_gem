@@ -40,7 +40,7 @@
 <hr />
 <br />
 
-<h2>Show Good Locations</h2>
+<h2>Show Good Locations (Aggregation with Nested Group by)</h2>
 <p>
   A "Good Location" is defined as a location where the organic matter concentration is greater than or equal to the averages of concentration of all different fields.
 </p>
@@ -64,7 +64,7 @@
 <hr />
 <br />
 
-<h2>Find Super Fields</h2>
+<h2>Find Super Fields (Division)</h2>
 <p>
   A "Super Field" is defined as a field that is associated with all types of soil conditions in the database.
 </p>
@@ -87,17 +87,7 @@
     <hr />
     <br />
 
-    <h2>Reset Locations Distinguished by Soil</h2>
-    <p>
-      If you wish to reset the table, press the reset button. If this is the
-      first time you're running this page, you MUST use reset.
-    </p>
-    <button id="resetLocationSoilTable">Reset</button>
-    <div id="resetResultMsg"></div>
-
-    <br />
-    <hr />
-    <br />
+  
 
     <h2>Insert Values into Location Distinguished by Soil</h2>
     <form id="insertLocationSoilForm">
@@ -214,6 +204,18 @@
     <h2>Count Locations Distinguished by Soil</h2>
     <button id="countLocationSoilTable">Count</button>
     <div id="countResultMsg"></div>
+
+    <h2>Reset Locations Distinguished by Soil</h2>
+    <p>
+      If you wish to reset the table, press the reset button. If this is the
+      first time you're running this page, you MUST use reset.
+    </p>
+    <button id="resetLocationSoilTable">Reset</button>
+    <div id="resetResultMsg"></div>
+
+    <br />
+    <hr />
+    <br />
 
     <script src="LocationDistinguishedBySoil.js"></script>
   </body>
