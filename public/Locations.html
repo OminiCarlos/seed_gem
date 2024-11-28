@@ -34,17 +34,6 @@
       <tbody></tbody>
     </table>
 
-    <br />
-    <hr />
-    <br />
-
-    <h2>Reset All Locations</h2>
-    <p>
-      If you wish to reset the table, press the reset button. If this is the
-      first time you're running this page, you MUST use reset.
-    </p>
-    <button id="resetDemotable">Reset</button>
-    <div id="resetResultMsg"></div>
 
     <br />
     <hr />
@@ -69,7 +58,7 @@
       />
       <br /><br />
       Is Outdoor: <input type="checkbox" id="insertIsOutdoor" /> <br /><br />
-      Is Irrigated: <input type="checkbox" id="insertIsIrrigated" />
+      <!-- Is Irrigated: <input type="checkbox" id="insertIsIrrigated" /> -->
       <br /><br />
       <button type="submit">Insert</button>
     </form>
@@ -99,8 +88,8 @@
       <br /><br />
       New Is Outdoor: <input type="checkbox" id="updateIsOutdoor" />
       <br /><br />
-      New Is Irrigated: <input type="checkbox" id="updateIsIrrigated" />
-      <br /><br />
+      <!-- New Is Irrigated: <input type="checkbox" id="updateIsIrrigated" />
+      <br /><br /> -->
       <button type="submit">Update</button>
     </form>
     <div id="updateResultMsg"></div>
@@ -138,6 +127,19 @@
     <h2>Count the Tuples in Locations</h2>
     <button id="countDemotable">Count</button>
     <div id="countResultMsg"></div>
+
+    <br />
+    <hr />
+    <br />
+
+    <h2>Reset All Locations</h2>
+    <p>
+      If you wish to reset the table, press the reset button. If this is the
+      first time you're running this page, you MUST use reset.
+    </p>
+    <button id="resetDemotable">Reset</button>
+    <div id="resetResultMsg"></div>
+
 
     <script src="Locations.js"></script>
   </body>

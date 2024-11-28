@@ -141,6 +141,67 @@ async function checkDbConnection() {
 //       ? `The number of tuples in soil condition table: ${responseData.count}`
 //       : "Error in counting soil conditions!";
 //   }
+
+
+// SELECTION / filter
+// Adds a new condition row to the filter form
+document.getElementById("addCondition").addEventListener("click", () => {
+  const conditionRow = document.querySelector(".filter-row").cloneNode(true);
+  document.getElementById("filterConditions").appendChild(conditionRow);
+});
+
+// Handles the filter form submission
+document.getElementById("filterSoilForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  // Collect all conditions
+  const conditionRows = document.querySelectorAll(".filter-row");
+  const conditions = [];
+  conditionRows.forEach((row) => {
+    const attribute = row.querySelector(".filter-attribute").value;
+    const operator = row.querySelector(".filter-operator").value;
+    const value = row.querySelector(".filter-value").value;
+    conditions.push(`${attribute} ${operator} '${value}'`);
+  });
+
+  // Combine conditions with AND/OR
+  const combineWith = document.getElementById("filterCombine").value;
+  const queryConditions = conditions.join(` ${combineWith} `);
+
+  // Send the filter query to the backend
+  const response = await fetch(`/soilconditions/filter`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ conditions: queryConditions }),
+  });
+
+  const responseData = await response.json();
+  const resultMsg = document.getElementById("filterResultMsg");
+
+  if (responseData.success) {
+    displayFilteredResults(responseData.data);
+    resultMsg.textContent = "Filter applied successfully!";
+  } else {
+    resultMsg.textContent = "Error applying filter.";
+  }
+});
+
+// Displays filtered results in the table
+function displayFilteredResults(data) {
+  const tableBody = document.querySelector("#soilTable tbody");
+  tableBody.innerHTML = "";
+
+  data.forEach((row) => {
+    const tableRow = tableBody.insertRow();
+    Object.values(row).forEach((value) => {
+      const cell = tableRow.insertCell();
+      cell.textContent = value;
+    });
+  });
+}
+
+
+
   
   // Initializes the webpage functionalities.
   window.onload = function () {

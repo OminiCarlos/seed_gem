@@ -113,8 +113,8 @@ CREATE TABLE distinguished_by (
     field_name VARCHAR(50),
     zone_ID INTEGER,
     PRIMARY KEY (soil_type, field_name, zone_ID),
-    FOREIGN KEY (soil_type) REFERENCES Soil_condition(soil_type),
-    FOREIGN KEY (field_name, zone_ID) REFERENCES Location(field_name, zone_ID)
+    FOREIGN KEY (soil_type) REFERENCES Soil_condition(soil_type) ON DELETE CASCADE,
+    FOREIGN KEY (field_name, zone_ID) REFERENCES Location(field_name, zone_ID) ON DELETE CASCADE
 );
 
 CREATE TABLE Orders (
@@ -200,17 +200,85 @@ VALUES ('Loamy', 7.00, 2.30);
 INSERT INTO Soil_condition (soil_type, pH, organic_matter_concentration)
 VALUES ('Clay', 5.80, 3.10);
 
+INSERT INTO Soil_condition (soil_type, pH, organic_matter_concentration)
+VALUES ('Silt', 6.80, 2.50);
+
+INSERT INTO Soil_condition (soil_type, pH, organic_matter_concentration)
+VALUES ('Peaty', 5.50, 4.00);
+
+INSERT INTO Soil_condition (soil_type, pH, organic_matter_concentration)
+VALUES ('Chalky', 7.20, 1.10);
+
+INSERT INTO Soil_condition (soil_type, pH, organic_matter_concentration)
+VALUES ('Saline', 8.00, 0.50);
+
+INSERT INTO Soil_condition (soil_type, pH, organic_matter_concentration)
+VALUES ('Gravelly', 6.00, 1.80);
+
+INSERT INTO Soil_condition (soil_type, pH, organic_matter_concentration)
+VALUES ('Humus-rich', 6.90, 3.50);
+
+INSERT INTO Soil_condition (soil_type, pH, organic_matter_concentration)
+VALUES ('Alluvial', 7.50, 2.80);
+
+INSERT INTO Soil_condition (soil_type, pH, organic_matter_concentration)
+VALUES ('Acidic', 4.50, 3.00);
+
+INSERT INTO Soil_condition (soil_type, pH, organic_matter_concentration)
+VALUES ('Alkaline', 8.20, 1.00);
+
+
 INSERT INTO Location (field_name, zone_id, is_outdoor) VALUES ('North Field', 1, 0); 
+INSERT INTO Location (field_name, zone_id, is_outdoor) VALUES ('North Field', 2, 1);
+INSERT INTO Location (field_name, zone_id, is_outdoor) VALUES ('North Field', 3, 0);
+INSERT INTO Location (field_name, zone_id, is_outdoor) VALUES ('North Field', 4, 1);
+INSERT INTO Location (field_name, zone_id, is_outdoor) VALUES ('North Field', 5, 1);
+INSERT INTO Location (field_name, zone_id, is_outdoor) VALUES ('North Field', 6, 1);
+INSERT INTO Location (field_name, zone_id, is_outdoor) VALUES ('North Field', 7, 1);
+INSERT INTO Location (field_name, zone_id, is_outdoor) VALUES ('North Field', 8, 1);
+INSERT INTO Location (field_name, zone_id, is_outdoor) VALUES ('North Field', 9, 1);
+INSERT INTO Location (field_name, zone_id, is_outdoor) VALUES ('North Field', 10, 1);
+INSERT INTO Location (field_name, zone_id, is_outdoor) VALUES ('North Field', 11, 1);
+INSERT INTO Location (field_name, zone_id, is_outdoor) VALUES ('North Field', 12, 1);
 
-INSERT INTO Location (field_name, zone_id, is_outdoor) VALUES ('Middle Field', 2, 1);
+INSERT INTO Location (field_name, zone_id, is_outdoor) VALUES ('South Field', 1, 1);
+INSERT INTO Location (field_name, zone_id, is_outdoor) VALUES ('South Field', 2, 0);
 
-INSERT INTO Location (field_name, zone_id, is_outdoor) VALUES ('South Field', 3, 1);
+INSERT INTO Location (field_name, zone_id, is_outdoor) VALUES ('Middle Field', 1, 1);
+INSERT INTO Location (field_name, zone_id, is_outdoor) VALUES ('Middle Field', 2, 0);
 
-INSERT INTO distinguished_by (field_name, zone_ID, soil_type) VALUES ('Middle Field', 2, 'Clay');
+INSERT INTO Location (field_name, zone_id, is_outdoor) VALUES ('East Field', 1, 0);
+INSERT INTO Location (field_name, zone_id, is_outdoor) VALUES ('East Field', 2, 1);
 
-INSERT INTO distinguished_by (field_name, zone_ID, soil_type) VALUES ('North Field', 1, 'Loamy');
+INSERT INTO Location (field_name, zone_id, is_outdoor) VALUES ('West Field', 1, 1);
+INSERT INTO Location (field_name, zone_id, is_outdoor) VALUES ('West Field', 2, 1);
 
-INSERT INTO distinguished_by (field_name, zone_ID, soil_type) VALUES ('South Field', 3, 'Loamy');
+
+
+INSERT INTO distinguished_by (field_name, zone_ID, soil_type) VALUES ('North Field', 1, 'Sandy');
+INSERT INTO distinguished_by (field_name, zone_ID, soil_type) VALUES ('North Field', 2, 'Loamy');
+INSERT INTO distinguished_by (field_name, zone_ID, soil_type) VALUES ('North Field', 3, 'Clay');
+INSERT INTO distinguished_by (field_name, zone_ID, soil_type) VALUES ('North Field', 4, 'Silt');
+INSERT INTO distinguished_by (field_name, zone_ID, soil_type) VALUES ('North Field', 5, 'Peaty');
+INSERT INTO distinguished_by (field_name, zone_ID, soil_type) VALUES ('North Field', 6, 'Chalky');
+INSERT INTO distinguished_by (field_name, zone_ID, soil_type) VALUES ('North Field', 7, 'Saline');
+INSERT INTO distinguished_by (field_name, zone_ID, soil_type) VALUES ('North Field', 8, 'Gravelly');
+INSERT INTO distinguished_by (field_name, zone_ID, soil_type) VALUES ('North Field', 9, 'Humus-rich');
+INSERT INTO distinguished_by (field_name, zone_ID, soil_type) VALUES ('North Field', 10, 'Alluvial');
+INSERT INTO distinguished_by (field_name, zone_ID, soil_type) VALUES ('North Field', 11, 'Acidic');
+INSERT INTO distinguished_by (field_name, zone_ID, soil_type) VALUES ('North Field', 12, 'Alkaline');
+
+INSERT INTO distinguished_by (field_name, zone_ID, soil_type) VALUES ('South Field', 1, 'Saline');
+INSERT INTO distinguished_by (field_name, zone_ID, soil_type) VALUES ('South Field', 2, 'Saline');
+
+INSERT INTO distinguished_by (field_name, zone_ID, soil_type) VALUES ('Middle Field', 2, 'Alkaline');
+INSERT INTO distinguished_by (field_name, zone_ID, soil_type) VALUES ('Middle Field', 1, 'Acidic');
+
+INSERT INTO distinguished_by (field_name, zone_ID, soil_type) VALUES ('West Field', 2, 'Alkaline');
+INSERT INTO distinguished_by (field_name, zone_ID, soil_type) VALUES ('West Field', 1, 'Acidic');
+
+INSERT INTO distinguished_by (field_name, zone_ID, soil_type) VALUES ('East Field', 2, 'Peaty');
+INSERT INTO distinguished_by (field_name, zone_ID, soil_type) VALUES ('East Field', 1, 'Chalky');
 
 
 -- CREATE OR REPLACE TRIGGER prevent_orphaned_location

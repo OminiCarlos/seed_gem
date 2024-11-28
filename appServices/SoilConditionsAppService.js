@@ -102,11 +102,26 @@ async function deleteSoilCondition(soil_type) {
 //   });
 // }
 
+async function filterSoilConditions(conditions) {
+  return await withOracleDB(async (connection) => {
+    const query = `SELECT soil_type, pH, organic_matter_concentration
+                   FROM Soil_condition
+                   WHERE ${conditions}`;
+    const result = await connection.execute(query);
+    return result.rows;
+  }).catch((error) => {
+    console.error("Error filtering soil conditions:", error);
+    throw error; // Rethrow the error to be handled in the controller
+  });
+}
+
+
 module.exports = {
   resetSoilConditionsTable: resetSoilConditionsTable,
   insertSoilCondition: insertSoilCondition,
   fetchSoilConditionsFromDb: fetchSoilConditionsFromDb,
   updateSoilCondition: updateSoilCondition,
   deleteSoilCondition: deleteSoilCondition,
+  filterSoilConditions: filterSoilConditions,
 //   countSoilConditions: countSoilConditions,
 };

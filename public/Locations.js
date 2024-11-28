@@ -68,7 +68,7 @@ async function insertDemotable(event) {
     field_name: document.getElementById("insertFieldName").value,
     zone_id: document.getElementById("insertZoneId").value,
     is_outdoor: document.getElementById("insertIsOutdoor").checked,
-    is_irrigated: document.getElementById("insertIsIrrigated").checked,
+    // is_irrigated: document.getElementById("insertIsIrrigated").checked,
   };
 
   const response = await fetch("/locations/insert-demotable", {
@@ -93,7 +93,7 @@ async function updateLocationDemotable(event) {
     field_name: document.getElementById("updateFieldName").value,
     zone_id: document.getElementById("updateZoneId").value,
     is_outdoor: document.getElementById("updateIsOutdoor").checked,
-    is_irrigated: document.getElementById("updateIsIrrigated").checked,
+    // is_irrigated: document.getElementById("updateIsIrrigated").checked,
   };
 
   const response = await fetch("/locations/update-demotable", {

@@ -30,8 +30,25 @@ async function resetDistinguishedByTable() {
 async function fetchDistinguishedByFromDb() {
   return await withOracleDB(async (connection) => {
     const result = await connection.execute(`
-      SELECT field_name, zone_id, soil_type
-      FROM distinguished_by
+      SELECT 
+    Location.field_name,
+    Location.zone_id,
+    Location.is_outdoor,
+    Soil_condition.soil_type,
+    Soil_condition.pH,
+    Soil_condition.organic_matter_concentration
+FROM 
+    distinguished_by
+JOIN 
+    Location 
+ON 
+    distinguished_by.field_name = Location.field_name
+    AND distinguished_by.zone_id = Location.zone_id
+JOIN 
+    Soil_condition 
+ON 
+    distinguished_by.soil_type = Soil_condition.soil_type
+ 
     `);
 
     return result.rows;
@@ -93,6 +110,79 @@ async function deleteDistinguishedBy(field_name, zone_id, soil_type) {
     });
   }
 
+
+  async function fetchGoodLocations() {
+    return await withOracleDB(async (connection) => {
+      const query = `
+        SELECT 
+    Location.field_name, 
+    location.zone_ID, 
+    location.is_outdoor,
+    distinguished_by.soil_type,
+    Soil_condition.pH,
+    Soil_condition.organic_matter_concentration 
+FROM 
+    distinguished_by, Location, Soil_condition
+WHERE 
+    distinguished_by.field_name = Location.field_name
+    AND 
+    distinguished_by.zone_id = Location.zone_id
+    AND 
+    distinguished_by.soil_type = Soil_condition.soil_type
+    AND
+    Soil_condition.organic_matter_concentration >= ALL (
+        SELECT 
+            AVG(Soil_condition.organic_matter_concentration)
+        FROM 
+            distinguished_by
+        JOIN 
+            Location 
+        ON 
+            distinguished_by.field_name = Location.field_name
+            AND distinguished_by.zone_id = Location.zone_id
+        JOIN 
+            Soil_condition 
+        ON 
+            distinguished_by.soil_type = Soil_condition.soil_type
+        GROUP BY 
+            Location.field_name
+    )
+
+      `;
+      const result = await connection.execute(query);
+      return result.rows;
+    });
+  }
+
+
+  async function fetchSuperFields() {
+    return await withOracleDB(async (connection) => {
+      const query = `
+       SELECT DISTINCT d.field_name, d.zone_id
+FROM distinguished_by d
+WHERE NOT EXISTS (
+    SELECT s.soil_type
+    FROM Soil_condition s
+    WHERE NOT EXISTS (
+        SELECT 1
+        FROM distinguished_by d2
+        WHERE d2.field_name = d.field_name
+          AND d2.soil_type = s.soil_type
+    )
+)
+      `;
+      const result = await connection.execute(query);
+
+      return result.rows;
+    }).catch((error) => {
+      console.error("Error fetching super fields:", error);
+      throw error;
+    });
+  }
+  
+
+  
+
 // Count the total number of entries in the table
 // async function countDistinguishedBy() {
 //   return await withOracleDB(async (connection) => {
@@ -107,11 +197,15 @@ async function deleteDistinguishedBy(field_name, zone_id, soil_type) {
 //   });
 // }
 
+
+
 module.exports = {
   resetDistinguishedByTable,
   fetchDistinguishedByFromDb,
   insertDistinguishedBy,
   updateDistinguishedBy,
   deleteDistinguishedBy,
+  fetchGoodLocations,
+  fetchSuperFields,
 //   countDistinguishedBy,
 };

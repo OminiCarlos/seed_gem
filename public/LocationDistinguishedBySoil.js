@@ -38,7 +38,7 @@ async function checkDbConnection() {
     tableContent.forEach((entry) => {
       const row = tableBody.insertRow();
   
-      ["field_name", "zone_id", "soil_type"].forEach((field,index) => {
+      ["field_name", "zone_id", "is_outdoor", "soil_type", "pH", "organic"].forEach((field,index) => {
         const cell = row.insertCell();
         cell.textContent = entry[index];
       });
@@ -135,6 +135,43 @@ async function checkDbConnection() {
       : "Error deleting record!";
     fetchTableData();
   }
+
+  // Handles fetching and displaying "Good Locations"
+async function fetchAndDisplayGoodLocations() {
+  const tableBody = document.querySelector("#goodLocationTable tbody");
+  const resultMsg = document.getElementById("goodLocationResultMsg");
+
+  // Send a request to the backend to fetch good locations
+  const response = await fetch("/locdistinguishedbysoil/good-locations", {
+    method: "GET",
+  });
+
+  const responseData = await response.json();
+
+  if (responseData.success) {
+    const goodLocations = responseData.data;
+
+    // Clear existing rows in the good locations table
+    tableBody.innerHTML = "";
+
+    // Populate the table with "Good Locations" data
+    goodLocations.forEach((entry) => {
+      const row = tableBody.insertRow();
+
+      ["field_name", "zone_id", "is_outdoor", "soil_type", "pH", "organic"].forEach(
+        (field, index) => {
+          const cell = row.insertCell();
+          cell.textContent = entry[index];
+        }
+      );
+    });
+
+    resultMsg.textContent = "Good locations displayed successfully!";
+  } else {
+    resultMsg.textContent = "Error fetching good locations.";
+  }
+}
+
   
   // Counts rows in the location distinguished by soil table.
 //   async function countLocationSoilTable() {
@@ -149,6 +186,47 @@ async function checkDbConnection() {
 //       ? `The number of tuples in the table: ${responseData.count}`
 //       : "Error in counting table entries!";
 //   }
+
+
+// Handles fetching and displaying "Super Fields"
+async function fetchAndDisplaySuperFields() {
+  const tableBody = document.querySelector("#superFieldsTable tbody");
+  const resultMsg = document.getElementById("superFieldsResultMsg");
+
+  // Send a request to the backend to fetch super fields
+  const response = await fetch("/locdistinguishedbysoil/super-fields", {
+    method: "GET",
+  });
+
+  const responseData = await response.json();
+
+  if (responseData.success) {
+    const superFields = responseData.data;
+
+    // Clear existing rows in the super fields table
+    tableBody.innerHTML = "";
+
+    console.log(superFields);
+
+    // Populate the table with "Super Fields" data
+    superFields.forEach((entry) => {
+      const row = tableBody.insertRow();
+
+      ["field_name", "zone_id"].forEach((field, index) => {
+        const cell = row.insertCell();
+        cell.textContent = entry[index];
+      });
+    });
+
+    resultMsg.textContent = "Super fields displayed successfully!";
+  } else {
+    resultMsg.textContent = "Error fetching super fields.";
+  }
+}
+
+
+
+
   
   // Initializes the webpage functionalities.
   window.onload = function () {
@@ -166,6 +244,12 @@ async function checkDbConnection() {
     document
       .getElementById("deleteLocationSoilForm")
       .addEventListener("submit", deleteLocationSoil);
+    document
+      .getElementById("showGoodLocations")
+      .addEventListener("click", fetchAndDisplayGoodLocations);
+    document
+      .getElementById("findSuperFields")
+      .addEventListener("click", fetchAndDisplaySuperFields);
     // document
     //   .getElementById("countLocationSoilTable")
     //   .addEventListener("click", countLocationSoilTable);

@@ -72,4 +72,16 @@ router.delete("/delete-demotable/:soil_type", async (req, res) => {
 //   }
 // });
 
+// Apply filtering to fetch soil conditions
+router.post("/filter", async (req, res) => {
+  const { conditions } = req.body; // Conditions string, e.g., "ph > 6.5 AND organic_matter < 2.0"
+  try {
+    const filteredResults = await appService.filterSoilConditions(conditions);
+    res.json({ success: true, data: filteredResults });
+  } catch (error) {
+    console.error("Error applying filter:", error);
+    res.status(500).json({ success: false });
+  }
+});
+
 module.exports = router;

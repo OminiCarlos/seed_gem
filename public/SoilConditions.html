@@ -33,18 +33,48 @@
       <tbody></tbody>
     </table>
 
-    <br />
-    <hr />
-    <br />
 
-    <h2>Reset All Soil Conditions</h2>
-    <p>
-      If you wish to reset the table, press the reset button. If this is the
-      first time you're running this page, you MUST use reset.
-    </p>
-    <button id="resetSoilTable">Reset</button>
-    <div id="resetResultMsg"></div>
+    <br />
+<hr />
+<br />
 
+<h2>Filter Soil Conditions</h2>
+<form id="filterSoilForm">
+  <div id="filterConditions">
+    <div class="filter-row">
+      Attribute:
+      <select class="filter-attribute">
+        <option value="soil_type">Soil Type</option>
+        <option value="pH">pH</option>
+        <option value="organic_matter_concentration">Organic Matter Concentration (%)</option>
+      </select>
+      Operator:
+      <select class="filter-operator">
+        <option value="=">=</option>
+        <option value="<"><</option>
+        <option value=">">></option>
+        <option value="<="><=</option>
+        <option value=">=">>=</option>
+        <option value="!=">!=</option>
+      </select>
+      Value:
+      <input type="text" class="filter-value" placeholder="Enter value" required />
+    </div>
+  </div>
+  <br />
+  <button type="button" id="addCondition">Add Another Condition</button>
+  <br /><br />
+  Combine With:
+  <select id="filterCombine">
+    <option value="AND">AND</option>
+    <option value="OR">OR</option>
+  </select>
+  <br /><br />
+  <button type="submit">Apply Filter</button>
+</form>
+<div id="filterResultMsg"></div>
+
+    
     <br />
     <hr />
     <br />
@@ -144,6 +174,18 @@
     <br />
     <hr />
     <br />
+
+    <h2>Reset All Soil Conditions</h2>
+    <p>
+      If you wish to reset the table, press the reset button. If this is the
+      first time you're running this page, you MUST use reset.
+    </p>
+    <button id="resetSoilTable">Reset</button>
+    <div id="resetResultMsg"></div>
+
+
+    
+
 
     <!-- <h2>Count the Soil Conditions</h2>
     <button id="countSoilTable">Count</button>
