@@ -1,129 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Database Application</title>
-  </head>
-  <body>
-    <h1>
-      Database Connection Status:
-      <span id="dbStatus"></span>
-      <img
-        id="loadingGif"
-        class="loading-gif"
-        src="loading_100px.gif"
-        alt="Loading..."
-      />
-    </h1>
 
-    <br />
-    <hr />
-    <br />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Database Application</title>
+</head>
 
-    <!-- Show 'Order' Table. Data will be fetched and inserted here dynamically using JavaScript. -->
-    <h2>Show All Orders</h2>
-    <table id="demotable" border="1">
-      <thead>
-        <tr>
-          <th>Order ID</th>
-          <th>Order Date</th>
-          <th>Order Comment</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+<body>
+  <h1>
+    Database Connection Status:
+    <span id="dbStatus"></span>
+    <img id="loadingGif" class="loading-gif" src="loading_100px.gif" alt="Loading..." />
+  </h1>
 
-    <br />
-    <hr />
-    <br />
+  <br />
+  <hr />
+  <br />
 
-    <h2>Reset All Orders</h2>
-    <p>
-      If you wish to reset the table, press the reset button. If this is the
-      first time you're running this page, you MUST use reset.
-    </p>
-    <button id="resetDemotable">Reset</button>
-    <div id="resetResultMsg"></div>
+  <!-- Show 'Order' Table. Data will be fetched and inserted here dynamically using JavaScript. -->
+  <h2>Show All Order Items</h2>
+  <table id="demotable" border="1">
+    <thead>
+      <tr>
+        <th>Order ID</th>
+        <th>Item ID</th>
+        <th>Plant ID</th>
+        <th>Quantity</th>
+        <th>Unit</th>
+        <th>Item Price</th>
+        <th>Supplier ID</th>
+        <th>Comment</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
 
-    <br />
-    <hr />
-    <br />
+  <br />
+  <hr />
+  <br />
 
-    <h2>Insert Values into Orders</h2>
-    <form id="insertDemotable">
-      Order ID:
-      <input
-        type="number"
-        id="insertOrderId"
-        placeholder="Enter Order ID"
-        required
-      />
-      <br /><br />
-      Order Date: <input type="date" id="insertOrderDate" required />
-      <br /><br />
-      Order Comment:
-      <input
-        type="text"
-        id="insertOrderComment"
-        placeholder="Enter Order Comment"
-        maxlength="255"
-      />
-      <br /><br />
-      <button type="submit">Insert</button>
-    </form>
-    <div id="insertResultMsg"></div>
+  <h2>Insert Items into Orders</h2>
+  <form id="insertDemotable">
+    Order ID:
+    <input type="number" id="insertOrderId" placeholder="Enter Order ID" required />
+    <br /><br />
+    Item ID:
+    <input type="number" id="insertItemID" placeholder="Unique per OrderID" required />
+    <br /><br />
+    Plant ID:
+    <input type="number" id="insertPlantId" placeholder="The ID of the plant to buy" required />
+    <br /><br />
+    Quantity
+    <input type="number" step="0.01" id="insertItemQuantity" placeholder="Enter quantity" required min="0" />
+    <br /><br />
+    Item Price
+    <input type="number" step="0.01" id="insertItemPrice" placeholder="Price per unit" required />
+    <br /><br />
+    Unit
+    <input type="text" id="insertItemUnit" placeholder="g, kg, box..." required />
+    <br /><br />
+    Supplier ID:
+    <input type="number" id="insertSupplierId" placeholder="The ID of the supplier" required />
+    <br /><br />
+    Item Comment:
+    <input type="text" id="insertItemComment" placeholder="Comment for this item" />
+    <br /><br />
+    <button type="submit">Insert</button>
+  </form>
+  <div id="insertResultMsg"></div>
 
-    <br />
-    <hr />
-    <br />
+  <br />
+  <hr />
+  <br />
 
-    <h2>Update Order Details</h2>
-    <form id="updateOrderDemotable">
-      Order ID:
-      <input
-        type="number"
-        id="updateOrderId"
-        placeholder="Enter Order ID"
-        required
-      />
-      <br /><br />
-      New Order Date: <input type="date" id="updateOrderDate" required />
-      <br /><br />
-      New Order Comment:
-      <input
-        type="text"
-        id="updateOrderComment"
-        placeholder="Enter New Order Comment"
-        maxlength="255"
-      />
-      <br /><br />
-      <button type="submit">Update</button>
-    </form>
-    <div id="updateResultMsg"></div>
+  <h2>Update Order Items</h2>
+  <form id="updateDemotable">
+    Order ID:
+    <input type="number" id="updateOrderId" placeholder="Enter Order ID" required />
+    <br /><br />
+    Item ID:
+    <input type="number" id="updateItemID" placeholder="Unique per OrderID" required />
+    <br /><br />
+    Plant ID:
+    <input type="number" id="updatePlantId" placeholder="The ID of the plant to buy" required />
+    <br /><br />
+    Quantity
+    <input type="number" step="0.01" id="updateItemQuantity" placeholder="Enter quantity" required min ="0" />
+    <br /><br />
+    Item Price
+    <input type="number" step="0.01" id="updateItemPrice" placeholder="Price per unit" required />
+    <br /><br />
+    Unit:
+    <input type="text" id="updateItemUnit" placeholder="kg, g, box..." required />
+    <br /><br />
+    Supplier ID:
+    <input type="number" id="updateSupplierId" placeholder="The ID of the supplier" required />
+    <br /><br />
+    Item Comment:
+    <input type="text" id="updateItemComment" placeholder="Comment for this item" />
+    <br /><br />
+    <button type="submit">Update</button>
+  </form>
+  <div id="updateResultMsg"></div>
 
-    <br />
-    <hr />
-    <br />
+  <br />
+  <hr />
+  <br />
 
-    <h2>Delete an Order</h2>
-    <form id="deleteOrderDemotable">
-      Order ID:
-      <input
-        type="number"
-        id="deleteOrderId"
-        placeholder="Enter Order ID to Delete"
-        required
-      />
-      <br /><br />
-      <button type="submit">Delete</button>
-    </form>
-    <div id="deleteResultMsg"></div>
+  <h2>Delete an Order Item</h2>
+  <form id="deleteDemotable">
+    Order ID:
+    <input type="number" id="deleteOrderId" placeholder="Enter Order ID to Delete" required />
+    <br /><br />
+    Item ID:
+    <input type="number" id="deleteItemId" placeholder="Enter the Item ID to Delete" required />
+    <br /><br />
+    <button type="submit">Delete</button>
+  </form>
+  <div id="deleteResultMsg"></div>
 
-    <br />
-    <hr />
-    <br />
+  <br />
+  <hr />
+  <br />
 
-    <script src="OrderItems.js"></script>
-  </body>
+  <script src="OrderItems.js"></script>
+</body>
+
 </html>

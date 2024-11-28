@@ -1,151 +1,163 @@
-// This function checks the database connection and updates its status on the frontend.
+// Check database connection and update status on the frontend
 async function checkDbConnection() {
   const statusElem = document.getElementById("dbStatus");
   const loadingGifElem = document.getElementById("loadingGif");
 
-  const response = await fetch("/check-db-connection", {
-    method: "GET",
-  });
-
-  loadingGifElem.style.display = "none";
-  statusElem.style.display = "inline";
-
-  response
-    .text()
-    .then((text) => {
-      statusElem.textContent = text;
-    })
-    .catch((error) => {
-      statusElem.textContent = "connection timed out";
-    });
+  try {
+    const response = await fetch("/check-db-connection", { method: "GET" });
+    const text = await response.text();
+    loadingGifElem.style.display = "none";
+    statusElem.style.display = "inline";
+    statusElem.textContent = text;
+  } catch (error) {
+    loadingGifElem.style.display = "none";
+    statusElem.textContent = "Connection timed out";
+    console.error("Error checking database connection:", error);
+  }
 }
 
-// Fetches data from the order table and displays it.
-async function fetchAndDisplayOrders() {
+
+
+// Fetch data from the order_item table and display it
+async function fetchAndDisplayOrderItems() {
   const tableBody = document.querySelector("#demotable tbody");
 
-  const response = await fetch("/orders/demotable", {
-    method: "GET",
-  });
+  try {
+    const response = await fetch("/order-items/demotable", { method: "GET" });
+    if (!response.ok) throw new Error("Failed to fetch order items");
 
-  const responseData = await response.json();
-  const demotableContent = responseData.data;
+    const { data } = await response.json();
 
-  // Clear existing table rows
-  tableBody.innerHTML = "";
+    // Clear the existing table rows
+    tableBody.innerHTML = "";
 
-  // Populate the table with data
-  demotableContent.forEach((order) => {
-    const row = tableBody.insertRow();
+    // Populate the table with data
+    data.forEach(orderItem => {
+      const row = tableBody.insertRow();
+      orderItem.forEach((field, index) => {
+        const cell = row.insertCell();
 
-    // Adjust to the number of columns in the 'Order' table
-    ["order_id", "order_date", "order_comment"].forEach((field, index) => {
-      const cell = row.insertCell();
-      cell.textContent = order[index];
+        // Format numerical fields
+        if (index === 3 || index === 5) { // Assuming Quantity (index 3) and Item Price (index 5)
+          cell.textContent = parseFloat(field).toFixed(2);
+        } else {
+          cell.textContent = field || ""; // Handle empty/null values
+        }
+      });
     });
-  });
+  } catch (error) {
+    console.error("Error fetching and displaying orders:", error);
+  }
 }
 
-// This function resets or initializes the order table.
-async function resetDemotable() {
-  const response = await fetch("/orders/initiate-demotable", {
-    method: "POST",
-  });
-  const responseData = await response.json();
-
-  const messageElement = document.getElementById("resetResultMsg");
-  messageElement.textContent = responseData.success
-    ? "Order table initiated successfully!"
-    : "Error initiating table!";
-  fetchTableData();
-}
-
-// Inserts new records into the order table.
-async function insertDemotable(event) {
+// Insert a new record into the order_item table
+async function insertOrderItem(event) {
   event.preventDefault();
 
-  const orderData = {
-    order_id: document.getElementById("insertOrderId").value,
-    order_date: document.getElementById("insertOrderDate").value,
-    order_comment: document.getElementById("insertOrderComment").value,
+  const orderItemData = {
+    order_ID: document.getElementById("insertOrderId").value,
+    item_ID: document.getElementById("insertItemID").value,
+    plant_ID: document.getElementById("insertPlantId").value,
+    quantity: document.getElementById("insertItemQuantity").value,
+    unit: document.getElementById("insertItemUnit").value,
+    item_price: document.getElementById("insertItemPrice").value,
+    supplier_ID: document.getElementById("insertSupplierId").value,
+    item_comment: document.getElementById("insertItemComment").value,
   };
 
-  const response = await fetch("/orders/insert-demotable", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(orderData),
-  });
+  try {
+    const response = await fetch("/order-items/insert-demotable", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(orderItemData)
+    });
 
-  const responseData = await response.json();
-  const messageElement = document.getElementById("insertResultMsg");
-  messageElement.textContent = responseData.success
-    ? "Order inserted successfully!"
-    : "Error inserting order!";
-  fetchTableData();
+    const result = await response.json();
+    const messageElement = document.getElementById("insertResultMsg");
+    messageElement.textContent = result.success
+      ? "Order item inserted successfully!"
+      : "Error inserting order item.";
+    fetchAndDisplayOrderItems();
+  } catch (error) {
+    console.error("Error inserting order item:", error);
+  }
 }
 
-// Updates order details in the order table.
-async function updateOrderDemotable(event) {
+// Update an existing record in the order_item table
+async function updateOrderItem(event) {
   event.preventDefault();
-  console.log("update pressed.")
-  const orderData = {
-    order_id: document.getElementById("updateOrderId").value,
-    order_date: document.getElementById("updateOrderDate").value,
-    order_comment: document.getElementById("updateOrderComment").value,
+
+  const orderItemData = {
+    order_ID: document.getElementById("updateOrderId").value,
+    item_ID: document.getElementById("updateItemID").value,
+    plant_ID: document.getElementById("updatePlantId").value,
+    quantity: document.getElementById("updateItemQuantity").value,
+    unit: document.getElementById("updateItemUnit").value,
+    item_price: document.getElementById("updateItemPrice").value,
+    supplier_ID: document.getElementById("updateSupplierId").value,
+    item_comment: document.getElementById("updateItemComment").value,
   };
 
-  const response = await fetch("/orders/update-demotable", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(orderData),
-  });
+  try {
+    const response = await fetch("/order-items/update-demotable", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(orderItemData)
+    });
 
-  const responseData = await response.json();
-  const messageElement = document.getElementById("updateResultMsg");
-  messageElement.textContent = responseData.success
-    ? "Order updated successfully!"
-    : "Error updating order!";
-  fetchTableData();
+    const result = await response.json();
+    const messageElement = document.getElementById("updateResultMsg");
+    messageElement.textContent = result.success
+      ? "Order item updated successfully!"
+      : "Error updating order item.";
+    fetchAndDisplayOrderItems();
+  } catch (error) {
+    console.error("Error updating order item:", error);
+  }
 }
 
-// Deletes an order from the order table by Order ID.
-async function deleteOrderDemotable(event) {
+// Delete a record from the order_item table using a JSON payload
+async function deleteOrderItem(event) {
   event.preventDefault();
 
-  const orderId = document.getElementById("deleteOrderId").value;
+  const orderItemData = {
+    order_ID: document.getElementById("deleteOrderId").value,
+    item_ID: document.getElementById("deleteItemId").value,
+  };
 
-  const response = await fetch(`/orders/delete-demotable/${orderId}`, {
-    method: "DELETE",
-  });
+  try {
+    const response = await fetch("/order-items/delete-demotable", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(orderItemData),
+    });
 
-  const responseData = await response.json();
-  const messageElement = document.getElementById("deleteResultMsg");
-  messageElement.textContent = responseData.success
-    ? "Order deleted successfully!"
-    : "Error deleting order!";
-  fetchTableData();
+    const result = await response.json();
+    const messageElement = document.getElementById("deleteResultMsg");
+    messageElement.textContent = result.success
+      ? "Order item deleted successfully!"
+      : "Error deleting order item.";
+    fetchAndDisplayOrderItems();
+  } catch (error) {
+    console.error("Error deleting order item:", error);
+  }
 }
 
 
-// Initializes the webpage functionalities.
-window.onload = function () {
+// Initialize the page functionalities
+window.onload = function() {
   checkDbConnection();
-  fetchTableData();
-  document
-    .getElementById("resetDemotable")
-    .addEventListener("click", resetDemotable);
+  fetchAndDisplayOrderItems();
+
   document
     .getElementById("insertDemotable")
-    .addEventListener("submit", insertDemotable);
-  document
-    .getElementById("updateOrderDemotable")
-    .addEventListener("submit", updateOrderDemotable);
-  document
-    .getElementById("deleteOrderDemotable")
-    .addEventListener("submit", deleteOrderDemotable);
-};
+    .addEventListener("submit", insertOrderItem);
 
-// General function to refresh the displayed table data.
-function fetchTableData() {
-  fetchAndDisplayOrders();
-}
+  document
+    .getElementById("updateDemotable")
+    .addEventListener("submit", updateOrderItem);
+
+  document
+    .getElementById("deleteDemotable")
+    .addEventListener("submit", deleteOrderItem);
+};

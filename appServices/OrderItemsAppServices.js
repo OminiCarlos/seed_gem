@@ -1,114 +1,148 @@
 const oracledb = require("oracledb");
 const { withOracleDB } = require("../appService.js");
 
-// above should be unchanged
-
-// adding new services from here!
+// Create the ORDER_ITEM table
 async function initiateDemotable() {
-  return await withOracleDB(async (connection) => {
+  return await withOracleDB(async connection => {
     try {
-      // change the table name to drop.
-      await connection.execute(`DROP TABLE ORDERS`);
+      await connection.execute(`DROP TABLE ORDER_ITEM`);
     } catch (err) {
-      // put the respective table name to help debugging.
-      console.log("Orders Table might not exist, proceeding to create...");
+      console.log("ORDER_ITEM table might not exist, proceeding to create...");
     }
 
-    const result = await connection.execute(
-      // change the table name and field. The order of field names follows that in seed_gem.sql
-      `
-      CREATE TABLE ORDERS (
-       order_id INTEGER PRIMARY KEY,
-       order_date DATE,
-       order_comment VARCHAR(3000)
-      )   
-        `
-    );
-    // change this to your table name
-    console.log("Orders table created successfully!");
-    return true;
-  }).catch(() => {
-    return false;
-  });
-}
-
-// 
-async function insertDemotable(
-  // change these to the attributes in your table.
-  order_id,
-  order_date,
-  order_comment
-) {
-  return await withOracleDB(async (connection) => {
-    const result = await connection.execute(
-      // change the attributes and the variable names.
-      `INSERT INTO ORDERS (order_id, order_date, order_comment) 
-                        VALUES (:order_id, TO_DATE(:order_date, 'YYYY-MM-DD'), :order_comment)`,
-      // these are the data you passed in. 
-      [order_id, order_date, order_comment],
-      { autoCommit: true }
-    );
-
-    return result.rowsAffected && result.rowsAffected > 0;
-  }).catch(() => {
-    return false;
-  });
-}
-
-
-async function fetchDemotableFromDb() {
-  return await withOracleDB(async (connection) => {
     const result = await connection.execute(`
-      SELECT *
-      FROM ORDERS
-      `); // replace with a join sql statement
-    return result.rows;
-  }).catch(() => {
-    return [];
-  });
-}
-
-async function updateDemotable(order_id, order_date, order_comment) {
-  console.log("service update orders called.");
-  console.log({ order_id, order_date, order_comment });
-  return await withOracleDB(async (connection) => {
-    const result = await connection.execute(
-      // change to the respective sql query.
-      `UPDATE ORDERS
-      SET
-          order_date = TO_DATE(:order_date, 'YYYY-MM-DD'),
-          order_comment = :order_comment
-      WHERE   order_id = :order_id`,
-      { order_id, order_date, order_comment},
-      { autoCommit: true }
-      
-    );
-    console.log(`order update rows affected:${result.rowsAffected}`);
-    return result.rowsAffected && result.rowsAffected > 0;
-  }).catch(() => {
+      CREATE TABLE ORDER_ITEM (
+        order_ID INTEGER,
+        item_ID INTEGER,
+        plant_ID INTEGER,
+        quantity INTEGER,
+        unit VARCHAR(50),
+        item_price NUMBER(10, 2),
+        supplier_ID INTEGER,
+        item_comment VARCHAR(3000),
+        PRIMARY KEY (order_ID, item_ID)
+      )
+    `);
+    console.log("ORDER_ITEM table created successfully!");
+    return true;
+  }).catch(error => {
+    console.error("Error creating ORDER_ITEM table:", error);
     return false;
   });
 }
 
-async function deleteDemotable(order_id) {
-  return await withOracleDB(async (connection) => {
+// Insert a new order item
+async function insertDemotable(
+  order_ID,
+  item_ID,
+  plant_ID,
+  quantity,
+  unit,
+  item_price,
+  supplier_ID,
+  item_comment
+) {
+  return await withOracleDB(async connection => {
     const result = await connection.execute(
-      // replace with the query in your table. 
-       `DELETE FROM ORDERS 
-        WHERE order_id = :order_id`,
-      {order_id},
+      `INSERT INTO ORDER_ITEM (order_ID, item_ID, plant_ID, quantity, unit, item_price, supplier_ID, item_comment)
+       VALUES (:order_ID, :item_ID, :plant_ID, :quantity, :unit, :item_price, :supplier_ID, :item_comment)`,
+      [
+        order_ID,
+        item_ID,
+        plant_ID,
+        quantity,
+        unit,
+        item_price,
+        supplier_ID,
+        item_comment
+      ],
       { autoCommit: true }
     );
-    return result.rowsAffected > 0;
-  }).catch(() => {
+
+    return result.rowsAffected && result.rowsAffected > 0;
+  }).catch(error => {
+    console.error("Error inserting order item:", error);
+    return false;
+  });
+}
+
+// Fetch all order items
+async function fetchDemotableFromDb() {
+  return await withOracleDB(async connection => {
+    const result = await connection.execute(`
+      SELECT * 
+      FROM ORDER_ITEM
+    `);
+    return result.rows;
+  }).catch(error => {
+    console.error("Error fetching order items:", error);
     return [];
   });
 }
 
+// Update an existing order item
+async function updateDemotable(
+  order_ID,
+  item_ID,
+  plant_ID,
+  quantity,
+  unit,
+  item_price,
+  supplier_ID,
+  item_comment
+) {
+  return await withOracleDB(async connection => {
+    const result = await connection.execute(
+      `UPDATE ORDER_ITEM
+       SET plant_ID = :plant_ID,
+           quantity = :quantity,
+           unit = :unit,
+           item_price = :item_price,
+           supplier_ID = :supplier_ID,
+           item_comment = :item_comment
+       WHERE order_ID = :order_ID AND item_ID = :item_ID`,
+      {
+        order_ID,
+        item_ID,
+        plant_ID,
+        quantity,
+        unit,
+        item_price,
+        supplier_ID,
+        item_comment
+      },
+      { autoCommit: true }
+    );
+
+    return result.rowsAffected && result.rowsAffected > 0;
+  }).catch(error => {
+    console.error("Error updating order item:", error);
+    return false;
+  });
+}
+
+// Delete an order item
+async function deleteDemotable(order_ID, item_ID) {
+  return await withOracleDB(async connection => {
+    const result = await connection.execute(
+      `DELETE FROM ORDER_ITEM 
+       WHERE order_ID = :order_ID AND item_ID = :item_ID`,
+      { order_ID, item_ID },
+      { autoCommit: true }
+    );
+
+    return result.rowsAffected > 0;
+  }).catch(error => {
+    console.error("Error deleting order item:", error);
+    return false;
+  });
+}
+
+// Export the services
 module.exports = {
   initiateDemotable: initiateDemotable,
   insertDemotable: insertDemotable,
   fetchDemotableFromDb: fetchDemotableFromDb,
   updateDemotable: updateDemotable,
-  deleteDemotable: deleteDemotable,
+  deleteDemotable: deleteDemotable
 };

@@ -1,3 +1,7 @@
+SPOOL error_log.txt;
+WHENEVER SQLERROR CONTINUE;
+
+
 --!!! drop in this order to prevent errors caused by violation of referential integrity 
 drop trigger enforce_total_participation_location;
 drop trigger prevent_orphaned_location;
@@ -71,10 +75,10 @@ CREATE TABLE Tag (
 
 CREATE TABLE plant_has_tags (
     plant_ID INTEGER,
-    label VARCHAR(50),
-    PRIMARY KEY (plant_ID, label),
+    tag VARCHAR(50),
+    PRIMARY KEY (plant_ID, tag),
     FOREIGN KEY (plant_ID) REFERENCES Plant(plant_ID),
-    FOREIGN KEY (label) REFERENCES Tag(label)
+    FOREIGN KEY (tag) REFERENCES Tag(tag)
 );
 
 CREATE TABLE Stage (
@@ -123,6 +127,7 @@ CREATE TABLE Orders (
     order_comment VARCHAR(3000)
 );
 
+
 CREATE TABLE Supplier (
     supplier_ID INTEGER PRIMARY KEY,
     supplier_name VARCHAR(50),
@@ -130,15 +135,16 @@ CREATE TABLE Supplier (
     supplier_tel VARCHAR(50) CHECK (supplier_tel IS NOT NULL)
 );
 
+
 CREATE TABLE Order_item (
     order_ID INTEGER,
     item_ID INTEGER,
+    plant_ID INTEGER NOT NULL,
     quantity INTEGER,
     unit VARCHAR(50),
-    item_price INTEGER,
-    item_comment VARCHAR(500),
-    plant_ID INTEGER NOT NULL,
+    item_price DECIMAL(10,2),
     supplier_ID INTEGER NOT NULL,
+    item_comment VARCHAR(500),
     PRIMARY KEY (order_ID, item_ID),
     FOREIGN KEY (order_ID) REFERENCES Orders(order_ID),
     FOREIGN KEY (plant_ID) REFERENCES Plant(plant_ID),
@@ -280,7 +286,14 @@ INSERT INTO distinguished_by (field_name, zone_ID, soil_type) VALUES ('West Fiel
 INSERT INTO distinguished_by (field_name, zone_ID, soil_type) VALUES ('East Field', 2, 'Peaty');
 INSERT INTO distinguished_by (field_name, zone_ID, soil_type) VALUES ('East Field', 1, 'Chalky');
 
+INSERT INTO Supplier (supplier_ID, supplier_name, supplier_address, supplier_tel) VALUES (1,'Green Dragon Seed Co.', 'UBC-V', '5139149968');
+INSERT INTO Supplier (supplier_ID, supplier_name, supplier_address, supplier_tel) VALUES (2,'White Tiger Seed Co.', 'UBC-V', '6045123736');
+INSERT INTO Supplier (supplier_ID, supplier_name, supplier_address, supplier_tel) VALUES (3,'Red Phenix Seed Co.', 'UBC-V', '7787624300');
+INSERT INTO Supplier (supplier_ID, supplier_name, supplier_address, supplier_tel) VALUES (4,'Black Tortoise Seed Co.', 'UBC-V', '2362133304');
 
+INSERT INTO Orders (order_ID, order_date, order_comment) VALUES (12,TO_DATE('2024-10-01', 'YYYY-MM-DD'), 'Why so serious?');
+INSERT INTO Orders (order_ID, order_date, order_comment) VALUES (1,TO_DATE('2024-11-28', 'YYYY-MM-DD'), 'Nb!');
+INSERT INTO Orders (order_ID, order_date, order_comment) VALUES (2,TO_DATE('2024-12-24', 'YYYY-MM-DD'), '666');
 -- CREATE OR REPLACE TRIGGER prevent_orphaned_location
 -- BEFORE DELETE ON distinguished_by
 -- FOR EACH ROW
@@ -324,3 +337,5 @@ INSERT INTO distinguished_by (field_name, zone_ID, soil_type) VALUES ('East Fiel
 --     END IF;
 -- END;
 -- /
+
+SPOOL OFF;

@@ -24,7 +24,7 @@ router.use('/batches',batchesController) // Mount Batches routes
 router.use('/plants',plantsController) // Mount plants routes
 router.use('/tags', tagsController) // Mount tags routes
 router.use('/orders', ordersController)
-router.use('/orderitems', orderItemsController)
+router.use('/order-items', orderItemsController)
 router.use('/stages', stagesController)
 router.use('/soilconditions',soilConditionsController) // Mount Soil routes
 router.use('/locdistinguishedbysoil',distinguishedByAppController) 
