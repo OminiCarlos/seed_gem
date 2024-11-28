@@ -6,6 +6,7 @@ const batchesController = require('./appControllers/BatchesAppController'); // I
 const plantsController = require('./appControllers/PlantsAppController'); // Import the plants controller
 const tagsController = require('./appControllers/TagsAppController'); // Import the Tags controller
 const ordersController = require('./appControllers/OrdersAppController'); // Import the Tags controller
+const orderItemsController = require('./appControllers/OrderItemsAppController'); // Import the Tags controller
 const stagesController = require('./appControllers/StagesAppController');
 const soilConditionsController = require('./appControllers/SoilConditionsAppController'); 
 const distinguishedByAppController = require('./appControllers/DistinguishedByAppController'); 
@@ -23,11 +24,15 @@ router.use('/batches',batchesController) // Mount Batches routes
 router.use('/plants',plantsController) // Mount plants routes
 router.use('/tags', tagsController) // Mount tags routes
 router.use('/orders', ordersController)
+router.use('/orderitems', orderItemsController)
 router.use('/stages', stagesController)
 router.use('/soilconditions',soilConditionsController) // Mount Soil routes
 router.use('/locdistinguishedbysoil',distinguishedByAppController) 
 router.use('/cultivars',cultivarsByAppController) 
-
+router.use("/suppliers", suppliersController); // Mount Suppliers routes
+router.use("/users", usersController); // Mount Users routes
+router.use("/records", recordsController); // Mount Records routes
+router.use("/batchIsAtStage", batchIsAtStageController); // Mount BatchIsAtStage routes
 // ----------------------------------------------------------
 // API endpoints
 // system level health check.
