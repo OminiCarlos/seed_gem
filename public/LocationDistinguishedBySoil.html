@@ -27,11 +27,61 @@
         <tr>
           <th>Field Name</th>
           <th>Zone ID</th>
+          <th>Is Outdoor</th>
           <th>Soil Type</th>
+          <th>pH</th>
+          <th>organic_matter%</th>
         </tr>
       </thead>
       <tbody></tbody>
     </table>
+
+    <br />
+<hr />
+<br />
+
+<h2>Show Good Locations</h2>
+<p>
+  A "Good Location" is defined as a location where the organic matter concentration is greater than or equal to the averages of concentration of all different fields.
+</p>
+<button id="showGoodLocations">Show Good Locations</button>
+<table id="goodLocationTable" border="1">
+  <thead>
+    <tr>
+      <th>Field Name</th>
+      <th>Zone ID</th>
+      <th>Is Outdoor</th>
+      <th>Soil Type</th>
+      <th>pH</th>
+      <th>Organic Matter%</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+<div id="goodLocationResultMsg"></div>
+
+<br />
+<hr />
+<br />
+
+<h2>Find Super Fields</h2>
+<p>
+  A "Super Field" is defined as a field that is associated with all types of soil conditions in the database.
+</p>
+<button id="findSuperFields">Find Super Fields</button>
+
+<table id="superFieldsTable" border="1" style="margin-top: 10px;">
+  <thead>
+    <tr>
+      <th>Field Name</th>
+      <th>Zone ID</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+<div id="superFieldsResultMsg"></div>
+
+
 
     <br />
     <hr />
@@ -78,6 +128,8 @@
       <button type="submit">Insert</button>
     </form>
     <div id="insertResultMsg"></div>
+
+    
 
     <br />
     <hr />

@@ -67,6 +67,8 @@ router.post("/delete-demotable", async (req, res) => {
       res.status(500).json({ success: false });
     }
   });
+
+
 // Count all entries
 router.get("/count", async (req, res) => {
   const countResult = await appService.countDistinguishedBy();
@@ -76,5 +78,32 @@ router.get("/count", async (req, res) => {
     res.status(500).json({ success: false });
   }
 });
+
+
+// Fetch good locations
+router.get("/good-locations", async (req, res) => {
+  try {
+    const goodLocations = await appService.fetchGoodLocations();
+    res.json({ success: true, data: goodLocations });
+  } catch (error) {
+    console.error("Error fetching good locations:", error);
+    res.status(500).json({ success: false });
+  }
+});
+
+
+// Fetch super fields
+router.get("/super-fields", async (req, res) => {
+  try {
+    const superFields = await appService.fetchSuperFields();
+    res.json({ success: true, data: superFields });
+  } catch (error) {
+    console.error("Error fetching super fields:", error);
+    res.status(500).json({ success: false });
+  }
+});
+
+
+
 
 module.exports = router;
