@@ -101,4 +101,20 @@ router.get("/count-fruit-yielding-plants", async (req, res) => {
   }
 });
 
+// Fetch count of plants grouped by yield_type
+router.get("/yield-type-count", async (req, res) => {
+  try {
+    const yieldTypeCounts = await appService.getYieldTypeCounts();
+    if (yieldTypeCounts) {
+      res.json({ data: yieldTypeCounts });
+    } else {
+      res.status(500).json({ success: false, message: "No data available" });
+    }
+  } catch (error) {
+    console.error("Error fetching yield type counts:", error);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+});
+
+
 module.exports = router;

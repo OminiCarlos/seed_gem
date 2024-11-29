@@ -163,6 +163,42 @@ async function countFruitYieldingPlants() {
     : "Error counting fruit-yielding plants!";
 }
 
+async function fetchYieldTypeCounts() {
+  try {
+    // Make an API call to fetch the count of plants by yield type
+    const response = await fetch("/plants/yield-type-count", {
+      method: "GET",
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch yield type counts");
+    }
+
+    const responseData = await response.json();
+
+    // Get the table body for the yield type count table
+    const tableBody = document.querySelector("#yieldTypeCountTable tbody");
+
+    // Clear existing rows in the table
+    tableBody.innerHTML = "";
+
+    // Populate the table with the fetched data
+    responseData.data.forEach((entry) => {
+      const row = tableBody.insertRow();
+      const yieldTypeCell = row.insertCell();
+      const countCell = row.insertCell();
+
+      yieldTypeCell.textContent = entry.yield_type;
+      countCell.textContent = entry.count;
+    });
+  } catch (error) {
+    console.error("Error fetching yield type counts:", error);
+    document.getElementById("yieldTypeCountResultMsg").textContent =
+      "Error fetching yield type counts.";
+  }
+}
+
+
 // Initializes the webpage functionalities.
 window.onload = function () {
   checkDbConnection();
@@ -185,9 +221,15 @@ window.onload = function () {
   document
     .getElementById("countPlantsYieldingFruits")
     .addEventListener("click", countFruitYieldingPlants);
+    document
+  .getElementById("fetchYieldTypeCount")
+  .addEventListener("click", fetchYieldTypeCounts);
+
 };
 
 // General function to refresh the displayed table data.
 function fetchTableData() {
   fetchAndDisplayPlants();
 }
+
+

@@ -149,6 +149,29 @@ async function countFruitYieldingPlants() {
   });
 }
 
+async function getYieldTypeCounts() {
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute(
+      `
+      SELECT yield_type, COUNT(*) AS count
+      FROM Plant
+      GROUP BY yield_type
+      ORDER BY yield_type
+      `
+    );
+    return result.rows.map((row) => ({
+      yield_type: row[0],
+      count: row[1],
+    }));
+  }).catch((error) => {
+    console.error("Error fetching yield type counts:", error);
+    return [];
+  });
+}
+
+
+
+
 module.exports = {
   initiateDemotable: initiateDemotable,
   insertDemotable: insertDemotable,
@@ -157,4 +180,5 @@ module.exports = {
   deleteDemotable: deleteDemotable,
   countDemotable,
   countFruitYieldingPlants: countFruitYieldingPlants,
+  getYieldTypeCounts,getYieldTypeCounts
 };
