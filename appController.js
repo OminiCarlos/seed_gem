@@ -4,6 +4,7 @@ const appService = require("./appService");
 const locationsController = require('./appControllers/LocationsAppController'); // Import the Locations controller
 const batchesController = require('./appControllers/BatchesAppController'); // Import the Batches controller
 const plantsController = require('./appControllers/PlantsAppController'); // Import the plants controller
+const plantHasTagsController = require("./appControllers/PlantHasTagsAppController");
 const tagsController = require('./appControllers/TagsAppController'); // Import the Tags controller
 const ordersController = require('./appControllers/OrdersAppController'); // Import the Tags controller
 const orderItemsController = require('./appControllers/OrderItemsAppController'); // Import the Tags controller
@@ -22,6 +23,7 @@ const router = express.Router();
 router.use('/locations',locationsController) // Mount Locations routes
 router.use('/batches',batchesController) // Mount Batches routes
 router.use('/plants',plantsController) // Mount plants routes
+router.use("/planthastags", plantHasTagsController);
 router.use('/tags', tagsController) // Mount tags routes
 router.use('/orders', ordersController)
 router.use('/order-items', orderItemsController)

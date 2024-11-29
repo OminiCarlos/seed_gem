@@ -35,22 +35,6 @@ CREATE TABLE Plant (
     overview_notes VARCHAR(3000)
 );
 
-INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
-VALUES
-    (1, 'Fruit', 'Apple', 'Malus domestica', 'Apple is a widely cultivated tree known for its sweet, edible fruit.');
-INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
-VALUES    
-    (2, 'Vegetable', 'Carrot', 'Daucus carota', 'Carrots are root vegetables, typically orange in color, known for their high vitamin A content.');
-INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
-VALUES    
-    (3, 'Herb', 'Basil', 'Ocimum basilicum', 'Basil is a culinary herb commonly used in Italian and Southeast Asian cuisines.');
-INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
-VALUES
-    (4, 'Flower', 'Sunflower', 'Helianthus annuus', 'Sunflowers are known for their large, bright yellow flower heads and seeds rich in oil.');
-INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
-VALUES
-    (5, 'Cereal', 'Wheat', 'Triticum aestivum', 'Wheat is a staple cereal grain used worldwide for making bread and other foods.');
-
 
 -- CREATE TABLE Cultivar (
 --     plant_ID INTEGER PRIMARY KEY,
@@ -122,7 +106,7 @@ CREATE TABLE distinguished_by (
 );
 
 CREATE TABLE Orders (
-    order_id INTEGER PRIMARY KEY,
+    order_ID INTEGER PRIMARY KEY,
     order_date DATE,
     order_comment VARCHAR(3000)
 );
@@ -135,12 +119,11 @@ CREATE TABLE Supplier (
     supplier_tel VARCHAR(50) CHECK (supplier_tel IS NOT NULL)
 );
 
-
 CREATE TABLE Order_item (
     order_ID INTEGER,
     item_ID INTEGER,
     plant_ID INTEGER NOT NULL,
-    quantity INTEGER,
+    quantity DECIMAL(10,2),
     unit VARCHAR(50),
     item_price DECIMAL(10,2),
     supplier_ID INTEGER NOT NULL,
@@ -167,6 +150,7 @@ CREATE TABLE Batch (
     UNIQUE (plant_date, item_ID, order_ID, field_name, zone_ID)
 );
 
+--how to ensure only the plant_id included in that batch is commited to the database?
 CREATE TABLE batch_is_at_Stage (
     batch_ID INTEGER,
     plant_ID INTEGER,
@@ -195,6 +179,23 @@ CREATE TABLE Plant_event_records_user_batch (
     FOREIGN KEY (batch_ID) REFERENCES Batch(batch_ID),
     FOREIGN KEY (user_ID) REFERENCES Userr(user_id)
 );
+
+INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
+VALUES
+    (1, 'Fruit', 'Apple', 'Malus domestica', 'Apple is a widely cultivated tree known for its sweet, edible fruit.');
+INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
+VALUES    
+    (2, 'Vegetable', 'Carrot', 'Daucus carota', 'Carrots are root vegetables, typically orange in color, known for their high vitamin A content.');
+INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
+VALUES    
+    (3, 'Herb', 'Basil', 'Ocimum basilicum', 'Basil is a culinary herb commonly used in Italian and Southeast Asian cuisines.');
+INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
+VALUES
+    (4, 'Flower', 'Sunflower', 'Helianthus annuus', 'Sunflowers are known for their large, bright yellow flower heads and seeds rich in oil.');
+INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
+VALUES
+    (5, 'Cereal', 'Wheat', 'Triticum aestivum', 'Wheat is a staple cereal grain used worldwide for making bread and other foods.');
+
 
 
 INSERT INTO Soil_condition (soil_type, pH, organic_matter_concentration)
@@ -294,6 +295,34 @@ INSERT INTO Supplier (supplier_ID, supplier_name, supplier_address, supplier_tel
 INSERT INTO Orders (order_ID, order_date, order_comment) VALUES (12,TO_DATE('2024-10-01', 'YYYY-MM-DD'), 'Why so serious?');
 INSERT INTO Orders (order_ID, order_date, order_comment) VALUES (1,TO_DATE('2024-11-28', 'YYYY-MM-DD'), 'Nb!');
 INSERT INTO Orders (order_ID, order_date, order_comment) VALUES (2,TO_DATE('2024-12-24', 'YYYY-MM-DD'), '666');
+
+INSERT INTO Order_item (order_ID, item_ID, plant_ID, quantity, unit, item_price, supplier_ID, item_comment)
+VALUES (12, 1, 3, 11, 'g', 16, 3, 'smells good.');
+INSERT INTO Order_item (order_ID, item_ID, plant_ID, quantity, unit, item_price, supplier_ID, item_comment)
+VALUES (12, 2, 2, 12, 'g', 12.5, 1, 'almost done.');
+
+INSERT INTO Stage (plant_ID, stage_name) VALUES (1, 'flower');
+INSERT INTO Stage (plant_ID, stage_name) VALUES (1, 'seed');
+INSERT INTO Stage (plant_ID, stage_name) VALUES (1, 'harvest');
+INSERT INTO Stage (plant_ID, stage_name) VALUES (2, 'flower');
+INSERT INTO Stage (plant_ID, stage_name) VALUES (2, 'seed');
+INSERT INTO Stage (plant_ID, stage_name) VALUES (2, 'harvest');
+
+INSERT INTO Batch (batch_ID, care_notes, plant_date, yield_weight, planted_quantity, 
+    survived_quantity, order_ID, item_ID, field_name, zone_ID) 
+VALUES (1, 'Don''t worry, be happy :)', TO_DATE('2023-09-04','YYYY-MM-DD'), 5,3,1, 12,1, 'South Field', 1);
+
+INSERT INTO batch_is_at_Stage (batch_ID, plant_ID, stage_name, start_date, end_date) 
+VALUES (1, 2, 'seed', TO_DATE('2024-10-01', 'YYYY-MM-DD'),  TO_DATE('2024-10-30', 'YYYY-MM-DD'));
+INSERT INTO batch_is_at_Stage (batch_ID, plant_ID, stage_name, start_date, end_date) 
+VALUES (1, 2, 'flower', TO_DATE('2024-10-31', 'YYYY-MM-DD'),  TO_DATE('2024-12-21', 'YYYY-MM-DD'));
+
+INSERT INTO Tag (tag) VALUES ('cold-resistant');
+INSERT INTO Tag (tag) VALUES ('big');
+
+INSERT INTO plant_has_tags (plant_ID, tag) VALUES (1, 'cold-resistant');
+INSERT INTO plant_has_tags (plant_ID, tag) VALUES (1, 'big');
+
 -- CREATE OR REPLACE TRIGGER prevent_orphaned_location
 -- BEFORE DELETE ON distinguished_by
 -- FOR EACH ROW

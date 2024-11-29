@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Batch Is At Stage</title>
+  </head>
+  <body>
+    <h1>
+      Database Connection Status:
+      <span id="dbStatus"></span>
+      <img
+        id="loadingGif"
+        class="loading-gif"
+        src="loading_100px.gif"
+        alt="Loading..."
+      />
+    </h1>
+
+    <br />
+    <hr />
+    <br />
+
+    <h2>Show all Plants with Their Tags</h2>
+    <table id="demotable" border="1">
+      <thead>
+        <tr>
+          <th>Plant ID</th>
+          <th>Tag</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <br />
+    <hr />
+    <br />
+
+    <h2>Assign A New Tag To A Plant</h2>
+    <form id="insertDemotable">
+      Plant ID:
+      <input
+        type="number"
+        id="insertPlantId"
+        placeholder="Enter Plant ID"
+        required
+      /><br /><br />
+      Tag:
+      <input
+        type="text"
+        id="insertTag"
+        placeholder="Enter Tag"
+        maxlength="50"
+        required
+      /><br /><br />
+      <button type="submit">Insert</button>
+    </form>
+    <div id="insertResultMsg"></div>
+
+    <br />
+    <hr />
+    <br />
+
+    <h2>Update The Tag Of A Plant</h2>
+    <form id="updateDemotable">
+      Plant ID:
+      <input
+        type="number"
+        id="updatePlantId"
+        placeholder="Enter Plant ID"
+        required
+      /><br /><br />
+      Old Tag Name:
+      <input
+        type="text"
+        id="updateOldTag"
+        placeholder="Enter the tag to replace"
+        maxlength="50"
+        required
+      /><br /><br />
+      New Tag Name:
+      <input
+        type="text"
+        id="updateNewTag"
+        placeholder="Enter New tag"
+        maxlength="50"
+      /><br /><br />
+      <button type="submit">Update</button>
+    </form>
+    <div id="updateResultMsg"></div>
+
+    <br />
+    <hr />
+    <br />
+
+    <h2>Delete a tag </h2>
+    <form id="deleteDemotable">
+      Plant ID to be deleted:
+      <input
+        type="number"
+        id="deletePlantId"
+        placeholder="Enter Plant ID"
+        required
+      /><br /><br />
+      Tag to be deleted:
+      <input
+        type="text"
+        id="deleteTag"
+        placeholder="Enter the tag to delete"
+        maxlength="50"
+        required
+      /><br /><br />
+      <button type="submit">Delete</button>
+    </form>
+    <div id="deleteResultMsg"></div>
+
+    <br />
+    <hr />
+    <br />
+
+    <script src="PlantHasTags.js"></script>
+  </body>
+</html>
