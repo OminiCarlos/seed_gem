@@ -139,15 +139,28 @@ async function deletePlantDemotable(event) {
 
 // Counts rows in the demotable.
 async function countDemotable() {
-  const response = await fetch("/count-demotable", {
+  const response = await fetch("/plants/count-demotable", {
     method: "GET",
   });
 
   const responseData = await response.json();
   const messageElement = document.getElementById("countResultMsg");
   messageElement.textContent = responseData.success
-    ? `The number of tuples in demotable: ${responseData.count}`
-    : "Error in count demotable!";
+    ? `The number of tuples in Plants: ${responseData.count}`
+    : "Error in count Plants!";
+}
+
+// Count plants yielding fruits
+async function countFruitYieldingPlants() {
+  const response = await fetch("/plants/count-fruit-yielding-plants", {
+    method: "GET",
+  });
+
+  const responseData = await response.json();
+  const messageElement = document.getElementById("fruitYieldCountResultMsg");
+  messageElement.textContent = responseData.success
+    ? `Number of fruit-yielding plants: ${responseData.count}`
+    : "Error counting fruit-yielding plants!";
 }
 
 // Initializes the webpage functionalities.
@@ -169,6 +182,9 @@ window.onload = function () {
   document
     .getElementById("countDemotable")
     .addEventListener("click", countDemotable);
+  document
+    .getElementById("countPlantsYieldingFruits")
+    .addEventListener("click", countFruitYieldingPlants);
 };
 
 // General function to refresh the displayed table data.

@@ -47,7 +47,7 @@ async function initiateDemotable() {
   });
 }
 
-// 
+//
 async function insertDemotable(
   // change these to the attributes in your table.
   plant_id,
@@ -72,12 +72,8 @@ async function insertDemotable(
         :scientific_name,
         :overview_notes
       )`,
-      // these are the data you passed in. 
-      [ plant_id,
-        yield_type,
-        common_name,
-        scientific_name,
-        overview_notes ],
+      // these are the data you passed in.
+      [plant_id, yield_type, common_name, scientific_name, overview_notes],
       { autoCommit: true }
     );
 
@@ -104,11 +100,7 @@ async function updateDemotable(
                   scientific_name = :scientific_name,
                   overview_notes = :overview_notes 
       WHERE plant_ID=:plant_id`,
-      [ plant_id,
-        yield_type,
-        common_name,
-        scientific_name,
-        overview_notes ],
+      [plant_id, yield_type, common_name, scientific_name, overview_notes],
       { autoCommit: true }
     );
     return result.rowsAffected && result.rowsAffected > 0;
@@ -121,8 +113,8 @@ async function deleteDemotable(plant_id) {
   zone_id = parseInt(plant_id);
   return await withOracleDB(async (connection) => {
     const result = await connection.execute(
-      // replace with the query in your table. 
-       `DELETE FROM PLANT 
+      // replace with the query in your table.
+      `DELETE FROM PLANT 
         WHERE plant_ID = :plant_id`,
       [plant_id],
       { autoCommit: true }
@@ -133,10 +125,35 @@ async function deleteDemotable(plant_id) {
   });
 }
 
+async function countDemotable() {
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute("SELECT Count(*) FROM PLANT");
+    return result.rows[0][0];
+  }).catch(() => {
+    return -1;
+  });
+}
+
+async function countFruitYieldingPlants() {
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute(
+      `SELECT COUNT(*) AS fruit_count
+       FROM Plant
+       GROUP BY yield_type
+       HAVING LOWER(yield_type) = 'fruit'`
+    );
+    return result.rows[0][0];
+  }).catch(() => {
+    return -1;
+  });
+}
+
 module.exports = {
   initiateDemotable: initiateDemotable,
   insertDemotable: insertDemotable,
   fetchDemotableFromDb: fetchDemotableFromDb,
   updateDemotable: updateDemotable,
   deleteDemotable: deleteDemotable,
+  countDemotable,
+  countFruitYieldingPlants: countFruitYieldingPlants,
 };
