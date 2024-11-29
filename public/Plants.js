@@ -139,15 +139,15 @@ async function deletePlantDemotable(event) {
 
 // Counts rows in the demotable.
 async function countDemotable() {
-  const response = await fetch("/count-demotable", {
+  const response = await fetch("/plants/count-demotable", {
     method: "GET",
   });
 
   const responseData = await response.json();
   const messageElement = document.getElementById("countResultMsg");
   messageElement.textContent = responseData.success
-    ? `The number of tuples in demotable: ${responseData.count}`
-    : "Error in count demotable!";
+    ? `The number of tuples in Plants: ${responseData.count}`
+    : "Error in count Plants!";
 }
 
 // Initializes the webpage functionalities.
