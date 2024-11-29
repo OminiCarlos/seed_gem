@@ -134,6 +134,20 @@ async function countDemotable() {
   });
 }
 
+async function countFruitYieldingPlants() {
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute(
+      `SELECT COUNT(*) AS fruit_count
+       FROM Plant
+       GROUP BY yield_type
+       HAVING LOWER(yield_type) = 'fruit'`
+    );
+    return result.rows[0][0];
+  }).catch(() => {
+    return -1;
+  });
+}
+
 module.exports = {
   initiateDemotable: initiateDemotable,
   insertDemotable: insertDemotable,
@@ -141,4 +155,5 @@ module.exports = {
   updateDemotable: updateDemotable,
   deleteDemotable: deleteDemotable,
   countDemotable,
+  countFruitYieldingPlants: countFruitYieldingPlants,
 };

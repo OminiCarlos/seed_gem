@@ -87,4 +87,18 @@ router.get("/count-demotable", async (req, res) => {
   }
 });
 
+router.get("/count-fruit-yielding-plants", async (req, res) => {
+  const count = await appService.countFruitYieldingPlants();
+  if (count >= 0) {
+    res.json({
+      success: true,
+      count: count,
+    });
+  } else {
+    res.status(500).json({
+      success: false,
+    });
+  }
+});
+
 module.exports = router;

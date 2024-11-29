@@ -150,6 +150,19 @@ async function countDemotable() {
     : "Error in count Plants!";
 }
 
+// Count plants yielding fruits
+async function countFruitYieldingPlants() {
+  const response = await fetch("/plants/count-fruit-yielding-plants", {
+    method: "GET",
+  });
+
+  const responseData = await response.json();
+  const messageElement = document.getElementById("fruitYieldCountResultMsg");
+  messageElement.textContent = responseData.success
+    ? `Number of fruit-yielding plants: ${responseData.count}`
+    : "Error counting fruit-yielding plants!";
+}
+
 // Initializes the webpage functionalities.
 window.onload = function () {
   checkDbConnection();
@@ -169,6 +182,9 @@ window.onload = function () {
   document
     .getElementById("countDemotable")
     .addEventListener("click", countDemotable);
+  document
+    .getElementById("countPlantsYieldingFruits")
+    .addEventListener("click", countFruitYieldingPlants);
 };
 
 // General function to refresh the displayed table data.
