@@ -422,16 +422,7 @@ Table created.
 1 row created.
 
 
-Warning: Trigger created with compilation errors.
-
-SP2-0734: unknown command beginning "IF v_count..." - rest of line ignored.
-SP2-0734: unknown command beginning "RAISE_APPL..." - rest of line ignored.
-SP2-0042: unknown command "END IF" - rest of line ignored.
-SP2-0042: unknown command "END" - rest of line ignored.
-SP2-0044: For a list of known commands enter HELP
-and to leave enter EXIT.
-
-Warning: Trigger created with compilation errors.
+Trigger created.
 
 
 Trigger created.
