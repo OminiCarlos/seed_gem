@@ -46,6 +46,12 @@ Table dropped.
 
 Table dropped.
 
+drop table plant_has_tags
+           *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
+
+
 
 Table dropped.
 
@@ -56,9 +62,6 @@ Table dropped.
 Table dropped.
 
 
-Table dropped.
-
-
 Table created.
 
 
@@ -337,29 +340,15 @@ Table created.
 
 1 row created.
 
-INSERT INTO Tag (tag) VALUES ("cold-resistant")
-                              *
-ERROR at line 1:
-ORA-00984: column not allowed here 
+
+1 row created.
 
 
-INSERT INTO Tag (tag) VALUES ("big")
-                              *
-ERROR at line 1:
-ORA-00984: column not allowed here 
+1 row created.
 
 
-INSERT INTO plant_has_tags (plant_ID, tag) VALUES (1, 'cold-resistant')
-*
-ERROR at line 1:
-ORA-02291: integrity constraint (ORA_SCHEN622.SYS_C001023219) violated - parent 
-key not found 
+1 row created.
 
 
-INSERT INTO plant_has_tags (plant_ID, tag) VALUES (1, 'big')
-*
-ERROR at line 1:
-ORA-02291: integrity constraint (ORA_SCHEN622.SYS_C001023219) violated - parent 
-key not found 
-
+1 row created.
 

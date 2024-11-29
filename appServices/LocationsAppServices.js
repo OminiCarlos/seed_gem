@@ -62,7 +62,7 @@ async function fetchDemotableFromDb() {
     const result = await connection.execute(`
       SELECT Location.field_name, Location.zone_id, Location.is_outdoor, Location_irrigation.is_irrigated
       FROM Location, Location_irrigation
-      WHERE Location.is_outdoor = Location_irrigation.is_outdoor`); // replace with a join sql statement
+      WHERE Location.is_outdoor = Location_irrigation.is_outdoor`); 
     return result.rows;
   }).catch(() => {
     return [];
@@ -102,10 +102,43 @@ async function deleteDemotable(field_name, zone_id) {
   });
 }
 
+async function filterDemotable(showOutdoor, showIndoor) {
+  return await withOracleDB(async (connection) => {
+    // Build the WHERE clause dynamically based on input
+    console.log(showOutdoor, showIndoor);
+    const conditions = [];
+    if (showOutdoor == 1) {
+      conditions.push("location.is_outdoor = 1");
+    }
+    if (showIndoor == 1) {
+      conditions.push("location.is_outdoor = 0");
+    } 
+    console.log(conditions.length, conditions);
+    const whereClause = conditions.length ===2? `WHERE LOCATION.is_outdoor = Location_irrigation.is_outdoor 
+                                              AND (${conditions.join(" OR ")}) ` : conditions.length ===1? 
+                                              `WHERE LOCATION.is_outdoor = Location_irrigation.is_outdoor AND ${conditions.join()} ` :`WHERE LOCATION.is_outdoor = Location_irrigation.is_outdoor`;
+
+    const query = `
+      SELECT LOCATION.field_name, LOCATION.zone_id, LOCATION.is_outdoor, Location_irrigation.is_irrigated
+      FROM LOCATION, Location_irrigation 
+      
+      ${whereClause}
+    `;
+
+    const result = await connection.execute(query);
+    return result.rows;
+  }).catch((error) => {
+    console.error("Error filtering demotable:", error);
+    return [];
+  });
+}
+
+
 module.exports = {
   initiateDemotable: initiateDemotable,
   insertDemotable: insertDemotable,
   fetchDemotableFromDb: fetchDemotableFromDb,
   updateDemotable: updateDemotable,
   deleteDemotable: deleteDemotable,
+  filterDemotable,filterDemotable,
 };

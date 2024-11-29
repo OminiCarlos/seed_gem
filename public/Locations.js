@@ -132,6 +132,45 @@ async function deleteLocationDemotable(event) {
   fetchTableData();
 }
 
+async function applyLocationFilter() {
+  // Get checkbox states
+  const showOutdoor = document.getElementById("showOutdoor").checked?1:0;
+  const showIndoor = document.getElementById("showIndoor").checked?1:0;
+
+  try {
+    // Make an API call to fetch filtered data
+    const response = await fetch(
+      `/locations/filter-demotable?showOutdoor=${showOutdoor}&showIndoor=${showIndoor}`,
+      { method: "GET" }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch filtered data");
+    }
+
+    const data = await response.json();
+    console.log(data);
+
+    // Get the table body
+    const tableBody = document.querySelector("#demotable tbody");
+
+    // Clear existing table rows
+    tableBody.innerHTML = "";
+
+    // Populate the table with the filtered data
+    data.data.forEach((location) => {
+      const row = tableBody.insertRow();
+      ["field_name", "zone_id", "is_outdoor", "__"].forEach((field, index) => {
+        const cell = row.insertCell();
+        cell.textContent = location[index];
+      });
+    });
+  } catch (error) {
+    console.error("Error applying location filter:", error);
+  }
+}
+
+
 // // Counts rows in the demotable.
 // async function countDemotable() {
 //   const response = await fetch("/locations-count-demotable", {
@@ -164,6 +203,9 @@ window.onload = function () {
   document
     .getElementById("countDemotable")
     .addEventListener("click", countDemotable);
+  document
+    .getElementById("applyFilter")
+    .addEventListener("click", applyLocationFilter);
 };
 
 // General function to refresh the displayed table data.

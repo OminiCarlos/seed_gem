@@ -142,6 +142,7 @@ async function countFruitYieldingPlants() {
        GROUP BY yield_type
        HAVING LOWER(yield_type) = 'fruit'`
     );
+    console.log(result);
     return result.rows[0][0];
   }).catch(() => {
     return -1;

@@ -56,6 +56,25 @@ router.post("/update-demotable", async (req, res) => {
   }
 });
 
+// Filter locations by indoor/outdoor
+router.get("/filter-demotable", async (req, res) => {
+  const { showOutdoor, showIndoor } = req.query;
+
+  // Convert query parameters to booleans
+  const filterOutdoor = showOutdoor;
+  const filterIndoor = showIndoor;
+
+  // Fetch filtered data from the service
+  const filteredData = await appService.filterDemotable(filterOutdoor, filterIndoor);
+
+  if (filteredData) {
+    res.json({ data: filteredData });
+  } else {
+    res.status(500).json({ success: false, message: "Error fetching filtered data" });
+  }
+});
+
+
 //delete one entry
 router.delete("/delete-demotable/:field_name/:zone_id", async (req, res) => {
   const { field_name, zone_id } = req.params;
