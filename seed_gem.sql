@@ -457,7 +457,23 @@ BEGIN
     SELECT COUNT(*) INTO v_count
     FROM distinguished_by
     WHERE field_name = :OLD.field_name AND zone_ID = :OLD.zone_ID;
+CREATE OR REPLACE TRIGGER prevent_orphaned_location
+BEFORE DELETE ON distinguished_by
+FOR EACH ROW
+DECLARE
+    v_count NUMBER;
+BEGIN
+    -- Check if the deletion will leave the Location without any distinguished_by entries
+    SELECT COUNT(*) INTO v_count
+    FROM distinguished_by
+    WHERE field_name = :OLD.field_name AND zone_ID = :OLD.zone_ID;
     
+    -- If this is the last entry, raise an error
+    IF v_count = 1 THEN
+        RAISE_APPLICATION_ERROR(-20002, 'Cannot delete the last distinguished_by entry for a Location.');
+    END IF;
+END;
+/
     -- If this is the last entry, raise an error
     IF v_count = 1 THEN
         RAISE_APPLICATION_ERROR(-20002, 'Cannot delete the last distinguished_by entry for a Location.');
