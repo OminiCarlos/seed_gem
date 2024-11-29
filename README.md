@@ -1,4 +1,8 @@
 # Seed Germ - A gardening management tool
+## !!!! For Project TA: Please find the MileStone 4 report in this path:
+MileStone_documents/milestone4_report.pdf
+
+## Introduction
 Seed Germ is a comprehensive system for managing and tracking plants within a garden, focusing on the plant growth data analytics. The system accommodates various plant types and stages, tracks scheduled and ad-hoc events, and provides traceability from seed purchase through to harvest and distribution. Its functionality includes maintaining records of plant event such as watering, weeding, etc., observations such as bud breaking, fruiting, etc. and generating timelines and analytics for efficient garden management.\
 Deploy instructions:
 Starting the Sample Project:
