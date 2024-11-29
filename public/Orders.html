@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>All Orders</title>
   </head>
-  <body>
+  <br>
     <h1>
       Database Connection Status:
       <span id="dbStatus"></span>
@@ -124,6 +124,46 @@
     <hr />
     <br />
 
+        <!-- Show 'Order' Table. Data will be fetched and inserted here dynamically using JavaScript. -->
+    <h2>Select Columns to  Display</h2>
+    <table id="dynamicDemotable" border="1">
+      <thead id="dynamicDemotableHeader"></thead>
+      <tbody id="dynamicDemotableBody"></tbody>
+    </table>
+
+    <br />
+    <hr />
+    <br />
+    
+    Check the columns you want to display and click "Update Display". 
+    <br></br>
+    <form id="updateDisplayDemotable">
+    <div>
+      Order ID:
+      <input
+        type="checkbox"
+        id="orderIdCheckbox"
+      />
+      &nbsp;&nbsp;&nbsp;&nbsp; 
+      Order Date:
+      <input
+        type="checkbox"
+        id="orderDateCheckbox"
+      />
+      &nbsp;&nbsp;&nbsp;&nbsp; 
+      Order Comment:
+      <input
+        type="checkbox"
+        id="orderCommentCheckbox"
+      />
+    </div>
+    <br />
+      <button type="submit">Update Display</button>
+    </form>
+    <div id="updateDisplayResultMsg"></div>
+
+    <br />
+    <br />
     <script src="Orders.js"></script>
   </body>
 </html>

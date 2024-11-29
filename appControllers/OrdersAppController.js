@@ -23,7 +23,6 @@ router.post("/initiate-demotable", async (req, res) => {
 
 // insert one entry
 router.post("/insert-demotable", async (req, res) => {
-  console.log("insert order demotable")
   const {order_id, order_date, order_comment} = req.body;
   const insertResult = await appService.insertDemotable(
     order_id,
@@ -45,9 +44,7 @@ router.post("/update-demotable", async (req, res) => {
     order_date,
     order_comment
   );
-  console.log(updateResult);
   if (updateResult) {
-    // console.log("REACHED here");
     res.json({ success: true });
   } else {
     res.status(500).json({ success: false });
@@ -57,12 +54,26 @@ router.post("/update-demotable", async (req, res) => {
 //delete one entry
 router.delete("/delete-demotable/:order_id", async (req, res) => {
   const { order_id } = req.params;
-  // console.log(field_name, zone_id);
   const deleteResult = await appService.deleteDemotable(
     order_id
   );
   if (deleteResult) {
     res.json({ success: true });
+  } else {
+    res.status(500).json({ success: false });
+  }
+});
+
+//update the columns to display
+router.post("/update-display-demotable", async (req, res) => {
+  const { order_id, order_date, order_comment } = req.body;
+  const updateResult = await appService.updateDisplayDemotable(
+    order_id,
+    order_date,
+    order_comment
+  );
+  if (updateResult) {
+    res.json({ data:updateResult, success:true});
   } else {
     res.status(500).json({ success: false });
   }

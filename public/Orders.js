@@ -126,6 +126,69 @@ async function deleteOrderDemotable(event) {
   fetchTableData();
 }
 
+async function updateDisplayDemotable(event) {
+  event.preventDefault();
+  const selectionData = {
+    order_id: document.getElementById("orderIdCheckbox").checked,
+    order_date: document.getElementById("orderDateCheckbox").checked,
+    order_comment: document.getElementById("orderCommentCheckbox").checked,
+  };
+
+  const response = await fetch("/orders/update-display-demotable", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(selectionData),
+  });
+
+  const responseData = await response.json();
+  console.log(responseData);
+  const messageElement = document.getElementById("updateDisplayResultMsg");
+  messageElement.textContent = responseData.success
+    ? "Display updated successfully!"
+    : "Error updating display!";
+  
+  columnsIncluded = [];
+  if (selectionData.order_id) {
+    columnsIncluded.push("Order ID")
+  };
+  if (selectionData.order_date) {
+    columnsIncluded.push("Order Date")
+  };
+  if (selectionData.order_comment) {
+    columnsIncluded.push("Order Comment")
+  };
+
+  displaySelectColumns(columnsIncluded,responseData);
+
+}
+
+// Fetches data from the order table and displays it.
+async function displaySelectColumns(headers,responseData) {
+  const theader = document.getElementById("dynamicDemotableHeader");
+  const tableBody = document.getElementById("dynamicDemotableBody");
+  const demotableContent = responseData.data;
+
+  // Clear existing table rows
+  tableBody.innerHTML = "";
+  theader.innerHTML = "";
+
+// Populate the header
+  const headerRow = theader.insertRow();
+  headers.forEach((header) => {
+    const th = document.createElement("th");
+    th.textContent = header; // Add the column name
+    headerRow.appendChild(th);
+  });
+
+  demotableContent.forEach(order => {
+    const row = tableBody.insertRow();
+    order.forEach(value => {
+      const cell = row.insertCell(); // Add a new cell to the current row
+      cell.textContent = value; // Populate the cell with the value
+    });
+  });
+}
+
 
 // Initializes the webpage functionalities.
 window.onload = function () {
@@ -143,6 +206,9 @@ window.onload = function () {
   document
     .getElementById("deleteOrderDemotable")
     .addEventListener("submit", deleteOrderDemotable);
+  document
+    .getElementById("updateDisplayDemotable")
+    .addEventListener("submit", updateDisplayDemotable); 
 };
 
 // General function to refresh the displayed table data.

@@ -105,10 +105,49 @@ async function deleteDemotable(order_id) {
   });
 }
 
+async function updateDisplayDemotable(order_id, order_date, order_comment) {
+  return await withOracleDB(async connection => {
+    // Step 1: Whitelist and validate column names
+    const validColumns = {
+      order_id: "order_id",
+      order_date: "order_date",
+      order_comment: "order_comment"
+    };
+    
+    const selectedColumns = [];
+    if (order_id) selectedColumns.push(validColumns.order_id);
+    if (order_date) selectedColumns.push(validColumns.order_date);
+    if (order_comment) selectedColumns.push(validColumns.order_comment);
+
+    // Step 2: Join columns into a comma-separated string
+    const selection = selectedColumns.join(",");
+    // Step 3: Handle no columns selected case
+    if (!selection) {
+      throw new Error("No columns selected for the query");
+    }
+
+    const query = `SELECT ${selection} FROM Orders`;
+    console.log("Executing Query:", query);
+
+    // Step 4: Execute the query
+    const result = await connection.execute(
+      query,
+      {},
+      { autoCommit: true }
+    );
+    console.log(result.rows[0][0]);
+    return result.rows;
+  }).catch(err => {
+    console.error("Error executing query:", err);
+    return false;
+  });
+}
+
 module.exports = {
   initiateDemotable: initiateDemotable,
   insertDemotable: insertDemotable,
   fetchDemotableFromDb: fetchDemotableFromDb,
   updateDemotable: updateDemotable,
   deleteDemotable: deleteDemotable,
+  updateDisplayDemotable: updateDisplayDemotable,
 };
