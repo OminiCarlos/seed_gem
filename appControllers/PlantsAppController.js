@@ -116,5 +116,21 @@ router.get("/yield-type-count", async (req, res) => {
   }
 });
 
+// Fetch count of plants with "care" in overview_notes, grouped by yield_type
+router.get("/care-count", async (req, res) => {
+  try {
+    const careCountData = await appService.getCareCountByYieldType();
+    if (careCountData) {
+      res.json({ data: careCountData });
+    } else {
+      res.status(500).json({ success: false, message: "No data available" });
+    }
+  } catch (error) {
+    console.error("Error fetching care count data:", error);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+});
+
+
 
 module.exports = router;

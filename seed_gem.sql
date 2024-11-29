@@ -182,19 +182,63 @@ CREATE TABLE Plant_event_records_user_batch (
 
 INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
 VALUES
-    (1, 'Fruit', 'Apple', 'Malus domestica', 'Apple is a widely cultivated tree known for its sweet, edible fruit.');
+    (1, 'Fruit', 'Apple', 'Malus domestica', 'Apple is a widely cultivated tree known for its sweet, edible fruit. Need good care');
 INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
 VALUES    
-    (2, 'Vegetable', 'Carrot', 'Daucus carota', 'Carrots are root vegetables, typically orange in color, known for their high vitamin A content.');
+    (2, 'Vegetable', 'Carrot', 'Daucus carota', 'Carrots are root vegetables, typically orange in color, known for their high vitamin A content Need good care.');
 INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
 VALUES    
     (3, 'Herb', 'Basil', 'Ocimum basilicum', 'Basil is a culinary herb commonly used in Italian and Southeast Asian cuisines.');
 INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
 VALUES
-    (4, 'Flower', 'Sunflower', 'Helianthus annuus', 'Sunflowers are known for their large, bright yellow flower heads and seeds rich in oil.');
+    (4, 'Flower', 'Sunflower', 'Helianthus annuus', 'Sunflowers are known for their large, bright yellow flower heads and seeds rich in oil Need good care.');
 INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
 VALUES
-    (5, 'Cereal', 'Wheat', 'Triticum aestivum', 'Wheat is a staple cereal grain used worldwide for making bread and other foods.');
+    (5, 'Cereal', 'Wheat', 'Triticum aestivum', 'Wheat is a staple cereal grain used worldwide for making bread and other foods Need good care.');
+INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
+VALUES
+    (6, 'Fruit', 'Banana', 'Musa acuminata', 'Bananas are tropical fruits known for their sweetness and ease of care in cultivation Need good care.');
+    
+INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
+VALUES
+    (7, 'Vegetable', 'Spinach', 'Spinacia oleracea', 'Spinach is a leafy green vegetable that requires proper care for optimal growth Need good care.');
+
+INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
+VALUES
+    (8, 'Herb', 'Mint', 'Mentha', 'Mint is a fragrant herb commonly used in teas and desserts, requiring regular watering and care.');
+
+INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
+VALUES
+    (9, 'Flower', 'Rose', 'Rosa', 'Roses are popular garden flowers admired for their beauty and fragrance, but they need careful pruning.');
+
+INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
+VALUES
+    (10, 'Cereal', 'Rice', 'Oryza sativa', 'Rice is a staple food crop that thrives in wet conditions and demands careful irrigationNeed good care.');
+
+INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
+VALUES
+    (11, 'Fruit', 'Cherry', 'Prunus avium', 'Cherries are small, sweet fruits often grown in temperate regions Need good care.');
+
+INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
+VALUES
+    (12, 'Vegetable', 'Potato', 'Solanum tuberosum', 'Potatoes are tuberous crops that store well and are easy to grow with minimal care.');
+
+INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
+VALUES
+    (13, 'Herb', 'Parsley', 'Petroselinum crispum', 'Parsley is a herb often used as a garnish or flavor enhancer in many dishes.');
+
+INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
+VALUES
+    (14, 'Flower', 'Lily', 'Lilium', 'Lilies are elegant flowers that symbolize purity and require specific care for long-lasting blooms.');
+
+INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
+VALUES
+    (15, 'Cereal', 'Barley', 'Hordeum vulgare', 'Barley is a versatile cereal grain used for food, beverages, and livestock feed.');
+
+
+
+
+
 
 
 

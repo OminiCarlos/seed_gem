@@ -46,11 +46,8 @@ Table dropped.
 
 Table dropped.
 
-drop table plant_has_tags
-           *
-ERROR at line 1:
-ORA-00942: table or view does not exist 
 
+Table dropped.
 
 
 Table dropped.
@@ -114,6 +111,36 @@ Table created.
 
 
 Table created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
 
 
 1 row created.

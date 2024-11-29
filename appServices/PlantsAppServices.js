@@ -169,6 +169,30 @@ async function getYieldTypeCounts() {
   });
 }
 
+async function getCareCountByYieldType() {
+  return await withOracleDB(async (connection) => {
+    const result = await connection.execute(
+      `
+      SELECT yield_type, COUNT(*) AS count
+      FROM Plant
+      WHERE LOWER(overview_notes) LIKE '%care%'
+      GROUP BY yield_type
+      ORDER BY yield_type
+      `
+    );
+
+    // Transform the result into a usable format
+    return result.rows.map((row) => ({
+      yield_type: row[0],
+      count: row[1],
+    }));
+  }).catch((error) => {
+    console.error("Error fetching care count data:", error);
+    return [];
+  });
+}
+
+
 
 
 
@@ -180,5 +204,6 @@ module.exports = {
   deleteDemotable: deleteDemotable,
   countDemotable,
   countFruitYieldingPlants: countFruitYieldingPlants,
-  getYieldTypeCounts,getYieldTypeCounts
+  getYieldTypeCounts:getYieldTypeCounts,
+  getCareCountByYieldType: getCareCountByYieldType
 };
