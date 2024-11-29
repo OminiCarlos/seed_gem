@@ -1,80 +1,84 @@
 const express = require("express");
-const appService = require("../appServices/BatchIsAtStageAppServices.js"); // Replace with the appropriate service
+const appService = require("../appServices/PlantHasTagsAppServices.js");
 const router = express.Router();
 
 // ----------------------------------------------------------
 // API endpoints
-// Fetch data from the batch_is_at_stage table
+
+// Check database connection status
+router.get("/check-db-connection", async (req, res) => {
+  try {
+    const connectionStatus = await appService.checkDbConnection();
+    res
+      .status(200)
+      .send(
+        connectionStatus ? "Database Connected" : "Database Connection Failed"
+      );
+  } catch (error) {
+    res.status(500).send("Database Connection Error");
+  }
+});
+
+// Fetch all records from the plant_has_tags table
 router.get("/demotable", async (req, res) => {
-  const tableContent = await appService.fetchBatchStagesFromDb();
-  res.json({ data: tableContent });
-});
-
-// Initialize the batch_is_at_stage table
-router.post("/initiate-demotable", async (req, res) => {
-  const initiateResult = await appService.initiateBatchStages();
-  if (initiateResult) {
-    res.json({ success: true });
-  } else {
-    res.status(500).json({ success: false });
+  try {
+    const tableContent = await appService.fetchPlantTagsFromDb();
+    res.json({ data: tableContent });
+  } catch (error) {
+    res.status(500).json({ error: "Error fetching data" });
   }
 });
 
-// Insert a new batch stage record
+// Insert a new tag for a plant
 router.post("/insert-demotable", async (req, res) => {
-  const { batch_ID, plant_ID, stage_name, start_date, end_date } = req.body;
+  const { plant_id, tag } = req.body;
 
-  const insertResult = await appService.insertBatchStage(
-    batch_ID,
-    plant_ID,
-    stage_name,
-    start_date,
-    end_date
-  );
-
-  if (insertResult) {
-    res.json({ success: true });
-  } else {
-    res.status(500).json({ success: false });
+  try {
+    const insertResult = await appService.insertPlantTag(plant_id, tag);
+    if (insertResult) {
+      res.json({ success: true });
+    } else {
+      res.status(500).json({ success: false, message: "Failed to insert tag" });
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Error inserting tag" });
   }
 });
 
-// Update an existing batch stage record
+// Update an existing tag for a plant
 router.post("/update-demotable", async (req, res) => {
-  const { batch_ID, plant_ID, stage_name, start_date, end_date } = req.body;
+  const { plant_id, oldTag, newTag } = req.body;
 
-  const updateResult = await appService.updateBatchStage(
-    batch_ID,
-    plant_ID,
-    stage_name,
-    start_date,
-    end_date
-  );
-
-  if (updateResult) {
-    res.json({ success: true });
-  } else {
-    res.status(500).json({ success: false });
+  try {
+    const updateResult = await appService.updatePlantTag(
+      plant_id,
+      oldTag,
+      newTag
+    );
+    if (updateResult) {
+      res.json({ success: true });
+    } else {
+      res.status(500).json({ success: false, message: "Failed to update tag" });
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Error updating tag" });
   }
 });
 
-// Delete a batch stage record by batch ID, plant ID, and stage name
-router.delete(
-  "/delete-demotable/:batch_ID/:plant_ID/:stage_name",
-  async (req, res) => {
-    const { batch_ID, plant_ID, stage_name } = req.params;
-    const deleteResult = await appService.deleteBatchStage(
-      batch_ID,
-      plant_ID,
-      stage_name
-    );
+// Delete a tag from the plant_has_tags table
+router.post("/delete-demotable", async (req, res) => {
+  const { plant_ID, tag } = req.body;
 
+  try {
+    const deleteResult = await appService.deletePlantTag(plant_ID, tag);
     if (deleteResult) {
       res.json({ success: true });
     } else {
-      res.status(500).json({ success: false });
+      res.status(500).json({ success: false, message: "Failed to delete tag" });
     }
+  } catch (error) {
+    res.status(500).json({ error: "Error deleting tag" });
   }
-);
+});
 
 module.exports = router;

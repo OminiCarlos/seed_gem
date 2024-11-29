@@ -16,7 +16,7 @@ async function checkDbConnection() {
 }
 
 // Fetch and display all plants with their tags.
-async function fetchAndDisplayTags() {
+async function fetchAndDisplayDemotable() {
   const tableBody = document.querySelector("#demotable tbody");
 
   try {
@@ -28,7 +28,7 @@ async function fetchAndDisplayTags() {
       const row = tableBody.insertRow();
       tuple.forEach((tagInfo) => {
         const cell = row.insertCell();
-        cell = tagInfo;
+        cell.textContent = tagInfo;
       })
     });
   } catch (error) {
@@ -37,15 +37,13 @@ async function fetchAndDisplayTags() {
 }
 
 // Insert a new tag for a plant.
-async function insertTag(event) {
-  console.log("insert Tag triggered.");
+async function insertDemotable(event) {
   event.preventDefault();
 
   const tagData = {
     plant_id: document.getElementById("insertPlantId").value,
     tag: document.getElementById("insertTag").value
   }
-  console.log(tagData.plant_id, tagData.tag);
   try {
     const response = await fetch("/planthastags/insert-demotable", {
       method: "POST",
@@ -57,14 +55,14 @@ async function insertTag(event) {
     document.getElementById("insertResultMsg").textContent = result.success
       ? "Tag inserted successfully!"
       : "Error inserting tag!";
-    fetchAndDisplayTags();
+    fetchAndDisplayDemotable();
   } catch (error) {
     console.error("Error inserting tag:", error);
   }
 }
 
 // Update an existing tag for a plant.
-async function updateTag(event) {
+async function updateDemotable(event) {
   event.preventDefault();
   const tagData = {
     plant_id: document.getElementById("updatePlantId").value,
@@ -83,7 +81,7 @@ async function updateTag(event) {
     document.getElementById("updateResultMsg").textContent = result.success
       ? "Tag updated successfully!"
       : "Error updating tag!";
-    fetchAndDisplayTags();
+    fetchAndDisplayDemotable();
   } catch (error) {
     console.error("Error updating tag:", error);
   }
@@ -111,15 +109,15 @@ async function deleteDemotable(event) {
   messageElement.textContent = responseData.success
     ? "Tag deleted successfully!"
     : "Error deleting tag!";
-  fetchAndDisplayTags();
+  fetchAndDisplayDemotable();
 }
 
 
 // Initialize webpage functionality.
 window.onload = function () {
   checkDbConnection();
-  fetchAndDisplayTags();
-  document.getElementById("insertDemotable").addEventListener("submit", insertTag);
-  document.getElementById("updateDemotable").addEventListener("submit", updateTag);
-  document.getElementById("deleteDemotable").addEventListener("submit", deleteTag);
+  fetchAndDisplayDemotable();
+  document.getElementById("insertDemotable").addEventListener("submit", insertDemotable);
+  document.getElementById("updateDemotable").addEventListener("submit", updateDemotable);
+  document.getElementById("deleteDemotable").addEventListener("submit", deleteDemotable);
 };

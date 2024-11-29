@@ -1,121 +1,86 @@
 const oracledb = require("oracledb");
 const { withOracleDB } = require("../appService.js");
 
-// Fetch all records from the batch_is_at_stage table
-async function fetchBatchStagesFromDb() {
-  return await withOracleDB(async (connection) => {
-    const result = await connection.execute("SELECT * FROM BATCH_IS_AT_STAGE");
-    return result.rows;
-  }).catch(() => {
+// Check database connection
+async function checkDbConnection() {
+  try {
+    return await withOracleDB(async connection => {
+      const result = await connection.execute("SELECT 1 FROM DUAL");
+      return result.rows.length > 0;
+    });
+  } catch (error) {
+    console.error("Database connection check failed:", error);
+    return false;
+  }
+}
+
+// Fetch all plant tags from the database
+async function fetchPlantTagsFromDb() {
+  return await withOracleDB(async connection => {
+    const result = await connection.execute(
+      "SELECT plant_id, tag FROM PLANT_HAS_TAGS"
+    );
+    return result.rows; // Assuming rows are in a [plant_id, tag] format
+  }).catch(error => {
+    console.error("Error fetching plant tags:", error);
     return [];
   });
 }
 
-// Initialize the batch_is_at_stage table
-async function initiateBatchStages() {
-  return await withOracleDB(async (connection) => {
-    try {
-      await connection.execute(`DROP TABLE BATCH_IS_AT_STAGE`);
-    } catch (err) {
-      console.log("Table might not exist, proceeding to create...");
-    }
-
+// Insert a new tag for a plant
+async function insertPlantTag(plant_id, tag) {
+  return await withOracleDB(async connection => {
+    console.log(plant_id, tag);
     const result = await connection.execute(
-      `CREATE TABLE BATCH_IS_AT_STAGE (
-          batch_ID VARCHAR2(50), 
-          plant_ID INTEGER, 
-          stage_name VARCHAR(50), 
-          start_date DATE, 
-          end_date DATE,
-          PRIMARY KEY (batch_ID, plant_ID, stage_name),
-          FOREIGN KEY (batch_ID) REFERENCES BATCH(batch_id),
-          FOREIGN KEY (plant_ID, stage_name) REFERENCES STAGE(plant_ID, stage_name)
-      )`
-    );
-    console.log("BATCH_IS_AT_STAGE table created successfully!");
-    return true;
-  }).catch(() => {
-    return false;
-  });
-}
-
-// Insert a new record into the batch_is_at_stage table
-async function insertBatchStage(
-  batch_ID,
-  plant_ID,
-  stage_name,
-  start_date,
-  end_date
-) {
-  return await withOracleDB(async (connection) => {
-    const result = await connection.execute(
-      `INSERT INTO BATCH_IS_AT_STAGE (
-          batch_ID, plant_ID, stage_name, start_date, end_date
-      ) 
-      VALUES (
-          :batch_ID, :plant_ID, :stage_name, TO_DATE(:start_date, 'YYYY-MM-DD'), TO_DATE(:end_date, 'YYYY-MM-DD')
-      )`,
-      [batch_ID, plant_ID, stage_name, start_date, end_date],
+      `INSERT INTO PLANT_HAS_TAGS (plant_id, tag) 
+       VALUES (:plant_id, :tag)`,
+      [plant_id, tag],
       { autoCommit: true }
     );
-
     return result.rowsAffected && result.rowsAffected > 0;
-  }).catch(() => {
+  }).catch(error => {
+    console.error("Error inserting plant tag:", error);
     return false;
   });
 }
 
-// Update an existing record in the batch_is_at_stage table
-async function updateBatchStage(
-  batch_ID,
-  plant_ID,
-  stage_name,
-  start_date,
-  end_date
-) {
-  return await withOracleDB(async (connection) => {
+// Update an existing tag for a plant
+async function updatePlantTag(plant_id, oldTag, newTag) {
+  return await withOracleDB(async connection => {
     const result = await connection.execute(
-      `UPDATE BATCH_IS_AT_STAGE 
-      SET 
-          start_date = TO_DATE(:start_date, 'YYYY-MM-DD'), 
-          end_date = TO_DATE(:end_date, 'YYYY-MM-DD')
-      WHERE 
-          batch_ID = :batch_ID AND 
-          plant_ID = :plant_ID AND 
-          stage_name = :stage_name`,
-      [start_date, end_date, batch_ID, plant_ID, stage_name],
+      `UPDATE PLANT_HAS_TAGS 
+       SET tag = :newTag 
+       WHERE plant_id = :plant_id AND tag = :oldTag`,
+      [newTag, plant_id, oldTag],
       { autoCommit: true }
     );
-
     return result.rowsAffected && result.rowsAffected > 0;
-  }).catch(() => {
+  }).catch(error => {
+    console.error("Error updating plant tag:", error);
     return false;
   });
 }
 
-// Delete a record from the batch_is_at_stage table
-async function deleteBatchStage(batch_ID, plant_ID, stage_name) {
-  return await withOracleDB(async (connection) => {
+// Delete a tag for a plant
+async function deletePlantTag(plant_id, tag) {
+  return await withOracleDB(async connection => {
     const result = await connection.execute(
-      `DELETE FROM BATCH_IS_AT_STAGE 
-      WHERE 
-          batch_ID = :batch_ID AND 
-          plant_ID = :plant_ID AND 
-          stage_name = :stage_name`,
-      [batch_ID, plant_ID, stage_name],
+      `DELETE FROM PLANT_HAS_TAGS 
+       WHERE plant_id = :plant_id AND tag = :tag`,
+      [plant_id, tag],
       { autoCommit: true }
     );
-
-    return result.rowsAffected > 0;
-  }).catch(() => {
-    return [];
+    return result.rowsAffected && result.rowsAffected > 0;
+  }).catch(error => {
+    console.error("Error deleting plant tag:", error);
+    return false;
   });
 }
 
 module.exports = {
-  fetchBatchStagesFromDb,
-  initiateBatchStages,
-  insertBatchStage,
-  updateBatchStage,
-  deleteBatchStage,
+  checkDbConnection,
+  fetchPlantTagsFromDb,
+  insertPlantTag,
+  updatePlantTag,
+  deletePlantTag
 };
