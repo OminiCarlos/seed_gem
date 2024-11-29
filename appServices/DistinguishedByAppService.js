@@ -158,7 +158,7 @@ WHERE
   async function fetchSuperFields() {
     return await withOracleDB(async (connection) => {
       const query = `
-       SELECT DISTINCT d.field_name, d.zone_id
+       SELECT DISTINCT d.field_name 
 FROM distinguished_by d
 WHERE NOT EXISTS (
     SELECT s.soil_type
@@ -198,6 +198,41 @@ WHERE NOT EXISTS (
 // }
 
 
+// Fetch information by Field Name
+async function fetchFieldName(field_name) {
+  return await withOracleDB(async (connection) => {
+    const query = `
+      SELECT 
+        Location.field_name,
+        Location.zone_id,
+        Location.is_outdoor,
+        Soil_condition.soil_type,
+        Soil_condition.pH,
+        Soil_condition.organic_matter_concentration
+      FROM 
+        distinguished_by
+      JOIN 
+        Location 
+      ON 
+        distinguished_by.field_name = Location.field_name
+        AND distinguished_by.zone_id = Location.zone_id
+      JOIN 
+        Soil_condition 
+      ON 
+        distinguished_by.soil_type = Soil_condition.soil_type
+      WHERE 
+        Location.field_name = :field_name
+    `;
+
+    const result = await connection.execute(query, [field_name]);
+
+    return result.rows; // Return the retrieved rows
+  }).catch((error) => {
+    console.error("Error fetching information by Field Name:", error);
+    throw error; // Rethrow the error to be handled by the controller
+  });
+}
+
 
 module.exports = {
   resetDistinguishedByTable,
@@ -207,5 +242,6 @@ module.exports = {
   deleteDistinguishedBy,
   fetchGoodLocations,
   fetchSuperFields,
+  fetchFieldName,
 //   countDistinguishedBy,
 };

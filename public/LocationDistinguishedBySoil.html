@@ -40,6 +40,37 @@
 <hr />
 <br />
 
+
+<h2>Find Information by Field Name</h2>
+<p>
+  Enter a Field Name to display its corresponding information from the database.
+</p>
+<form id="findFieldNameForm">
+  Field Name:
+  <input
+    type="text"
+    id="findFieldNameInput"
+    placeholder="Enter Field Name"
+    required
+  />
+  <button type="submit">Find</button>
+</form>
+<div id="findFieldNameResultMsg"></div>
+<table id="findFieldNameTable" border="1" style="margin-top: 10px;">
+  <thead>
+    <tr>
+      <th>Field Name</th>
+      <th>Zone ID</th>
+      <th>Is Outdoor</th>
+      <th>Soil Type</th>
+      <th>pH</th>
+      <th>Organic Matter%</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+
 <h2>Show Good Locations (Aggregation with Nested Group by)</h2>
 <p>
   A "Good Location" is defined as a location where the organic matter concentration is greater than or equal to the averages of concentration of all different fields.
@@ -74,7 +105,7 @@
   <thead>
     <tr>
       <th>Field Name</th>
-      <th>Zone ID</th>
+      
     </tr>
   </thead>
   <tbody></tbody>

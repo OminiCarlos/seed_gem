@@ -103,6 +103,28 @@ router.get("/super-fields", async (req, res) => {
   }
 });
 
+// Fetch information by Field Name
+router.get("/find-field-name", async (req, res) => {
+  const { field_name } = req.query; // Get the Field Name from the query parameter
+
+  if (!field_name || field_name.trim() === "") {
+    return res.status(400).json({ success: false, message: "Field Name is required." });
+  }
+
+  try {
+    const fieldData = await appService.fetchFieldName(field_name.trim());
+    if (fieldData.length > 0) {
+      res.json({ success: true, data: fieldData });
+    } else {
+      res.json({ success: true, data: [] }); // No matching data
+    }
+  } catch (error) {
+    console.error("Error fetching information by Field Name:", error);
+    res.status(500).json({ success: false, message: "Internal server error." });
+  }
+});
+
+
 
 
 

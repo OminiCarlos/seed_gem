@@ -212,7 +212,7 @@ async function fetchAndDisplaySuperFields() {
     superFields.forEach((entry) => {
       const row = tableBody.insertRow();
 
-      ["field_name", "zone_id"].forEach((field, index) => {
+      ["field_name"].forEach((field, index) => {
         const cell = row.insertCell();
         cell.textContent = entry[index];
       });
@@ -224,7 +224,53 @@ async function fetchAndDisplaySuperFields() {
   }
 }
 
+// Fetches and displays information for a specific Field Name
+async function fetchAndDisplayFieldName(event) {
+  event.preventDefault(); // Prevent default form submission behavior
 
+  const fieldName = document.getElementById("findFieldNameInput").value.trim();
+  const resultMsg = document.getElementById("findFieldNameResultMsg");
+  const tableBody = document.querySelector("#findFieldNameTable tbody");
+
+  // Clear previous results
+  resultMsg.textContent = "";
+  tableBody.innerHTML = "";
+
+  if (!fieldName) {
+    resultMsg.textContent = "Please enter a valid Field Name.";
+    return;
+  }
+
+  try {
+    // Send a request to the backend with the specified Field Name
+    const response = await fetch(`/locdistinguishedbysoil/find-field-name?field_name=${encodeURIComponent(fieldName)}`, {
+      method: "GET",
+    });
+
+    const responseData = await response.json();
+
+    if (responseData.success && responseData.data.length > 0) {
+      const fieldData = responseData.data;
+
+      // Populate the table with data
+      fieldData.forEach((entry) => {
+        const row = tableBody.insertRow();
+
+        ["field_name", "zone_id", "is_outdoor", "soil_type", "pH", "organic_matter"].forEach((field, index) => {
+          const cell = row.insertCell();
+          cell.textContent = entry[index];
+        });
+      });
+
+      resultMsg.textContent = "Field Name information displayed successfully!";
+    } else {
+      resultMsg.textContent = "No data found for the specified Field Name.";
+    }
+  } catch (error) {
+    console.error("Error fetching field name information:", error);
+    resultMsg.textContent = "An error occurred while fetching the data.";
+  }
+}
 
 
   
@@ -250,6 +296,9 @@ async function fetchAndDisplaySuperFields() {
     document
       .getElementById("findSuperFields")
       .addEventListener("click", fetchAndDisplaySuperFields);
+    document
+      .getElementById("findFieldNameForm")
+      .addEventListener("submit", fetchAndDisplayFieldName);
     // document
     //   .getElementById("countLocationSoilTable")
     //   .addEventListener("click", countLocationSoilTable);

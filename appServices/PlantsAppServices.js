@@ -175,9 +175,8 @@ async function getCareCountByYieldType() {
       `
       SELECT yield_type, COUNT(*) AS count
       FROM Plant
-      WHERE LOWER(overview_notes) LIKE '%care%'
       GROUP BY yield_type
-      
+      HAVING COUNT(*) >= 2
       `
     );
 
