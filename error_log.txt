@@ -160,137 +160,53 @@ Table created.
 
 1 row created.
 
-INSERT INTO Cultivar (plant_ID, cultivar_name)
-*
-ERROR at line 1:
-ORA-00001: unique constraint (ORA_TIANYIY.SYS_C001114309) violated 
 
-
-
 1 row created.
-
-INSERT INTO Cultivar (plant_ID, cultivar_name)
-*
-ERROR at line 1:
-ORA-00001: unique constraint (ORA_TIANYIY.SYS_C001114309) violated 
 
 
-
 1 row created.
-
-INSERT INTO Cultivar (plant_ID, cultivar_name)
-*
-ERROR at line 1:
-ORA-00001: unique constraint (ORA_TIANYIY.SYS_C001114309) violated 
 
 
-
 1 row created.
-
-INSERT INTO Cultivar (plant_ID, cultivar_name)
-*
-ERROR at line 1:
-ORA-00001: unique constraint (ORA_TIANYIY.SYS_C001114309) violated 
 
 
-
 1 row created.
-
-INSERT INTO Cultivar (plant_ID, cultivar_name)
-*
-ERROR at line 1:
-ORA-00001: unique constraint (ORA_TIANYIY.SYS_C001114309) violated 
 
 
-
 1 row created.
-
-INSERT INTO Cultivar (plant_ID, cultivar_name)
-*
-ERROR at line 1:
-ORA-00001: unique constraint (ORA_TIANYIY.SYS_C001114309) violated 
 
 
-
 1 row created.
-
-INSERT INTO Cultivar (plant_ID, cultivar_name)
-*
-ERROR at line 1:
-ORA-00001: unique constraint (ORA_TIANYIY.SYS_C001114309) violated 
 
 
-
 1 row created.
-
-INSERT INTO Cultivar (plant_ID, cultivar_name)
-*
-ERROR at line 1:
-ORA-00001: unique constraint (ORA_TIANYIY.SYS_C001114309) violated 
 
 
-
 1 row created.
-
-INSERT INTO Cultivar (plant_ID, cultivar_name)
-*
-ERROR at line 1:
-ORA-00001: unique constraint (ORA_TIANYIY.SYS_C001114309) violated 
 
 
-
 1 row created.
-
-INSERT INTO Cultivar (plant_ID, cultivar_name)
-*
-ERROR at line 1:
-ORA-00001: unique constraint (ORA_TIANYIY.SYS_C001114309) violated 
 
 
-
 1 row created.
-
-INSERT INTO Cultivar (plant_ID, cultivar_name)
-*
-ERROR at line 1:
-ORA-00001: unique constraint (ORA_TIANYIY.SYS_C001114309) violated 
 
 
-
 1 row created.
-
-INSERT INTO Cultivar (plant_ID, cultivar_name)
-*
-ERROR at line 1:
-ORA-00001: unique constraint (ORA_TIANYIY.SYS_C001114309) violated 
 
 
-
 1 row created.
-
-INSERT INTO Cultivar (plant_ID, cultivar_name)
-*
-ERROR at line 1:
-ORA-00001: unique constraint (ORA_TIANYIY.SYS_C001114309) violated 
 
 
-
 1 row created.
 
-INSERT INTO Cultivar (plant_ID, cultivar_name)
-*
-ERROR at line 1:
-ORA-00001: unique constraint (ORA_TIANYIY.SYS_C001114309) violated 
 
+1 row created.
 
 
 1 row created.
 
-INSERT INTO Cultivar (plant_ID, cultivar_name)
-*
-ERROR at line 1:
-ORA-00001: unique constraint (ORA_TIANYIY.SYS_C001114309) violated 
 
+1 row created.
 
 
 1 row created.
@@ -506,11 +422,17 @@ ORA-00001: unique constraint (ORA_TIANYIY.SYS_C001114309) violated
 1 row created.
 
 
-1 row created.
+Warning: Trigger created with compilation errors.
 
+SP2-0734: unknown command beginning "IF v_count..." - rest of line ignored.
+SP2-0734: unknown command beginning "RAISE_APPL..." - rest of line ignored.
+SP2-0042: unknown command "END IF" - rest of line ignored.
+SP2-0042: unknown command "END" - rest of line ignored.
+SP2-0044: For a list of known commands enter HELP
+and to leave enter EXIT.
 
-1 row created.
+Warning: Trigger created with compilation errors.
 
 
-1 row created.
+Trigger created.
 
