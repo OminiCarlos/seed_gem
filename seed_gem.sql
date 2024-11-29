@@ -236,6 +236,86 @@ VALUES
     (15, 'Cereal', 'Barley', 'Hordeum vulgare', 'Barley is a versatile cereal grain used for food, beverages, and livestock feed.');
 
 
+INSERT INTO Cultivar (plant_ID, cultivar_name)
+VALUES
+    (1, 'Granny Smith');
+
+
+
+INSERT INTO Cultivar (plant_ID, cultivar_name)
+VALUES
+    (2, 'Nantes');
+
+
+
+INSERT INTO Cultivar (plant_ID, cultivar_name)
+VALUES
+    (3, 'Genovese');
+
+
+
+INSERT INTO Cultivar (plant_ID, cultivar_name)
+VALUES
+    (4, 'Autumn Beauty');
+
+
+
+INSERT INTO Cultivar (plant_ID, cultivar_name)
+VALUES
+    (5, 'Durum Wheat');
+
+
+INSERT INTO Cultivar (plant_ID, cultivar_name)
+VALUES
+    (6, 'Cavendish');
+
+
+
+INSERT INTO Cultivar (plant_ID, cultivar_name)
+VALUES
+    (7, 'Giant Noble');
+
+INSERT INTO Cultivar (plant_ID, cultivar_name)
+VALUES
+    (8, 'Peppermint');
+
+
+
+INSERT INTO Cultivar (plant_ID, cultivar_name)
+VALUES
+    (9, 'Knock Out');
+
+
+
+INSERT INTO Cultivar (plant_ID, cultivar_name)
+VALUES
+    (10, 'Jasmine Rice');
+
+
+
+
+INSERT INTO Cultivar (plant_ID, cultivar_name)
+VALUES
+    (12, 'Russet');
+
+INSERT INTO Cultivar (plant_ID, cultivar_name)
+VALUES
+    (13, 'Curly Leaf Parsley');
+
+
+INSERT INTO Cultivar (plant_ID, cultivar_name)
+VALUES
+    (14, 'Stargazer');
+
+
+
+INSERT INTO Cultivar (plant_ID, cultivar_name)
+VALUES
+    (15, 'Two-Row Barley');
+
+
+
+
 
 
 

@@ -156,7 +156,7 @@ async function getYieldTypeCounts() {
       SELECT yield_type, COUNT(*) AS count
       FROM Plant
       GROUP BY yield_type
-      ORDER BY yield_type
+      
       `
     );
     return result.rows.map((row) => ({
@@ -177,7 +177,7 @@ async function getCareCountByYieldType() {
       FROM Plant
       WHERE LOWER(overview_notes) LIKE '%care%'
       GROUP BY yield_type
-      ORDER BY yield_type
+      
       `
     );
 
