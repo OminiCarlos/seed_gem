@@ -1,14 +1,8 @@
-drop trigger enforce_total_participation_location
-*
-ERROR at line 1:
-ORA-04080: trigger 'ENFORCE_TOTAL_PARTICIPATION_LOCATION' does not exist 
+
+Trigger dropped.
 
 
-drop trigger prevent_orphaned_location
-*
-ERROR at line 1:
-ORA-04080: trigger 'PREVENT_ORPHANED_LOCATION' does not exist 
-
+Trigger dropped.
 
 
 Table dropped.
@@ -111,6 +105,21 @@ Table created.
 
 
 Table created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
 
 
 1 row created.
