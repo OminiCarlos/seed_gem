@@ -7,37 +7,35 @@ Seed Germ is a comprehensive system for managing and tracking plants within a ga
 Deploy instructions:
 Starting the Sample Project:
 
-Navigate to the remote directory of the sample project.
-Run the project's start script:
-This script is essential for starting the project on the remote server, as it includes important configurations for the node runtime environment.
-```
-sh ./remote-start.sh
-```
+## How to run this website?
 
-After running the script, you should see a message in the terminal similar to: Server running at `http://localhost:<node starting port number>/`. Note down the `<node starting port number>`.
+This instruction is assuming you are on a unix server. If not, please ask a 304 TA for help to deploy the code on the department server. 
 
-If you see an error like Syntax error: "elif" unexpected (expecting "then") and you are on a Windows machine, it may be the case that the line endings are causing an issue. Run sed -i 's/\r$//' remote-start.sh and sed -i 's/\r$//' .env to fix the issue.
-Building an SSH Tunnel to the Remote Node Application:
-
-Sometimes, IDEs like Visual Studio Code can automatically handle port forwarding for you when you start the application remotely within their built-in SSH connection session. In such cases, you don't need to perform this step manually and you can directly access your application on that port.
-
-With VS Code, you can simply click on the the "port" tab to see the webpage on the local browser.
-
-Alternatively, UBC teaching team has provided a script to facilitate the SSH tunnel creation to the remote node application:
-
-Open a new terminal in your local project folder.
+1. Go to the project folder, make sure you are in folder "project_b9d8f_i8r6v_k1l2s".
+2. Run sqlplus. When logged in, run this script: `start seed_gem.sql`.
+3. Run the project's start script:
+        ```
+        sh ./remote-start.sh
+        ```
+        After running the script, you should see a message in the terminal similar to: Server running at `http://localhost:<node starting port number>/`. Note down the `<node starting port number>`. </br>
+        
+    **Note:** If you see an error like Syntax error: "elif" unexpected (expecting "then") and you are on a Windows machine, it may be the case that the line endings are causing an issue. Run sed -i 's/\r$//' remote-start.sh and sed -i 's/\r$//' .env to fix the issue.
+   
+4. CPSC304 Teaching team has provided a script to facilitate the SSH tunnel creation to the remote node application:
+Open a new terminal in your local project folder on your local machine, not the server.
 Depending on your operating system:
-
-`Mac users:
-sh ./scripts/mac/server-tunnel.sh`
-
-`Windows users:
-.\scripts\win\server-tunnel.cmd`
-
+Mac users:
+```
+sh ./scripts/mac/server-tunnel.sh
+```
+Windows users:
+```
+.\scripts\win\server-tunnel.cmd
+```
 
 Follow the instructions in the terminal. You'll need to enter the node starting port number you noted earlier. The subsequent steps resemble the process of starting an SSH connection to the ugrad server.
 
-Accessing the Sample Project:
+5. Accessing the Sample Project:
 
 After you've input your node's starting port number in the previous step, you should see a message similar to:
 
@@ -47,21 +45,5 @@ After you've input your node's starting port number in the previous step, you sh
         after completing the steps below... 
 --------------------------------------------------------------------------
 At this point, you can access the sample project via the provided URL.
-`http://localhost:<node starting port number>/`
 
-David add some changes to main to make it the commit version again.
-
-## How to add a frontend backend instance?
-
-### Step 1: Duplicate Frontend Files
-Make a copy of Locations.html and Locations.js
-Change respective fetch strings: xxx -> yyy
-
-### Step 2: Duplicate Backend Files
-Make a copy of Locations AppController.js
-Make a copy of Locations AppServices.js
-
-Change the strings.
-
-### Step 3: mount the sub-appController to the main appController.
-Follow the instructions in the main app Controller.
+**Note:** Alternatively, you can forward the port to your local machine and open it in the local browser. 
