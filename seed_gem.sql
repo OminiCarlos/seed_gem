@@ -236,6 +236,28 @@ VALUES
     (15, 'Cereal', 'Barley', 'Hordeum vulgare', 'Barley is a versatile cereal grain used for food, beverages, and livestock feed.');
 
 
+INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
+VALUES
+    (16, 'Cereal', 'Barleyq', 'Hordeum vulgare2', 'Barley is a versatile cereal grain used for food, beverages, and livestock feed.');
+
+INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
+VALUES
+    (17, 'Cereal', 'Barleye', 'Hordeum vulgare22', 'Barley is a versatile cereal grain used for food, beverages, and livestock feed.');
+
+
+INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
+VALUES
+    (18, 'Flower2', 'Lilyr', 'Liliumr', 'Lilies are elegant flowers that symbolize purity and require specific care for long-lasting blooms.');
+
+INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
+VALUES
+    (19, 'Flower2', 'Lilyg', 'Liliume', 'Lilies are elegant flowers that symbolize purity and require specific care for long-lasting blooms.');
+
+INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
+VALUES
+    (20, 'Flower3', 'Lilyf', 'Liliumer', 'Lilies are elegant flowers that symbolize purity and require specific care for long-lasting blooms.');
+
+
 INSERT INTO Cultivar (plant_ID, cultivar_name)
 VALUES
     (1, 'Granny Smith');
@@ -293,7 +315,6 @@ VALUES
 
 
 
-
 INSERT INTO Cultivar (plant_ID, cultivar_name)
 VALUES
     (12, 'Russet');
@@ -312,12 +333,6 @@ VALUES
 INSERT INTO Cultivar (plant_ID, cultivar_name)
 VALUES
     (15, 'Two-Row Barley');
-
-
-
-
-
-
 
 
 
