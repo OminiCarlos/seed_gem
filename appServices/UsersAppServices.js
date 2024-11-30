@@ -13,13 +13,13 @@ async function fetchUserDemotableFromDb() {
 async function initiateUserDemotable() {
   return await withOracleDB(async (connection) => {
     try {
-      await connection.execute(`DROP TABLE USER_TABLE`);
+      await connection.execute(`DROP TABLE Userr`);
     } catch (err) {
       console.log("Table might not exist, proceeding to create...");
     }
 
     const result = await connection.execute(
-      `CREATE TABLE USER_TABLE (
+      `CREATE TABLE Userr (
                 user_id VARCHAR2(50),
                 user_name VARCHAR2(255),
                 user_note VARCHAR2(255),
@@ -36,7 +36,7 @@ async function initiateUserDemotable() {
 async function insertUserDemotable(user_id, user_name, user_note) {
   return await withOracleDB(async (connection) => {
     const result = await connection.execute(
-      `INSERT INTO USER_TABLE (
+      `INSERT INTO Userr (
                 user_id, user_name, user_note
             ) 
             VALUES (
@@ -55,7 +55,7 @@ async function insertUserDemotable(user_id, user_name, user_note) {
 async function updateUserDemotable(user_id, user_name, user_note) {
   return await withOracleDB(async (connection) => {
     const result = await connection.execute(
-      `UPDATE USER_TABLE 
+      `UPDATE Userr 
             SET 
                 user_name = :user_name,
                 user_note = :user_note
@@ -73,7 +73,7 @@ async function updateUserDemotable(user_id, user_name, user_note) {
 async function deleteUserDemotable(user_id) {
   return await withOracleDB(async (connection) => {
     const result = await connection.execute(
-      `DELETE FROM USER_TABLE 
+      `DELETE FROM Userr 
             WHERE user_id = :user_id`,
       [user_id],
       { autoCommit: true }
