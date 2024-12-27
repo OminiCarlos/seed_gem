@@ -430,9 +430,3 @@ Table created.
 
 1 row created.
 
-
-Trigger created.
-
-
-Trigger created.
-
