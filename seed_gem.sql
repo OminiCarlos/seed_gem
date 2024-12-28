@@ -1,28 +1,28 @@
 --!!! drop in this order to prevent errors caused by violation of referential integrity 
-drop table Plant_event_records_user_batch;
-drop table App_user;
-drop table batch_is_at_Stage;
-drop table Batch;
-drop table Order_item;
-drop table Supplier;
-drop table Seed_orders;
-drop table distinguished_by;
-drop table Soil_condition;
-drop table Location_irrigation;
-drop table Location;
-drop table Stage;
-drop table plant_has_tags;
-drop table Tag;
-drop table Plant;
+DROP TABLE IF EXISTS Plant_event_records_user_batch;
+DROP TABLE IF EXISTS App_user;
+DROP TABLE IF EXISTS batch_is_at_Stage;
+DROP TABLE IF EXISTS Batch;
+DROP TABLE IF EXISTS Order_item;
+DROP TABLE IF EXISTS Supplier;
+DROP TABLE IF EXISTS Seed_orders;
+DROP TABLE IF EXISTS distinguished_by;
+DROP TABLE IF EXISTS Soil_condition;
+DROP TABLE IF EXISTS Location_irrigation;
+DROP TABLE IF EXISTS Location;
+DROP TABLE IF EXISTS Stage;
+DROP TABLE IF EXISTS plant_has_tags;
+DROP TABLE IF EXISTS Tag;
+DROP TABLE IF EXISTS Plant;
 
 
 CREATE TABLE Plant (
     plant_ID INTEGER PRIMARY KEY,
     yield_type VARCHAR(50),
-    common_name VARCHAR(50),
+    common_name VARCHAR(50) unique,
     cultivar_name VARCHAR(50),
-    scientific_name VARCHAR(50) UNIQUE,
-    overview_notes TEXT
+    scientific_name VARCHAR(50),
+    overview_notes TEXT,
     UNIQUE (cultivar_name, common_name)
 );
 
@@ -160,35 +160,35 @@ CREATE TABLE Plant_event_records_user_batch (
 INSERT INTO Plant (plant_ID, yield_type, common_name, cultivar_name, scientific_name, overview_notes)
 VALUES
     (1, 'Fruit', 'Apple', 'Granny Smith', 'Malus domestica', 'Apple is a widely cultivated tree known for its sweet, edible fruit. Need good care');
-INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
+INSERT INTO Plant (plant_ID, yield_type, common_name, cultivar_name, scientific_name, overview_notes)
 VALUES    
     (2, 'Vegetable', 'Carrot', 'Nantes', 'Daucus carota', 'Carrots are root vegetables, typically orange in color, known for their high vitamin A content Need good care.');
-INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
+INSERT INTO Plant (plant_ID, yield_type, common_name, cultivar_name, scientific_name, overview_notes)
 VALUES    
     (3, 'Herb', 'Basil', 'Genovese', 'Ocimum basilicum', 'Basil is a culinary herb commonly used in Italian and Southeast Asian cuisines.');
-INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
+INSERT INTO Plant (plant_ID, yield_type, common_name, cultivar_name, scientific_name, overview_notes)
 VALUES
-    (4, 'Flower', 'Sunflower', 'Autumn Beauty'. 'Helianthus annuus', 'Sunflowers are known for their large, bright yellow flower heads and seeds rich in oil Need good care.');
-INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
+    (4, 'Flower', 'Sunflower', 'Autumn Beauty', 'Helianthus annuus', 'Sunflowers are known for their large, bright yellow flower heads and seeds rich in oil Need good care.');
+INSERT INTO Plant (plant_ID, yield_type, common_name, cultivar_name, scientific_name, overview_notes)
 VALUES
     (5, 'Cereal', 'Wheat', 'Durum Wheat', 'Triticum aestivum', 'Wheat is a staple cereal grain used worldwide for making bread and other foods Need good care.');
-INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
+INSERT INTO Plant (plant_ID, yield_type, common_name, cultivar_name, scientific_name, overview_notes)
 VALUES
     (6, 'Fruit', 'Banana', 'Cavendish', 'Musa acuminata', 'Bananas are tropical fruits known for their sweetness and ease of care in cultivation Need good care.');
     
-INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
+INSERT INTO Plant (plant_ID, yield_type, common_name, cultivar_name, scientific_name, overview_notes)
 VALUES
     (7, 'Vegetable', 'Spinach', 'Giant Noble', 'Spinacia oleracea', 'Spinach is a leafy green vegetable that requires proper care for optimal growth Need good care.');
 
-INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
+INSERT INTO Plant (plant_ID, yield_type, common_name, cultivar_name, scientific_name, overview_notes)
 VALUES
     (8, 'Herb', 'Mint', 'Peppermint', 'Mentha', 'Mint is a fragrant herb commonly used in teas and desserts, requiring regular watering and care.');
 
-INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
+INSERT INTO Plant (plant_ID, yield_type, common_name, cultivar_name, scientific_name, overview_notes)
 VALUES
     (9, 'Flower', 'Rose', 'Knock Out', 'Rosa', 'Roses are popular garden flowers admired for their beauty and fragrance, but they need careful pruning.');
 
-INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
+INSERT INTO Plant (plant_ID, yield_type, common_name, cultivar_name, scientific_name, overview_notes)
 VALUES
     (10, 'Cereal', 'Rice', 'Jasmine Rice', 'Oryza sativa', 'Rice is a staple food crop that thrives in wet conditions and demands careful irrigationNeed good care.');
 
@@ -196,43 +196,43 @@ INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_
 VALUES
     (11, 'Fruit', 'Cherry', 'Prunus avium', 'Cherries are small, sweet fruits often grown in temperate regions Need good care.');
 
-INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
+INSERT INTO Plant (plant_ID, yield_type, common_name, cultivar_name, scientific_name, overview_notes)
 VALUES
     (12, 'Vegetable', 'Potato', 'Russet', 'Solanum tuberosum', 'Potatoes are tuberous crops that store well and are easy to grow with minimal care.');
 
-INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
+INSERT INTO Plant (plant_ID, yield_type, common_name, cultivar_name, scientific_name, overview_notes)
 VALUES
     (13, 'Herb', 'Parsley', 'Curly Leaf Parsley', 'Petroselinum crispum', 'Parsley is a herb often used as a garnish or flavor enhancer in many dishes.');
 
-INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
+INSERT INTO Plant (plant_ID, yield_type, common_name, cultivar_name, scientific_name, overview_notes)
 VALUES
     (14, 'Flower', 'Lily', 'Stargazer', 'Lilium', 'Lilies are elegant flowers that symbolize purity and require specific care for long-lasting blooms.');
 
-INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
+INSERT INTO Plant (plant_ID, yield_type, common_name, cultivar_name, scientific_name, overview_notes)
 VALUES
     (15, 'Cereal', 'Barley', 'Two-Row Barley', 'Hordeum vulgare', 'Barley is a versatile cereal grain used for food, beverages, and livestock feed.');
 
 
 INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
 VALUES
-    (16, 'Cereal', 'Barleyq', 'Hordeum vulgare2', 'Barley is a versatile cereal grain used for food, beverages, and livestock feed.');
+    (16, 'Cereal', 'Barley', 'Hordeum vulgare2', 'Barley is a versatile cereal grain used for food, beverages, and livestock feed.');
 
 INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
 VALUES
-    (17, 'Cereal', 'Barleye', 'Hordeum vulgare22', 'Barley is a versatile cereal grain used for food, beverages, and livestock feed.');
+    (17, 'Cereal', 'Barley', 'Hordeum vulgare22', 'Barley is a versatile cereal grain used for food, beverages, and livestock feed.');
 
 
 INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
 VALUES
-    (18, 'Flower2', 'Lilyr', 'Liliumr', 'Lilies are elegant flowers that symbolize purity and require specific care for long-lasting blooms.');
+    (18, 'Flower', 'Lily', 'Lilium', 'Lilies are elegant flowers that symbolize purity and require specific care for long-lasting blooms.');
 
 INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
 VALUES
-    (19, 'Flower2', 'Lilyg', 'Liliume', 'Lilies are elegant flowers that symbolize purity and require specific care for long-lasting blooms.');
+    (19, 'Flower', 'Lily', 'Lilium', 'Lilies are elegant flowers that symbolize purity and require specific care for long-lasting blooms.');
 
 INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
 VALUES
-    (20, 'Flower3', 'Lilyf', 'Liliumer', 'Lilies are elegant flowers that symbolize purity and require specific care for long-lasting blooms.');
+    (20, 'Flower', 'Lilyf', 'Lilium', 'Lilies are elegant flowers that symbolize purity and require specific care for long-lasting blooms.');
 
 INSERT INTO Soil_condition (soil_type, pH, organic_matter_concentration)
 VALUES ('Sandy', 6.50, 1.20);
@@ -358,3 +358,6 @@ INSERT INTO Tag (tag) VALUES ('big');
 
 INSERT INTO plant_has_tags (plant_ID, tag) VALUES (1, 'cold-resistant');
 INSERT INTO plant_has_tags (plant_ID, tag) VALUES (1, 'big');
+
+select *
+from Plant
