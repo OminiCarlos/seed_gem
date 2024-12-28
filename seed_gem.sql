@@ -1,21 +1,11 @@
-SPOOL error_log.txt;
-WHENEVER SQLERROR CONTINUE;
-
-
 --!!! drop in this order to prevent errors caused by violation of referential integrity 
-drop trigger enforce_total_participation_location;
-drop trigger prevent_orphaned_location;
-
 drop table Plant_event_records_user_batch;
-
--- Userr is not a typo; user is a reserved name in Oracle so cannot be used 
-drop table Userr;
+drop table App_user;
 drop table batch_is_at_Stage;
 drop table Batch;
 drop table Order_item;
 drop table Supplier;
--- Orders is not a typo; order is a reserved name in Oracle so cannot be used 
-drop table Orders;
+drop table Seed_orders;
 drop table distinguished_by;
 drop table Soil_condition;
 drop table Location_irrigation;
@@ -23,34 +13,17 @@ drop table Location;
 drop table Stage;
 drop table plant_has_tags;
 drop table Tag;
-drop table Cultivar;
 drop table Plant;
 
 
 CREATE TABLE Plant (
     plant_ID INTEGER PRIMARY KEY,
     yield_type VARCHAR(50),
-    common_name VARCHAR(50) UNIQUE,
-    scientific_name VARCHAR(50) UNIQUE,
-    overview_notes VARCHAR(3000)
-);
-
-
--- CREATE TABLE Cultivar (
---     plant_ID INTEGER PRIMARY KEY,
---     yield_type VARCHAR(50),
---     common_name VARCHAR(50),
---     scientific_name VARCHAR(50),
---     overview_notes VARCHAR(3000),
---     cultivar_name VARCHAR(50),
---     FOREIGN KEY (plant_ID) REFERENCES Plant(plant_ID),
---     UNIQUE (cultivar_name, common_name)
--- );
-
-CREATE TABLE Cultivar (
-    plant_ID INTEGER PRIMARY KEY,
+    common_name VARCHAR(50),
     cultivar_name VARCHAR(50),
-    FOREIGN KEY (plant_ID) REFERENCES Plant(plant_ID)
+    scientific_name VARCHAR(50) UNIQUE,
+    overview_notes TEXT
+    UNIQUE (cultivar_name, common_name)
 );
 
 CREATE TABLE Tag (
@@ -61,15 +34,19 @@ CREATE TABLE plant_has_tags (
     plant_ID INTEGER,
     tag VARCHAR(50),
     PRIMARY KEY (plant_ID, tag),
-    FOREIGN KEY (plant_ID) REFERENCES Plant(plant_ID),
+    FOREIGN KEY (plant_ID) REFERENCES Plant(plant_ID) 
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE,
     FOREIGN KEY (tag) REFERENCES Tag(tag)
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE
 );
 
 CREATE TABLE Stage (
     stage_name VARCHAR(50),
     plant_ID INTEGER,
     PRIMARY KEY (stage_name, plant_ID),
-    FOREIGN KEY (plant_ID) REFERENCES Plant(plant_ID) ON DELETE CASCADE
+    FOREIGN KEY (plant_ID) REFERENCES Plant(plant_ID) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE Location (
@@ -92,8 +69,8 @@ VALUES (0, 1);
 
 CREATE TABLE Soil_condition (
     soil_type VARCHAR(50) PRIMARY KEY,
-    pH NUMBER(5, 2),
-    organic_matter_concentration NUMBER(5, 2)
+    pH NUMERIC (5, 2),
+    organic_matter_concentration NUMERIC (5, 2)
 );
 
 CREATE TABLE distinguished_by (
@@ -101,11 +78,11 @@ CREATE TABLE distinguished_by (
     field_name VARCHAR(50),
     zone_ID INTEGER,
     PRIMARY KEY (soil_type, field_name, zone_ID),
-    FOREIGN KEY (soil_type) REFERENCES Soil_condition(soil_type) ON DELETE CASCADE,
-    FOREIGN KEY (field_name, zone_ID) REFERENCES Location(field_name, zone_ID) ON DELETE CASCADE
+    FOREIGN KEY (soil_type) REFERENCES Soil_condition(soil_type) ON DELETE RESTRICT ON UPDATE CASCADE,
+    FOREIGN KEY (field_name, zone_ID) REFERENCES Location(field_name, zone_ID) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
-CREATE TABLE Orders (
+CREATE TABLE Seed_orders (
     order_ID INTEGER PRIMARY KEY,
     order_date DATE,
     order_comment VARCHAR(3000)
@@ -116,7 +93,7 @@ CREATE TABLE Supplier (
     supplier_ID INTEGER PRIMARY KEY,
     supplier_name VARCHAR(50),
     supplier_address VARCHAR(50),
-    supplier_tel VARCHAR(50) CHECK (supplier_tel IS NOT NULL)
+    supplier_tel VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE Order_item (
@@ -129,9 +106,9 @@ CREATE TABLE Order_item (
     supplier_ID INTEGER NOT NULL,
     item_comment VARCHAR(500),
     PRIMARY KEY (order_ID, item_ID),
-    FOREIGN KEY (order_ID) REFERENCES Orders(order_ID),
-    FOREIGN KEY (plant_ID) REFERENCES Plant(plant_ID),
-    FOREIGN KEY (supplier_ID) REFERENCES Supplier(supplier_ID)
+    FOREIGN KEY (order_ID) REFERENCES Seed_orders(order_ID) ON DELETE RESTRICT ON UPDATE CASCADE,
+    FOREIGN KEY (plant_ID) REFERENCES Plant(plant_ID) ON DELETE RESTRICT ON UPDATE CASCADE,
+    FOREIGN KEY (supplier_ID) REFERENCES Supplier(supplier_ID) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 CREATE TABLE Batch (
@@ -145,8 +122,8 @@ CREATE TABLE Batch (
     order_ID INTEGER NOT NULL,
     field_name VARCHAR(50) NOT NULL,
     zone_ID INTEGER NOT NULL,
-    FOREIGN KEY (item_ID, order_ID) REFERENCES Order_item(item_ID, order_ID),
-    FOREIGN KEY (field_name, zone_ID) REFERENCES Location(field_name, zone_ID),
+    FOREIGN KEY (item_ID, order_ID) REFERENCES Order_item(item_ID, order_ID) ON DELETE RESTRICT ON UPDATE CASCADE,
+    FOREIGN KEY (field_name, zone_ID) REFERENCES Location(field_name, zone_ID) ON DELETE RESTRICT ON UPDATE CASCADE,
     UNIQUE (plant_date, item_ID, order_ID, field_name, zone_ID)
 );
 
@@ -158,11 +135,11 @@ CREATE TABLE batch_is_at_Stage (
     start_date DATE,
     end_date DATE,
     PRIMARY KEY (batch_ID, plant_ID, stage_name),
-    FOREIGN KEY (batch_ID) REFERENCES Batch(batch_ID),
-    FOREIGN KEY (stage_name, plant_ID) REFERENCES Stage(stage_name, plant_ID)
+    FOREIGN KEY (batch_ID) REFERENCES Batch(batch_ID) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (stage_name, plant_ID) REFERENCES Stage(stage_name, plant_ID) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
-CREATE TABLE Userr (
+CREATE TABLE App_user (
     user_id INTEGER PRIMARY KEY,
     user_name VARCHAR(50),
     user_note VARCHAR(3000)
@@ -176,44 +153,44 @@ CREATE TABLE Plant_event_records_user_batch (
     event_observation VARCHAR(3000),
     batch_ID INTEGER NOT NULL,
     user_ID INTEGER NOT NULL,
-    FOREIGN KEY (batch_ID) REFERENCES Batch(batch_ID),
-    FOREIGN KEY (user_ID) REFERENCES Userr(user_id)
+    FOREIGN KEY (batch_ID) REFERENCES Batch(batch_ID) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (user_ID) REFERENCES App_user(user_id) ON DELETE RESTRICT ON UPDATE RESTRICT
 );
 
-INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
+INSERT INTO Plant (plant_ID, yield_type, common_name, cultivar_name, scientific_name, overview_notes)
 VALUES
-    (1, 'Fruit', 'Apple', 'Malus domestica', 'Apple is a widely cultivated tree known for its sweet, edible fruit. Need good care');
+    (1, 'Fruit', 'Apple', 'Granny Smith', 'Malus domestica', 'Apple is a widely cultivated tree known for its sweet, edible fruit. Need good care');
 INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
 VALUES    
-    (2, 'Vegetable', 'Carrot', 'Daucus carota', 'Carrots are root vegetables, typically orange in color, known for their high vitamin A content Need good care.');
+    (2, 'Vegetable', 'Carrot', 'Nantes', 'Daucus carota', 'Carrots are root vegetables, typically orange in color, known for their high vitamin A content Need good care.');
 INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
 VALUES    
-    (3, 'Herb', 'Basil', 'Ocimum basilicum', 'Basil is a culinary herb commonly used in Italian and Southeast Asian cuisines.');
+    (3, 'Herb', 'Basil', 'Genovese', 'Ocimum basilicum', 'Basil is a culinary herb commonly used in Italian and Southeast Asian cuisines.');
 INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
 VALUES
-    (4, 'Flower', 'Sunflower', 'Helianthus annuus', 'Sunflowers are known for their large, bright yellow flower heads and seeds rich in oil Need good care.');
+    (4, 'Flower', 'Sunflower', 'Autumn Beauty'. 'Helianthus annuus', 'Sunflowers are known for their large, bright yellow flower heads and seeds rich in oil Need good care.');
 INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
 VALUES
-    (5, 'Cereal', 'Wheat', 'Triticum aestivum', 'Wheat is a staple cereal grain used worldwide for making bread and other foods Need good care.');
+    (5, 'Cereal', 'Wheat', 'Durum Wheat', 'Triticum aestivum', 'Wheat is a staple cereal grain used worldwide for making bread and other foods Need good care.');
 INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
 VALUES
-    (6, 'Fruit', 'Banana', 'Musa acuminata', 'Bananas are tropical fruits known for their sweetness and ease of care in cultivation Need good care.');
+    (6, 'Fruit', 'Banana', 'Cavendish', 'Musa acuminata', 'Bananas are tropical fruits known for their sweetness and ease of care in cultivation Need good care.');
     
 INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
 VALUES
-    (7, 'Vegetable', 'Spinach', 'Spinacia oleracea', 'Spinach is a leafy green vegetable that requires proper care for optimal growth Need good care.');
+    (7, 'Vegetable', 'Spinach', 'Giant Noble', 'Spinacia oleracea', 'Spinach is a leafy green vegetable that requires proper care for optimal growth Need good care.');
 
 INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
 VALUES
-    (8, 'Herb', 'Mint', 'Mentha', 'Mint is a fragrant herb commonly used in teas and desserts, requiring regular watering and care.');
+    (8, 'Herb', 'Mint', 'Peppermint', 'Mentha', 'Mint is a fragrant herb commonly used in teas and desserts, requiring regular watering and care.');
 
 INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
 VALUES
-    (9, 'Flower', 'Rose', 'Rosa', 'Roses are popular garden flowers admired for their beauty and fragrance, but they need careful pruning.');
+    (9, 'Flower', 'Rose', 'Knock Out', 'Rosa', 'Roses are popular garden flowers admired for their beauty and fragrance, but they need careful pruning.');
 
 INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
 VALUES
-    (10, 'Cereal', 'Rice', 'Oryza sativa', 'Rice is a staple food crop that thrives in wet conditions and demands careful irrigationNeed good care.');
+    (10, 'Cereal', 'Rice', 'Jasmine Rice', 'Oryza sativa', 'Rice is a staple food crop that thrives in wet conditions and demands careful irrigationNeed good care.');
 
 INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
 VALUES
@@ -221,19 +198,19 @@ VALUES
 
 INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
 VALUES
-    (12, 'Vegetable', 'Potato', 'Solanum tuberosum', 'Potatoes are tuberous crops that store well and are easy to grow with minimal care.');
+    (12, 'Vegetable', 'Potato', 'Russet', 'Solanum tuberosum', 'Potatoes are tuberous crops that store well and are easy to grow with minimal care.');
 
 INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
 VALUES
-    (13, 'Herb', 'Parsley', 'Petroselinum crispum', 'Parsley is a herb often used as a garnish or flavor enhancer in many dishes.');
+    (13, 'Herb', 'Parsley', 'Curly Leaf Parsley', 'Petroselinum crispum', 'Parsley is a herb often used as a garnish or flavor enhancer in many dishes.');
 
 INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
 VALUES
-    (14, 'Flower', 'Lily', 'Lilium', 'Lilies are elegant flowers that symbolize purity and require specific care for long-lasting blooms.');
+    (14, 'Flower', 'Lily', 'Stargazer', 'Lilium', 'Lilies are elegant flowers that symbolize purity and require specific care for long-lasting blooms.');
 
 INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
 VALUES
-    (15, 'Cereal', 'Barley', 'Hordeum vulgare', 'Barley is a versatile cereal grain used for food, beverages, and livestock feed.');
+    (15, 'Cereal', 'Barley', 'Two-Row Barley', 'Hordeum vulgare', 'Barley is a versatile cereal grain used for food, beverages, and livestock feed.');
 
 
 INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
@@ -256,86 +233,6 @@ VALUES
 INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
 VALUES
     (20, 'Flower3', 'Lilyf', 'Liliumer', 'Lilies are elegant flowers that symbolize purity and require specific care for long-lasting blooms.');
-
-
-INSERT INTO Cultivar (plant_ID, cultivar_name)
-VALUES
-    (1, 'Granny Smith');
-
-
-
-INSERT INTO Cultivar (plant_ID, cultivar_name)
-VALUES
-    (2, 'Nantes');
-
-
-
-INSERT INTO Cultivar (plant_ID, cultivar_name)
-VALUES
-    (3, 'Genovese');
-
-
-
-INSERT INTO Cultivar (plant_ID, cultivar_name)
-VALUES
-    (4, 'Autumn Beauty');
-
-
-
-INSERT INTO Cultivar (plant_ID, cultivar_name)
-VALUES
-    (5, 'Durum Wheat');
-
-
-INSERT INTO Cultivar (plant_ID, cultivar_name)
-VALUES
-    (6, 'Cavendish');
-
-
-
-INSERT INTO Cultivar (plant_ID, cultivar_name)
-VALUES
-    (7, 'Giant Noble');
-
-INSERT INTO Cultivar (plant_ID, cultivar_name)
-VALUES
-    (8, 'Peppermint');
-
-
-
-INSERT INTO Cultivar (plant_ID, cultivar_name)
-VALUES
-    (9, 'Knock Out');
-
-
-
-INSERT INTO Cultivar (plant_ID, cultivar_name)
-VALUES
-    (10, 'Jasmine Rice');
-
-
-
-INSERT INTO Cultivar (plant_ID, cultivar_name)
-VALUES
-    (12, 'Russet');
-
-INSERT INTO Cultivar (plant_ID, cultivar_name)
-VALUES
-    (13, 'Curly Leaf Parsley');
-
-
-INSERT INTO Cultivar (plant_ID, cultivar_name)
-VALUES
-    (14, 'Stargazer');
-
-
-
-INSERT INTO Cultivar (plant_ID, cultivar_name)
-VALUES
-    (15, 'Two-Row Barley');
-
-
-
 
 INSERT INTO Soil_condition (soil_type, pH, organic_matter_concentration)
 VALUES ('Sandy', 6.50, 1.20);
@@ -431,9 +328,9 @@ INSERT INTO Supplier (supplier_ID, supplier_name, supplier_address, supplier_tel
 INSERT INTO Supplier (supplier_ID, supplier_name, supplier_address, supplier_tel) VALUES (3,'Red Phenix Seed Co.', 'UBC-V', '7787624300');
 INSERT INTO Supplier (supplier_ID, supplier_name, supplier_address, supplier_tel) VALUES (4,'Black Tortoise Seed Co.', 'UBC-V', '2362133304');
 
-INSERT INTO Orders (order_ID, order_date, order_comment) VALUES (12,TO_DATE('2024-10-01', 'YYYY-MM-DD'), 'Why so serious?');
-INSERT INTO Orders (order_ID, order_date, order_comment) VALUES (1,TO_DATE('2024-11-28', 'YYYY-MM-DD'), 'Nb!');
-INSERT INTO Orders (order_ID, order_date, order_comment) VALUES (2,TO_DATE('2024-12-24', 'YYYY-MM-DD'), '666');
+INSERT INTO Seed_orders (order_ID, order_date, order_comment) VALUES (12,'2024-10-01', 'Why so serious?');
+INSERT INTO Seed_orders (order_ID, order_date, order_comment) VALUES (1,'2024-11-28', 'Nb!');
+INSERT INTO Seed_orders (order_ID, order_date, order_comment) VALUES (2,'2024-11-24', '666');
 
 INSERT INTO Order_item (order_ID, item_ID, plant_ID, quantity, unit, item_price, supplier_ID, item_comment)
 VALUES (12, 1, 3, 11, 'g', 16, 3, 'smells good.');
@@ -449,61 +346,15 @@ INSERT INTO Stage (plant_ID, stage_name) VALUES (2, 'harvest');
 
 INSERT INTO Batch (batch_ID, care_notes, plant_date, yield_weight, planted_quantity, 
     survived_quantity, order_ID, item_ID, field_name, zone_ID) 
-VALUES (1, 'Don''t worry, be happy :)', TO_DATE('2023-09-04','YYYY-MM-DD'), 5,3,1, 12,1, 'South Field', 1);
+VALUES (1, 'Don''t worry, be happy :)', '2023-09-04', 5,3,1, 12,1, 'South Field', 1);
 
 INSERT INTO batch_is_at_Stage (batch_ID, plant_ID, stage_name, start_date, end_date) 
-VALUES (1, 2, 'seed', TO_DATE('2024-10-01', 'YYYY-MM-DD'),  TO_DATE('2024-10-30', 'YYYY-MM-DD'));
+VALUES (1, 2, 'seed', '2024-10-01',  '2024-10-30');
 INSERT INTO batch_is_at_Stage (batch_ID, plant_ID, stage_name, start_date, end_date) 
-VALUES (1, 2, 'flower', TO_DATE('2024-10-31', 'YYYY-MM-DD'),  TO_DATE('2024-12-21', 'YYYY-MM-DD'));
+VALUES (1, 2, 'flower', '2024-10-31',  '2024-12-21');
 
 INSERT INTO Tag (tag) VALUES ('cold-resistant');
 INSERT INTO Tag (tag) VALUES ('big');
 
 INSERT INTO plant_has_tags (plant_ID, tag) VALUES (1, 'cold-resistant');
 INSERT INTO plant_has_tags (plant_ID, tag) VALUES (1, 'big');
-
--- CREATE OR REPLACE TRIGGER prevent_orphaned_location
--- BEFORE DELETE ON distinguished_by
--- FOR EACH ROW
--- DECLARE
---     v_count NUMBER;
--- BEGIN
---     -- Check if the deletion will leave the Location without any distinguished_by entries
---     SELECT COUNT(*) INTO v_count
---     FROM distinguished_by
---     WHERE field_name = :OLD.field_name AND zone_ID = :OLD.zone_ID;
-    
---     -- If this is the last entry, raise an error
---     IF v_count = 1 THEN
---         RAISE_APPLICATION_ERROR(-20002, 'Cannot delete the last distinguished_by entry for a Location.');
---     END IF;
--- END;
--- /
-
--- -- !!! This will be prevented due to the trigegr above.
--- -- just for testing purposes
--- -- DELETE FROM distinguished_by
--- -- WHERE soil_type = 'Clay'
--- --   AND field_name = 'Middle Field'
--- --   AND zone_ID = 0;
-
--- -- !!! Be sure to only enforce it after you have created the first entry of every distinct instance in table Location
--- CREATE OR REPLACE TRIGGER enforce_total_participation_location
--- AFTER INSERT ON Location
--- FOR EACH ROW
--- DECLARE
---     v_count NUMBER;
--- BEGIN
---     -- Check if the new location has a corresponding entry in soil_condition
---     SELECT COUNT(*) INTO v_count
---     FROM distinguished_by
---     WHERE field_name = :NEW.field_name AND zone_ID = :NEW.zone_ID;
-    
---     -- If no entry exists, raise an error
---     IF v_count = 0 THEN
---         RAISE_APPLICATION_ERROR(-20001, 'Location must be distinguished by at least one soil condition.');
---     END IF;
--- END;
--- /
-
-SPOOL OFF;
