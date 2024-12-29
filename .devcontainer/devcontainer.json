@@ -1,0 +1,20 @@
+{
+  "name": "Node.js Dev Environment",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:18",
+  "features": {},
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "GitHub.copilot",
+        "tomoki1207.pdf"
+      ]
+    }
+  },
+  "postCreateCommand": "npm install eslint prettier react @supabase/supabase-js",
+  "remoteEnv": {
+    "ENV_FILE": ".env"
+  },
+  "initializeCommand": "echo 'Environment initialized. Run \"bash remote-start.sh\" to start the server.'"
+}
