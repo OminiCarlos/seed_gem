@@ -1,49 +1,50 @@
-# Seed Germ - A gardening management tool
-## !!!! For Project TA: Please find the MileStone 4 report in this path:
-MileStone_documents/milestone4_report.pdf
+# Seed Gem - A gardening management tool
 
 ## Introduction
-Seed Germ is a comprehensive system for managing and tracking plants within a garden, focusing on the plant growth data analytics. The system accommodates various plant types and stages, tracks scheduled and ad-hoc events, and provides traceability from seed purchase through to harvest and distribution. Its functionality includes maintaining records of plant event such as watering, weeding, etc., observations such as bud breaking, fruiting, etc. and generating timelines and analytics for efficient garden management.\
-Deploy instructions:
-Starting the Sample Project:
+Seed Gem is a comprehensive system for managing and tracking plants within a garden, focusing on the plant growth data analytics. The system accommodates various plant types and stages, tracks scheduled and ad-hoc events, and provides traceability from seed purchase through to harvest and distribution. Its functionality includes maintaining records of plant event such as watering, weeding, etc., observations such as bud breaking, fruiting, etc. and generating timelines and analytics for efficient garden management.\
 
 ## How to run this website?
 
-This instruction is assuming you are on a unix server. If not, please ask a 304 TA for help to deploy the code on the department server. 
+### Prerequisites
+Before you begin, ensure you have met the following requirements:
+- Node.js (version 18 or later)
+- npm (Node Package Manager)
+- Supabase account (for database management)
 
-1. Go to the project folder, make sure you are in folder "project_b9d8f_i8r6v_k1l2s".
-2. Run sqlplus. When logged in, run this script: `start seed_gem.sql`.
-3. Run the project's start script:
-        ```
-        sh ./remote-start.sh
-        ```
-        After running the script, you should see a message in the terminal similar to: Server running at `http://localhost:<node starting port number>/`. Note down the `<node starting port number>`. </br>
-        
-    **Note:** If you see an error like Syntax error: "elif" unexpected (expecting "then") and you are on a Windows machine, it may be the case that the line endings are causing an issue. Run sed -i 's/\r$//' remote-start.sh and sed -i 's/\r$//' .env to fix the issue.
-   
-4. CPSC304 Teaching team has provided a script to facilitate the SSH tunnel creation to the remote node application:
-Open a new terminal in your local project folder on your local machine, not the server.
-Depending on your operating system:
-Mac users:
-```
-sh ./scripts/mac/server-tunnel.sh
-```
-Windows users:
-```
-.\scripts\win\server-tunnel.cmd
-```
+### Installation
+To install the project, follow these steps:
 
-Follow the instructions in the terminal. You'll need to enter the node starting port number you noted earlier. The subsequent steps resemble the process of starting an SSH connection to the ugrad server.
+1. Clone the repository:
+    ```sh
+    git clone <repository-url>
+    cd <repository-directory>
+    ```
 
-5. Accessing the Sample Project:
+2. Install the dependencies:
+    ```sh
+    npm install
+    ```
 
-After you've input your node's starting port number in the previous step, you should see a message similar to:
+3. Set up the environment variables:
+    - Create a [.env](http://_vscodecontentref_/0) file in the root directory of the project.
+    - Add the necessary environment variables (refer to devcontainer.json for any required variables).
 
--------------------------------------------------------------------------- 
-        You will be able to access your application at: 
-        http://localhost:<Local Accessing Port Number> 
-        after completing the steps below... 
---------------------------------------------------------------------------
-At this point, you can access the sample project via the provided URL.
+4. Initialize the database:
+    - Ensure your Supabase account is set up and the necessary tables are created.
 
-**Note:** Alternatively, you can forward the port to your local machine and open it in the local browser. 
+### Running the Project
+To run the project, follow these steps:
+
+1. Start the server:
+    ```sh
+    sh remote-start.sh
+    ```
+
+2. Open your browser and navigate to:
+    ```
+    http://localhost:<PORT>
+    ```
+    Replace `<PORT>` with the port number specified in your [.env](http://_vscodecontentref_/1) file.
+
+## License
+This project is licensed under the ISC License.
