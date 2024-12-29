@@ -19,8 +19,8 @@ DROP TABLE IF EXISTS Plant;
 CREATE TABLE Plant (
     plant_ID INTEGER PRIMARY KEY,
     yield_type VARCHAR(50),
-    common_name VARCHAR(50) unique,
-    cultivar_name VARCHAR(50),
+    common_name VARCHAR(50),
+    cultivar_name VARCHAR(50) NOT NULL,
     scientific_name VARCHAR(50),
     overview_notes TEXT,
     UNIQUE (cultivar_name, common_name)
@@ -192,9 +192,9 @@ INSERT INTO Plant (plant_ID, yield_type, common_name, cultivar_name, scientific_
 VALUES
     (10, 'Cereal', 'Rice', 'Jasmine Rice', 'Oryza sativa', 'Rice is a staple food crop that thrives in wet conditions and demands careful irrigationNeed good care.');
 
-INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
+INSERT INTO Plant (plant_ID, yield_type, common_name, cultivar_name, scientific_name, overview_notes)
 VALUES
-    (11, 'Fruit', 'Cherry', 'Prunus avium', 'Cherries are small, sweet fruits often grown in temperate regions Need good care.');
+    (11, 'Fruit', 'Cherry', 'N/A', 'Prunus avium', 'Cherries are small, sweet fruits often grown in temperate regions Need good care.');
 
 INSERT INTO Plant (plant_ID, yield_type, common_name, cultivar_name, scientific_name, overview_notes)
 VALUES
@@ -213,26 +213,13 @@ VALUES
     (15, 'Cereal', 'Barley', 'Two-Row Barley', 'Hordeum vulgare', 'Barley is a versatile cereal grain used for food, beverages, and livestock feed.');
 
 
-INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
+INSERT INTO Plant (plant_ID, yield_type, common_name, cultivar_name, scientific_name, overview_notes)
 VALUES
-    (16, 'Cereal', 'Barley', 'Hordeum vulgare2', 'Barley is a versatile cereal grain used for food, beverages, and livestock feed.');
+    (16, 'Cereal', 'Barley', 'N/A', 'Hordeum vulgare2', 'Barley is a versatile cereal grain used for food, beverages, and livestock feed.');
 
-INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
+INSERT INTO Plant (plant_ID, yield_type, common_name, cultivar_name, scientific_name, overview_notes)
 VALUES
-    (17, 'Cereal', 'Barley', 'Hordeum vulgare22', 'Barley is a versatile cereal grain used for food, beverages, and livestock feed.');
-
-
-INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
-VALUES
-    (18, 'Flower', 'Lily', 'Lilium', 'Lilies are elegant flowers that symbolize purity and require specific care for long-lasting blooms.');
-
-INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
-VALUES
-    (19, 'Flower', 'Lily', 'Lilium', 'Lilies are elegant flowers that symbolize purity and require specific care for long-lasting blooms.');
-
-INSERT INTO Plant (plant_ID, yield_type, common_name, scientific_name, overview_notes)
-VALUES
-    (20, 'Flower', 'Lilyf', 'Lilium', 'Lilies are elegant flowers that symbolize purity and require specific care for long-lasting blooms.');
+    (18, 'Flower', 'Lily', 'N/A', 'Lilium', 'Lilies are elegant flowers that symbolize purity and require specific care for long-lasting blooms.');
 
 INSERT INTO Soil_condition (soil_type, pH, organic_matter_concentration)
 VALUES ('Sandy', 6.50, 1.20);
@@ -358,6 +345,3 @@ INSERT INTO Tag (tag) VALUES ('big');
 
 INSERT INTO plant_has_tags (plant_ID, tag) VALUES (1, 'cold-resistant');
 INSERT INTO plant_has_tags (plant_ID, tag) VALUES (1, 'big');
-
-select *
-from Plant
