@@ -1,18 +1,24 @@
 {
   "name": "Node.js Dev Environment",
   "image": "mcr.microsoft.com/devcontainers/javascript-node:18",
-  "features": {},
+  "features": {
+    "docker-in-docker": {
+      "version": "latest"
+    }
+  },
   "customizations": {
     "vscode": {
       "extensions": [
         "dbaeumer.vscode-eslint",
         "esbenp.prettier-vscode",
         "GitHub.copilot",
-        "tomoki1207.pdf"
+        "tomoki1207.pdf",
+        "denoland.vscode-deno",
+        "ms-vscode-remote.remote-containers"
       ]
     }
   },
-  "postCreateCommand": "npm install eslint prettier react @supabase/supabase-js",
+  "postCreateCommand": "npm install eslint prettier react @supabase/supabase-js && sudo apt-get update && sudo apt-get install -y postgresql-client",
   "remoteEnv": {
     "ENV_FILE": ".env"
   },

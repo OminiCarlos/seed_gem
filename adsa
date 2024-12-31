@@ -1,1 +1,3 @@
 psql postgresql://postgres:Alpha2gamma-smash@db.hcwkiyqibkgkluouhkib.supabase.co:5432/postgres
+
+psql -h db.hcwkiyqibkgkluouhkib.supabase.co -U postgres -d your_database_name

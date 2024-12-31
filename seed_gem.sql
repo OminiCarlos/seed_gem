@@ -142,7 +142,7 @@ CREATE TABLE batch_is_at_Stage (
 CREATE TABLE App_user (
     user_id INTEGER PRIMARY KEY,
     user_name VARCHAR(50),
-    user_note VARCHAR(3000)
+    user_note VARCHAR(3000),
 );
 
 CREATE TABLE Plant_event_records_user_batch (

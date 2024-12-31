@@ -31,6 +31,10 @@ To install the project, follow these steps:
 
 4. Initialize the database:
     - Ensure your Supabase account is set up and the necessary tables are created.
+    - Connect to the database: use this command to establish postgre client coneection with supabase. (You need to know the database's password.)
+    ```
+    psql -h aws-0-us-west-1.pooler.supabase.com -p 5432 -d postgres -U postgres.hcwkiyqibkgkluouhkib
+    ```
 
 ### Running the Project
 To run the project, follow these steps:
