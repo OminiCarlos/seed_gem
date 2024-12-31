@@ -1,86 +1,39 @@
-const oracledb = require('oracledb');
+// filepath: /workspaces/seed_gem/appService.js
+const { createClient } = require('@supabase/supabase-js');
 const loadEnvFile = require('./utils/envUtil');
 
 const envVariables = loadEnvFile('./.env');
 
-// Database configuration setup. Ensure your .env file has the required database credentials.
-const dbConfig = {
-    user: envVariables.ORACLE_USER,
-    password: envVariables.ORACLE_PASS,
-    connectString: `${envVariables.ORACLE_HOST}:${envVariables.ORACLE_PORT}/${envVariables.ORACLE_DBNAME}`,
-    poolMin: 1,
-    poolMax: 3,
-    poolIncrement: 1,
-    poolTimeout: 60
-};
+// Supabase configuration setup. Ensure your .env file has the required Supabase credentials.
+const supabaseUrl = envVariables.SUPABASE_URL;
+const supabaseKey = envVariables.SUPABASE_KEY;
 
-// initialize connection pool
-async function initializeConnectionPool() {
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+// Wrapper to manage Supabase actions, simplifying connection handling.
+async function withSupabase(action) {
     try {
-        await oracledb.createPool(dbConfig);
-        console.log('Connection pool started');
-    } catch (err) {
-        console.error('Initialization error: ' + err.message);
-    }
-}
-
-async function closePoolAndExit() {
-    console.log('\nTerminating');
-    try {
-        await oracledb.getPool().close(10); // 10 seconds grace period for connections to finish
-        console.log('Pool closed');
-        process.exit(0);
-    } catch (err) {
-        console.error(err.message);
-        process.exit(1);
-    }
-}
-
-initializeConnectionPool();
-
-process
-    .once('SIGTERM', closePoolAndExit)
-    .once('SIGINT', closePoolAndExit);
-
-// ----------------------------------------------------------
-// Wrapper to manage OracleDB actions, simplifying connection handling.
-async function withOracleDB(action) {
-    let connection;
-    try {
-        connection = await oracledb.getConnection(); // Gets a connection from the default pool 
-        return await action(connection);
+        return await action(supabase);
     } catch (err) {
         console.error(err);
         throw err;
-    } finally {
-        if (connection) {
-            try {
-                await connection.close();
-            } catch (err) {
-                console.error(err);
-            }
-        }
     }
 }
 
-
-// ----------------------------------------------------------
 // Core functions for database operations
-// Modify these functions, especially the SQL queries, based on your project's requirements and design.
-async function testOracleConnection() {
-    return await withOracleDB(async (connection) => {
+async function testSupabaseConnection() {
+    return await withSupabase(async (supabase) => {
+        const { data, error } = await supabase.from('plant').select('*').limit(1);
+        if (error) {
+            throw error;
+        }
         return true;
     }).catch(() => {
         return false;
     });
 }
 
-// TODO: add intialize demoTables, which intializes all the tables in ER diagram by running a sql file. 
-
-
-
-
 module.exports = {
-    testOracleConnection,
-    withOracleDB
+    testOracleConnection: testSupabaseConnection, // Alias kept for compatibility
+    withOracleDB: withSupabase // Alias kept for compatibility
 };

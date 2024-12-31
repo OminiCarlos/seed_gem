@@ -30,7 +30,7 @@ async function fetchAndDisplayPlants() {
 
   const responseData = await response.json();
   const demotableContent = responseData.data;
-  console.log(demotableContent);
+  console.log("demotableContent", demotableContent);
 
   // Clear existing table rows
   tableBody.innerHTML = "";

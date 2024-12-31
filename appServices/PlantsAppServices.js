@@ -196,13 +196,13 @@ async function getCareCountByYieldType() {
 
 
 module.exports = {
-  initiateDemotable: initiateDemotable,
-  insertDemotable: insertDemotable,
-  fetchDemotableFromDb: fetchDemotableFromDb,
-  updateDemotable: updateDemotable,
-  deleteDemotable: deleteDemotable,
+  initiateDemotable,
+  insertDemotable,
+  fetchDemotableFromDb,
+  updateDemotable,
+  deleteDemotable,
   countDemotable,
-  countFruitYieldingPlants: countFruitYieldingPlants,
-  getYieldTypeCounts:getYieldTypeCounts,
-  getCareCountByYieldType: getCareCountByYieldType
+  countFruitYieldingPlants,
+  getYieldTypeCounts,
+  getCareCountByYieldType
 };
