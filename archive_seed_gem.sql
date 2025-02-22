@@ -15,6 +15,7 @@ DROP TABLE IF EXISTS plant_has_tags;
 DROP TABLE IF EXISTS Tag;
 DROP TABLE IF EXISTS Plant;
 
+
 CREATE TABLE Plant (
     plant_ID INTEGER PRIMARY KEY,
     yield_type VARCHAR(50),
@@ -24,12 +25,10 @@ CREATE TABLE Plant (
     overview_notes TEXT,
     UNIQUE (cultivar_name, common_name)
 );
-Alter table plant ENABLE ROW LEVEL SECURITY;
 
 CREATE TABLE Tag (
     tag VARCHAR(50) PRIMARY KEY
 );
-Alter table Tag ENABLE ROW LEVEL SECURITY;
 
 CREATE TABLE plant_has_tags (
     plant_ID INTEGER,
@@ -42,7 +41,6 @@ CREATE TABLE plant_has_tags (
     ON DELETE CASCADE 
     ON UPDATE CASCADE
 );
-Alter table plant_has_tags ENABLE ROW LEVEL SECURITY;
 
 CREATE TABLE Stage (
     stage_name VARCHAR(50),
@@ -50,7 +48,6 @@ CREATE TABLE Stage (
     PRIMARY KEY (stage_name, plant_ID),
     FOREIGN KEY (plant_ID) REFERENCES Plant(plant_ID) ON DELETE CASCADE ON UPDATE CASCADE
 );
-Alter table stage ENABLE ROW LEVEL SECURITY;
 
 CREATE TABLE Location (
 	field_name VARCHAR(50),
@@ -58,13 +55,11 @@ CREATE TABLE Location (
 	is_outdoor INTEGER,
 	PRIMARY KEY (field_name, zone_id)
 );
-Alter table location ENABLE ROW LEVEL SECURITY;
 
 CREATE TABLE Location_irrigation (
 	is_outdoor INTEGER PRIMARY KEY,
 	is_irrigated INTEGER
 );
-Alter table location_irrigation ENABLE ROW LEVEL SECURITY;
 
 INSERT INTO Location_irrigation (is_outdoor, is_irrigated)
 VALUES (1, 0);
@@ -77,7 +72,6 @@ CREATE TABLE Soil_condition (
     pH NUMERIC (5, 2),
     organic_matter_concentration NUMERIC (5, 2)
 );
-Alter table soil_condition ENABLE ROW LEVEL SECURITY;
 
 CREATE TABLE distinguished_by (
     soil_type VARCHAR(50),
@@ -87,14 +81,12 @@ CREATE TABLE distinguished_by (
     FOREIGN KEY (soil_type) REFERENCES Soil_condition(soil_type) ON DELETE RESTRICT ON UPDATE CASCADE,
     FOREIGN KEY (field_name, zone_ID) REFERENCES Location(field_name, zone_ID) ON DELETE RESTRICT ON UPDATE CASCADE
 );
-Alter table distinguished_by ENABLE ROW LEVEL SECURITY;
 
 CREATE TABLE Seed_orders (
     order_ID INTEGER PRIMARY KEY,
     order_date DATE,
     order_comment VARCHAR(3000)
 );
-Alter table seed_orders ENABLE ROW LEVEL SECURITY;
 
 
 CREATE TABLE Supplier (
@@ -103,7 +95,6 @@ CREATE TABLE Supplier (
     supplier_address VARCHAR(50),
     supplier_tel VARCHAR(50) NOT NULL
 );
-Alter table supplier ENABLE ROW LEVEL SECURITY;
 
 CREATE TABLE Order_item (
     order_ID INTEGER,
@@ -119,7 +110,6 @@ CREATE TABLE Order_item (
     FOREIGN KEY (plant_ID) REFERENCES Plant(plant_ID) ON DELETE RESTRICT ON UPDATE CASCADE,
     FOREIGN KEY (supplier_ID) REFERENCES Supplier(supplier_ID) ON DELETE RESTRICT ON UPDATE CASCADE
 );
-Alter table order_item ENABLE ROW LEVEL SECURITY;
 
 CREATE TABLE Batch (
     batch_ID INTEGER PRIMARY KEY,
@@ -136,7 +126,6 @@ CREATE TABLE Batch (
     FOREIGN KEY (field_name, zone_ID) REFERENCES Location(field_name, zone_ID) ON DELETE RESTRICT ON UPDATE CASCADE,
     UNIQUE (plant_date, item_ID, order_ID, field_name, zone_ID)
 );
-Alter table batch ENABLE ROW LEVEL SECURITY;
 
 --how to ensure only the plant_id included in that batch is commited to the database?
 CREATE TABLE batch_is_at_Stage (
@@ -149,23 +138,12 @@ CREATE TABLE batch_is_at_Stage (
     FOREIGN KEY (batch_ID) REFERENCES Batch(batch_ID) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (stage_name, plant_ID) REFERENCES Stage(stage_name, plant_ID) ON DELETE RESTRICT ON UPDATE CASCADE
 );
-Alter table batch_is_at_stage ENABLE ROW LEVEL SECURITY;
 
 CREATE TABLE App_user (
-    user_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id INTEGER PRIMARY KEY,
     user_name VARCHAR(50),
     user_note VARCHAR(3000)
 );
-Alter table app_user ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY user_select_policy ON App_user
-FOR SELECT
-USING (auth.uid() = user_id);
-
-CREATE POLICY user_modify_policy ON App_user
-FOR ALL
-USING (auth.uid() = user_id)
-WITH CHECK (auth.uid() = user_id);
 
 CREATE TABLE Plant_event_records_user_batch (
     event_id INTEGER PRIMARY KEY,
@@ -174,11 +152,10 @@ CREATE TABLE Plant_event_records_user_batch (
     event_instruction VARCHAR(3000),
     event_observation VARCHAR(3000),
     batch_ID INTEGER NOT NULL,
-    user_ID uuid NOT NULL,
+    user_ID INTEGER NOT NULL,
     FOREIGN KEY (batch_ID) REFERENCES Batch(batch_ID) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (user_ID) REFERENCES App_user(user_id) ON DELETE RESTRICT ON UPDATE RESTRICT
 );
-Alter table plant_event_records_user_batch ENABLE ROW LEVEL SECURITY;
 
 INSERT INTO Plant (plant_ID, yield_type, common_name, cultivar_name, scientific_name, overview_notes)
 VALUES
