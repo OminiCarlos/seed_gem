@@ -20,6 +20,8 @@ const batchIsAtStageController = require("./appControllers/BatchIsAtStageAppCont
 //------------------step 2: load routers below -----------------------
 const router = express.Router();
 
+// localhost:50000/locations
+
 router.use('/locations',locationsController) // Mount Locations routes
 router.use('/batches',batchesController) // Mount Batches routes
 router.use('/plants',plantsController) // Mount plants routes
