@@ -1,11 +1,12 @@
-const { createClient } = require("@supabase/supabase-js");
+// const { createClient } = require("@supabase/supabase-js");
 
-const supabase = createClient(
-  "https://hcwkiyqibkgkluouhkib.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhjd2tpeXFpYmtna2x1b3Voa2liIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjcyNDExODYsImV4cCI6MjA0MjgxNzE4Nn0.DZXk4MZ-x6myPy5XW0N6FRu06T6z53r1asvXlpdRLio"
-);
+// const supabase = createClient(
+//   "https://hcwkiyqibkgkluouhkib.supabase.co",
+//   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhjd2tpeXFpYmtna2x1b3Voa2liIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcyNzI0MTE4NiwiZXhwIjoyMDQyODE3MTg2fQ.7Kyxu9CSiAW-peM0okiCRuYekr98KNpyj2Z-Bn5xv2U"
+// );
 
-// above should be unchanged
+const {supabase} = require('../appService');
+
 
 // adding new services from here!
 async function initiateDemotable() {
@@ -64,13 +65,12 @@ async function insertDemotable(
 async function fetchDemotableFromDb() {
   try {
     const { data, error } = await supabase.from("location").select("*");
+    console.log(data)
 
     if (error) {
       console.error("Error fetching data:", error);
       return [];
     }
-
-    console.log(data);
 
     return data;
   } catch (error) {

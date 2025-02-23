@@ -9,6 +9,7 @@
   },
   "license": "ISC",
   "dependencies": {
+    "@shadcn/ui": "^0.0.4",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.17.3",

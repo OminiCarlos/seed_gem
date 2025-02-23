@@ -35,5 +35,6 @@ async function testSupabaseConnection() {
 
 module.exports = {
     testOracleConnection: testSupabaseConnection, // Alias kept for compatibility
-    withOracleDB: withSupabase // Alias kept for compatibility
+    withOracleDB: withSupabase, // Alias kept for compatibility
+    supabase:supabase
 };
