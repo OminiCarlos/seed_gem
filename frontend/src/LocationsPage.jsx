@@ -6,7 +6,7 @@ import DataTable from "./components/DataTable";
 import Sidebar from "./components/SideBar";
 import TopBar from "./components/TopBar";
 
-console.log("in loc", supabase);
+// console.log("in loc", supabase);
 
 const TopBarParam = {
   pageTitle: "Locations",

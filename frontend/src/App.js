@@ -8,7 +8,7 @@ import HomePage from './HomePage';
 import PlantEventLogs from "./PlantEventLogs";
 
 
-console.log(supabase);
+// console.log(supabase);
 
 function AuthPage() {
   const [session, setSession] = useState(null);

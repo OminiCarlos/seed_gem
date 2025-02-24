@@ -5,8 +5,7 @@
 //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhjd2tpeXFpYmtna2x1b3Voa2liIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcyNzI0MTE4NiwiZXhwIjoyMDQyODE3MTg2fQ.7Kyxu9CSiAW-peM0okiCRuYekr98KNpyj2Z-Bn5xv2U"
 // );
 
-const {supabase} = require('../appService');
-
+const { supabase } = require("../appService");
 
 // adding new services from here!
 async function initiateDemotable() {
@@ -65,7 +64,7 @@ async function insertDemotable(
 async function fetchDemotableFromDb() {
   try {
     const { data, error } = await supabase.from("location").select("*");
-    console.log(data)
+    // console.log(data)
 
     if (error) {
       console.error("Error fetching data:", error);
@@ -73,6 +72,36 @@ async function fetchDemotableFromDb() {
     }
 
     return data;
+  } catch (error) {
+    console.error("Error:", error);
+    return [];
+  }
+}
+
+async function listFieldNames() {
+  try {
+    const { data, error } = await supabase
+      .from("location")
+      .select("field_name");
+    console.log(data);
+
+    const uniqueItems= [
+      ...new Set(
+        data.map((item) => {
+          return item.field_name;
+        })
+      ),
+    ];
+    const options = uniqueItems.map((item)=>({
+      value:item,
+      label:item
+    }));
+    if (error) {
+      console.error("Error fetching data:", error);
+      return [];
+    }
+
+    return options;
   } catch (error) {
     console.error("Error:", error);
     return [];
@@ -154,5 +183,5 @@ module.exports = {
   updateDemotable: updateDemotable,
   deleteDemotable: deleteDemotable,
   filterDemotable,
-  filterDemotable,
+  listFieldNames,
 };

@@ -10,7 +10,7 @@ import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import supabase from "../util/supabase";
 
-console.log(supabase);
+// console.log(supabase);
 
 function LoginPage() {
   const [session, setSession] = useState(null);

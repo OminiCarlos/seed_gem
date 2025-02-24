@@ -13,6 +13,13 @@ router.get("/demotable", async (req, res) => {
   res.json({ data: tableContent });
 });
 
+router.get("/list-field-name", async (req, res) => {
+  console.log("field_name_called");
+  const fieldNames = await appService.listFieldNames();
+  res.json(fieldNames);
+});
+
+
 // inititate table
 router.post("/initiate-demotable", async (req, res) => {
   const initiateResult = await appService.initiateDemotable();
