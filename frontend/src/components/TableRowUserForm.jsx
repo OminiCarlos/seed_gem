@@ -16,11 +16,16 @@ const TableRowUserForm = ({ columns, onClose, onSubmit }) => {
   // When a field that should be a dropdown gains focus, fetch its options from the backend.
   const handleFocus = async (col) => {
     // Only fetch if the column doesn't have static options and hasn't fetched yet.
-    if (col.isDropdown && !col.options && !fetchedOptions[col.key] && col.fetchUrl) {
+    if (
+      col.isDropdown &&
+      !col.options &&
+      !fetchedOptions[col.key] &&
+      col.fetchUrl
+    ) {
       try {
         const response = await fetch(col.fetchUrl);
         const data = await response.json();
-        console.log("dropdown data: ",data);
+        console.log("dropdown data: ", data);
         // Assume data is an array of options. Each option can have "value" and "label"
         setFetchedOptions((prev) => ({
           ...prev,
@@ -33,12 +38,16 @@ const TableRowUserForm = ({ columns, onClose, onSubmit }) => {
   };
 
   const handleSubmit = () => {
-    onSubmit(formData); // Send data to parent component
+    const processedData = { ...formData };
+    if (processedData.is_outdoor !== "") {
+      processedData.is_outdoor = Number(processedData.is_outdoor);
+    }
+    onSubmit(processedData); // Send data to parent component
     onClose(); // Close modal
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
         <h2 className="text-xl font-semibold mb-4">Add New Location</h2>
 
@@ -57,14 +66,14 @@ const TableRowUserForm = ({ columns, onClose, onSubmit }) => {
                 onChange={(e) => handleChange(col.key, e.target.value)}
                 className="w-full px-3 py-2 border rounded-md"
               >
-                <option value="">
-                  Select {col.label}
-                </option>
-                {(col.options || fetchedOptions[col.key])?.map((option, idx) => (
-                  <option key={idx} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
+                <option value="">Select {col.label}</option>
+                {(col.options || fetchedOptions[col.key])?.map(
+                  (option, idx) => (
+                    <option key={idx} value={option.value}>
+                      {option.label}
+                    </option>
+                  )
+                )}
               </select>
             ) : (
               // Regular text input for non-dropdown fields.
@@ -80,7 +89,10 @@ const TableRowUserForm = ({ columns, onClose, onSubmit }) => {
 
         {/* Buttons */}
         <div className="flex justify-end space-x-3 mt-4">
-          <button onClick={onClose} className="px-4 py-2 bg-gray-300 rounded-md">
+          <button
+            onClick={onClose}
+            className="px-4 py-2 bg-gray-300 rounded-md"
+          >
             Cancel
           </button>
           <button

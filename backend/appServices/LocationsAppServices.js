@@ -64,7 +64,7 @@ async function insertDemotable(
 async function fetchDemotableFromDb() {
   try {
     const { data, error } = await supabase.from("location").select("*");
-    // console.log(data)
+    console.log(data)
 
     if (error) {
       console.error("Error fetching data:", error);
@@ -83,7 +83,6 @@ async function listFieldNames() {
     const { data, error } = await supabase
       .from("location")
       .select("field_name");
-    console.log(data);
 
     const uniqueItems= [
       ...new Set(
