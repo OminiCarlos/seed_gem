@@ -4,9 +4,15 @@ import React, { useState, useEffect } from "react";
 import supabase from "../util/supabase";
 import DataTable from "./components/DataTable";
 import Sidebar from "./components/SideBar";
+import TopBar from "./components/TopBar";
 
 console.log("in loc", supabase);
 
+const TopBarParam = {
+  pageTitle: "Locations",
+  onSearch: (query) => console.log("Searching for:", query),
+  onAddBatch: () => console.log("Add batch clicked!"),
+};
 
 // @todo: get the supabase client working 
 
@@ -14,7 +20,6 @@ const LocationDisplay = () => {
   const [locations, setLocations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  
 
   useEffect(() => {
     fetchLocations();
@@ -82,6 +87,13 @@ const LocationDisplay = () => {
     },
   ];
 
+  const addNewRow = () => {
+    setLocations((prev) => [
+      { id: "sample", field_name: "", zone_id: "", is_outdoor: "" },
+      ...prev,
+    ]);
+  };
+
   return (
     <div className="flex h-screen">
       {/* Sidebar with fixed width */}
@@ -90,24 +102,31 @@ const LocationDisplay = () => {
       {/* Right section: flex column layout */}
       <div className="flex-1 flex flex-col">
         {/* Top section (1/3 of the height) */}
-        <div className="h-1/8 bg-gray-100 p-4 border-b">
-          <h2 className="text-lg font-semibold">Top Section</h2>
-          {/* Add your top section content here */}
+        <div className="h-1/8 flex flex-col">
+          <TopBar
+            pageTitle={TopBarParam.pageTitle}
+            onSearch={TopBarParam.onSearch}
+            onAddBatch={TopBarParam.onAddBatch}
+          />
         </div>
 
         <div className="h-3/8 bg-gray-100 p-4 border-b">
-          <h2 className="text-lg font-semibold">Middle Section</h2>
+          <h2 className="text-lg font-semibold">Add Map</h2>
           {/* Add your top section content here */}
         </div>
 
         {/* Bottom section (2/3 of the height) */}
         <div className="h-1/2 flex flex-col overflow-hidden">
-          <DataTable data={locations} columns={columns} title="Locations" />
+          <DataTable
+            data={locations}
+            columns={columns}
+            title="Locations Overview"
+            onAddRow={addNewRow}
+          />
         </div>
       </div>
     </div>
   );
-
 };
 
 export default LocationDisplay;

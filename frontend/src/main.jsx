@@ -12,19 +12,34 @@ import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 
 import LoginPage from "./LoginPage";
-import HomePage from "./SidebarTest";
+import HomePage from "./TemplatePage";
 // import HomePage from "./components/LocationPage";
 // import PlantsPage from "./PlantsPage";
-// import LocationsPage from "./LocationsPage";
+import LocationsPage from "./LocationsPage";
+import TestUserForm from "./TestTableRowUserform";
 
+
+const menuItems = [
+  { name: "Home", path: "/home", component: HomePage },
+  { name: "Locations", path: "/locations", component: LocationsPage },
+  { name: "TestTableRowUserForm", path: "/userform", component: TestUserForm },
+  // { name: "Plants", path: "/plants", component: PlantsPage },
+  // { name: "Batches", path: "/batches", component: BatchesPage },
+  // { name: "Orders", path: "/orders", component: OrdersPage },
+  // { name: "Suppliers", path: "/suppliers", component: SuppliersPage },
+  // { name: "Visit Records", path: "/visits", component: VisitsPage },
+];
 const App = () => {
   return (
     <Router>
       <Routes>
+        {/* Default Route */}
         <Route path="/" element={<LoginPage />} />
-        <Route path="/home" element={<HomePage />} />
-        {/* <Route path="/plants" element={<PlantsPage />} />
-        <Route path="/locations" element={<LocationsPage />} /> */}
+
+        {/* Dynamically Generate Routes */}
+        {menuItems.map(({ path, component: Component }, index) => (
+          <Route key={index} path={path} element={<Component />} />
+        ))}
       </Routes>
     </Router>
   );

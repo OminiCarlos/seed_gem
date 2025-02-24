@@ -3,9 +3,9 @@ import { Search } from "lucide-react";
 
 const TopBar = ({ pageTitle, onSearch,onAddBatch}) => {
   return (
-    <div className="flex items-center justify-between p-8 w-full h-full">
+    <div className="flex items-center justify-between p-6 w-full h-full">
       {/* Page Title */}
-      <h2 className="text-xl font-semibold">{pageTitle}</h2>
+      <h2 className="text-2xl font-semibold mb-4">{pageTitle}</h2>
 
       {/* Search Bar */}
       <div className="relative flex items-center">

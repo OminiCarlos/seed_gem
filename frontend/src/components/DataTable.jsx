@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { ArrowUp, ArrowDown } from "lucide-react"; // Import icons from ShadCN UI
 
-const DataTable = ({ data, columns, title }) => {
+const DataTable = ({ data, columns, title, onAddRow }) => {
   const [sortedColumn, setSortedColumn] = useState(null);
   const [sortOrder, setSortOrder] = useState("asc");
 
@@ -27,7 +27,15 @@ const DataTable = ({ data, columns, title }) => {
 
   return (
     <div className="p-6 flex flex-col h-full">
-      <h2 className="text-2xl font-semibold mb-4">{title}</h2>
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-2xl font-semibold mb-4">{title}</h2>
+        <button
+          onClick={onAddRow} // Calls the function when clicked
+          className="bg-black text-white px-4 py-2 rounded-md hover:bg-blue-700"
+        >
+          +
+        </button>
+      </div>
       <div className="overflow-y-auto">
         <table className="min-w-full bg-gray-50 rounded-lg">
           <thead className="bg-gray-300 sticky top-0 z-10">
