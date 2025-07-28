@@ -1,38 +1,35 @@
-const oracledb = require("oracledb");
-const { withOracleDB } = require("../appService.js");
+const { withSupabase } = require("../appService.js");
 
 // Fetch all records from the batch_is_at_stage table
 async function fetchBatchStagesFromDb() {
-  return await withOracleDB(async (connection) => {
-    const result = await connection.execute("SELECT * FROM BATCH_IS_AT_STAGE");
-    return result.rows;
+  return await withSupabase(async (supabase) => {
+    const { data, error } = await supabase
+      .from("batch_is_at_stage")
+      .select("*");
+
+    if (error) {
+      console.error("Error fetching batch stages:", error);
+      return [];
+    }
+    return data || [];
   }).catch(() => {
     return [];
   });
 }
 
-// Initialize the batch_is_at_stage table
+// Clear all records from the batch_is_at_stage table (for testing/reset purposes)
 async function initiateBatchStages() {
-  return await withOracleDB(async (connection) => {
-    try {
-      await connection.execute(`DROP TABLE BATCH_IS_AT_STAGE`);
-    } catch (err) {
-      console.log("Table might not exist, proceeding to create...");
-    }
+  return await withSupabase(async (supabase) => {
+    const { error } = await supabase
+      .from("batch_is_at_stage")
+      .delete()
+      .neq("batch_id", 0); // Delete all records (neq with impossible value)
 
-    const result = await connection.execute(
-      `CREATE TABLE BATCH_IS_AT_STAGE (
-          batch_ID VARCHAR2(50), 
-          plant_ID INTEGER, 
-          stage_name VARCHAR(50), 
-          start_date DATE, 
-          end_date DATE,
-          PRIMARY KEY (batch_ID, plant_ID, stage_name),
-          FOREIGN KEY (batch_ID) REFERENCES BATCH(batch_id),
-          FOREIGN KEY (plant_ID, stage_name) REFERENCES STAGE(plant_ID, stage_name)
-      )`
-    );
-    console.log("BATCH_IS_AT_STAGE table created successfully!");
+    if (error) {
+      console.error("Error clearing batch stages table:", error);
+      return false;
+    }
+    console.log("BATCH_IS_AT_STAGE table cleared successfully!");
     return true;
   }).catch(() => {
     return false;
@@ -47,19 +44,20 @@ async function insertBatchStage(
   start_date,
   end_date
 ) {
-  return await withOracleDB(async (connection) => {
-    const result = await connection.execute(
-      `INSERT INTO BATCH_IS_AT_STAGE (
-          batch_ID, plant_ID, stage_name, start_date, end_date
-      ) 
-      VALUES (
-          :batch_ID, :plant_ID, :stage_name, TO_DATE(:start_date, 'YYYY-MM-DD'), TO_DATE(:end_date, 'YYYY-MM-DD')
-      )`,
-      [batch_ID, plant_ID, stage_name, start_date, end_date],
-      { autoCommit: true }
-    );
+  return await withSupabase(async (supabase) => {
+    const { data, error } = await supabase.from("batch_is_at_stage").insert({
+      batch_id: batch_ID,
+      plant_id: plant_ID,
+      stage_name: stage_name,
+      start_date: start_date,
+      end_date: end_date,
+    });
 
-    return result.rowsAffected && result.rowsAffected > 0;
+    if (error) {
+      console.error("Error inserting batch stage:", error);
+      return false;
+    }
+    return true;
   }).catch(() => {
     return false;
   });
@@ -73,21 +71,22 @@ async function updateBatchStage(
   start_date,
   end_date
 ) {
-  return await withOracleDB(async (connection) => {
-    const result = await connection.execute(
-      `UPDATE BATCH_IS_AT_STAGE 
-      SET 
-          start_date = TO_DATE(:start_date, 'YYYY-MM-DD'), 
-          end_date = TO_DATE(:end_date, 'YYYY-MM-DD')
-      WHERE 
-          batch_ID = :batch_ID AND 
-          plant_ID = :plant_ID AND 
-          stage_name = :stage_name`,
-      [start_date, end_date, batch_ID, plant_ID, stage_name],
-      { autoCommit: true }
-    );
+  return await withSupabase(async (supabase) => {
+    const { data, error } = await supabase
+      .from("batch_is_at_stage")
+      .update({
+        start_date: start_date,
+        end_date: end_date,
+      })
+      .eq("batch_id", batch_ID)
+      .eq("plant_id", plant_ID)
+      .eq("stage_name", stage_name);
 
-    return result.rowsAffected && result.rowsAffected > 0;
+    if (error) {
+      console.error("Error updating batch stage:", error);
+      return false;
+    }
+    return true;
   }).catch(() => {
     return false;
   });
@@ -95,20 +94,21 @@ async function updateBatchStage(
 
 // Delete a record from the batch_is_at_stage table
 async function deleteBatchStage(batch_ID, plant_ID, stage_name) {
-  return await withOracleDB(async (connection) => {
-    const result = await connection.execute(
-      `DELETE FROM BATCH_IS_AT_STAGE 
-      WHERE 
-          batch_ID = :batch_ID AND 
-          plant_ID = :plant_ID AND 
-          stage_name = :stage_name`,
-      [batch_ID, plant_ID, stage_name],
-      { autoCommit: true }
-    );
+  return await withSupabase(async (supabase) => {
+    const { data, error } = await supabase
+      .from("batch_is_at_stage")
+      .delete()
+      .eq("batch_id", batch_ID)
+      .eq("plant_id", plant_ID)
+      .eq("stage_name", stage_name);
 
-    return result.rowsAffected > 0;
+    if (error) {
+      console.error("Error deleting batch stage:", error);
+      return false;
+    }
+    return true;
   }).catch(() => {
-    return [];
+    return false;
   });
 }
 

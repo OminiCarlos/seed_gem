@@ -1,46 +1,33 @@
-const oracledb = require("oracledb");
-const { withOracleDB } = require("../appService.js");
+const { withSupabase } = require("../appService.js");
 
 // above should be unchanged
 
 // adding new services from here!
 
 async function fetchDemotableFromDb() {
-  return await withOracleDB(async (connection) => {
-    const result = await connection.execute(
-      `SELECT * 
-       FROM Plant`
-    ); // replace with a join sql statement
-    return result.rows;
+  return await withSupabase(async (supabase) => {
+    const { data, error } = await supabase.from("plant").select("*");
+
+    if (error) {
+      console.error("Error fetching plants:", error);
+      return [];
+    }
+    return data || [];
   }).catch(() => {
     return [];
   });
 }
 
 async function initiateDemotable() {
-  return await withOracleDB(async (connection) => {
-    try {
-      // change the table name to drop.
-      await connection.execute(`DROP TABLE PLANT`);
-    } catch (err) {
-      // put the respective table name to help debugging.
-      console.log("Plant Table might not exist, proceeding to create...");
+  return await withSupabase(async (supabase) => {
+    const { error } = await supabase.from("plant").delete().neq("plant_id", 0);
+
+    if (error) {
+      console.error("Error clearing Plant table:", error);
+      return false;
     }
 
-    const result = await connection.execute(
-      // change the table name and field. The order of field names follows that in seed_gem.sql
-      `
-      CREATE TABLE Plant (
-          plant_ID INTEGER PRIMARY KEY,
-          yield_type VARCHAR(50),
-          common_name VARCHAR(50) UNIQUE,
-          scientific_name VARCHAR(50) UNIQUE,
-          overview_notes VARCHAR(3000)
-      )
-      `
-    );
-    // change this to your table name
-    console.log("Plant table created successfully!");
+    console.log("Plant table cleared successfully!");
     return true;
   }).catch(() => {
     return false;
@@ -56,28 +43,20 @@ async function insertDemotable(
   scientific_name,
   overview_notes
 ) {
-  return await withOracleDB(async (connection) => {
-    const result = await connection.execute(
-      // change the attributes and the variable names.
-      `INSERT INTO Plant (
-        plant_ID,
-        yield_type,
-        common_name,
-        scientific_name,
-        overview_notes)
-      VALUES (
-        :plant_id,
-        :yield_type,
-        :common_name,
-        :scientific_name,
-        :overview_notes
-      )`,
-      // these are the data you passed in.
-      [plant_id, yield_type, common_name, scientific_name, overview_notes],
-      { autoCommit: true }
-    );
+  return await withSupabase(async (supabase) => {
+    const { data, error } = await supabase.from("plant").insert({
+      plant_id: plant_id,
+      yield_type: yield_type,
+      common_name: common_name,
+      scientific_name: scientific_name,
+      overview_notes: overview_notes,
+    });
 
-    return result.rowsAffected && result.rowsAffected > 0;
+    if (error) {
+      console.error("Error inserting plant:", error);
+      return false;
+    }
+    return true;
   }).catch(() => {
     return false;
   });
@@ -90,79 +69,86 @@ async function updateDemotable(
   scientific_name,
   overview_notes
 ) {
-  return await withOracleDB(async (connection) => {
-    const result = await connection.execute(
-      // change to the respective sql query. Change the table name as well.
-      `UPDATE PLANT SET
-                  plant_ID = :plant_id,
-                  yield_type = :yield_type,
-                  common_name = :common_name,
-                  scientific_name = :scientific_name,
-                  overview_notes = :overview_notes 
-      WHERE plant_ID=:plant_id`,
-      [plant_id, yield_type, common_name, scientific_name, overview_notes],
-      { autoCommit: true }
-    );
-    return result.rowsAffected && result.rowsAffected > 0;
+  return await withSupabase(async (supabase) => {
+    const { data, error } = await supabase
+      .from("plant")
+      .update({
+        yield_type: yield_type,
+        common_name: common_name,
+        scientific_name: scientific_name,
+        overview_notes: overview_notes,
+      })
+      .eq("plant_id", plant_id);
+
+    if (error) {
+      console.error("Error updating plant:", error);
+      return false;
+    }
+    return true;
   }).catch(() => {
     return false;
   });
 }
 
 async function deleteDemotable(plant_id) {
-  zone_id = parseInt(plant_id);
-  return await withOracleDB(async (connection) => {
-    const result = await connection.execute(
-      // replace with the query in your table.
-      `DELETE FROM PLANT 
-        WHERE plant_ID = :plant_id`,
-      [plant_id],
-      { autoCommit: true }
-    );
-    return result.rowsAffected > 0;
+  return await withSupabase(async (supabase) => {
+    const { data, error } = await supabase
+      .from("plant")
+      .delete()
+      .eq("plant_id", plant_id);
+
+    if (error) {
+      console.error("Error deleting plant:", error);
+      return false;
+    }
+    return true;
   }).catch(() => {
-    return [];
+    return false;
   });
 }
 
 async function countDemotable() {
-  return await withOracleDB(async (connection) => {
-    const result = await connection.execute("SELECT Count(*) FROM PLANT");
-    return result.rows[0][0];
+  return await withSupabase(async (supabase) => {
+    const { count, error } = await supabase
+      .from("plant")
+      .select("*", { count: "exact", head: true });
+
+    if (error) {
+      console.error("Error counting plants:", error);
+      return -1;
+    }
+    return count || 0;
   }).catch(() => {
     return -1;
   });
 }
 
 async function countFruitYieldingPlants() {
-  return await withOracleDB(async (connection) => {
-    const result = await connection.execute(
-      `SELECT COUNT(*) AS fruit_count
-       FROM Plant
-       GROUP BY yield_type
-       HAVING LOWER(yield_type) = 'fruit'`
-    );
-    console.log(result);
-    return result.rows[0][0];
+  return await withSupabase(async (supabase) => {
+    const { count, error } = await supabase
+      .from("plant")
+      .select("*", { count: "exact", head: true })
+      .ilike("yield_type", "fruit");
+
+    if (error) {
+      console.error("Error counting fruit plants:", error);
+      return -1;
+    }
+    return count || 0;
   }).catch(() => {
     return -1;
   });
 }
 
 async function getYieldTypeCounts() {
-  return await withOracleDB(async (connection) => {
-    const result = await connection.execute(
-      `
-      SELECT yield_type, COUNT(*) AS count
-      FROM Plant
-      GROUP BY yield_type
-      
-      `
-    );
-    return result.rows.map((row) => ({
-      yield_type: row[0],
-      count: row[1],
-    }));
+  return await withSupabase(async (supabase) => {
+    const { data, error } = await supabase.rpc("get_yield_type_counts");
+
+    if (error) {
+      console.error("Error fetching yield type counts:", error);
+      return [];
+    }
+    return data || [];
   }).catch((error) => {
     console.error("Error fetching yield type counts:", error);
     return [];
@@ -170,30 +156,19 @@ async function getYieldTypeCounts() {
 }
 
 async function getCareCountByYieldType() {
-  return await withOracleDB(async (connection) => {
-    const result = await connection.execute(
-      `
-      SELECT yield_type, COUNT(*) AS count
-      FROM Plant
-      GROUP BY yield_type
-      HAVING COUNT(*) >= 2
-      `
-    );
+  return await withSupabase(async (supabase) => {
+    const { data, error } = await supabase.rpc("get_care_count_by_yield_type");
 
-    // Transform the result into a usable format
-    return result.rows.map((row) => ({
-      yield_type: row[0],
-      count: row[1],
-    }));
+    if (error) {
+      console.error("Error fetching care count data:", error);
+      return [];
+    }
+    return data || [];
   }).catch((error) => {
     console.error("Error fetching care count data:", error);
     return [];
   });
 }
-
-
-
-
 
 module.exports = {
   initiateDemotable,
@@ -204,5 +179,5 @@ module.exports = {
   countDemotable,
   countFruitYieldingPlants,
   getYieldTypeCounts,
-  getCareCountByYieldType
+  getCareCountByYieldType,
 };

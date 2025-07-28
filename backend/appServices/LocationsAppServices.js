@@ -1,36 +1,19 @@
-// const { createClient } = require("@supabase/supabase-js");
-
-// const supabase = createClient(
-//   "https://hcwkiyqibkgkluouhkib.supabase.co",
-//   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhjd2tpeXFpYmtna2x1b3Voa2liIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcyNzI0MTE4NiwiZXhwIjoyMDQyODE3MTg2fQ.7Kyxu9CSiAW-peM0okiCRuYekr98KNpyj2Z-Bn5xv2U"
-// );
-
-const { supabase } = require("../appService");
+const { supabase, withSupabase } = require("../appService");
 
 // adding new services from here!
 async function initiateDemotable() {
-  return await withOracleDB(async (connection) => {
-    try {
-      // change the table name to drop.
-      await connection.execute(`DROP TABLE LOCATION`);
-    } catch (err) {
-      // put the respective table name to help debugging.
-      console.log("Location Table might not exist, proceeding to create...");
+  return await withSupabase(async (supabase) => {
+    const { error } = await supabase
+      .from("location")
+      .delete()
+      .neq("field_name", "");
+
+    if (error) {
+      console.error("Error clearing Location table:", error);
+      return false;
     }
 
-    const result = await connection.execute(
-      // change the table name and field. The order of field names follows that in seed_gem.sql
-      `
-      CREATE TABLE LOCATION (
-                field_name VARCHAR2(50), 
-                zone_id INTEGER, 
-                is_outdoor NUMBER(1), 
-                PRIMARY KEY (field_name, zone_id)
-            )
-        `
-    );
-    // change this to your table name
-    console.log("LOCATION table created successfully!");
+    console.log("LOCATION table cleared successfully!");
     return true;
   }).catch(() => {
     return false;
@@ -45,17 +28,18 @@ async function insertDemotable(
   is_outdoor,
   is_irrigated
 ) {
-  return await withOracleDB(async (connection) => {
-    const result = await connection.execute(
-      // change the attributes and the variable names.
-      `INSERT INTO LOCATION (field_name, zone_id, is_outdoor) 
-                        VALUES (:field_name, :zone_id, :is_outdoor)`,
-      // these are the data you passed in.
-      [field_name, zone_id, is_outdoor],
-      { autoCommit: true }
-    );
+  return await withSupabase(async (supabase) => {
+    const { data, error } = await supabase.from("location").insert({
+      field_name: field_name,
+      zone_id: zone_id,
+      is_outdoor: is_outdoor,
+    });
 
-    return result.rowsAffected && result.rowsAffected > 0;
+    if (error) {
+      console.error("Error inserting location:", error);
+      return false;
+    }
+    return true;
   }).catch(() => {
     return false;
   });
@@ -64,7 +48,7 @@ async function insertDemotable(
 async function fetchDemotableFromDb() {
   try {
     const { data, error } = await supabase.from("location").select("*");
-    console.log(data)
+    console.log(data);
 
     if (error) {
       console.error("Error fetching data:", error);
@@ -84,16 +68,16 @@ async function listFieldNames() {
       .from("location")
       .select("field_name");
 
-    const uniqueItems= [
+    const uniqueItems = [
       ...new Set(
         data.map((item) => {
           return item.field_name;
         })
       ),
     ];
-    const options = uniqueItems.map((item)=>({
-      value:item,
-      label:item
+    const options = uniqueItems.map((item) => ({
+      value: item,
+      label: item,
     }));
     if (error) {
       console.error("Error fetching data:", error);
@@ -108,16 +92,18 @@ async function listFieldNames() {
 }
 
 async function updateDemotable(field_name, zone_id, is_outdoor) {
-  return await withOracleDB(async (connection) => {
-    const result = await connection.execute(
-      // change to the respective sql query.
-      `UPDATE LOCATION SET is_outdoor = :is_outdoor 
-                WHERE field_name=:field_name
-                AND   zone_id = :zone_id  `,
-      [is_outdoor, field_name, zone_id],
-      { autoCommit: true }
-    );
-    return result.rowsAffected && result.rowsAffected > 0;
+  return await withSupabase(async (supabase) => {
+    const { data, error } = await supabase
+      .from("location")
+      .update({ is_outdoor: is_outdoor })
+      .eq("field_name", field_name)
+      .eq("zone_id", zone_id);
+
+    if (error) {
+      console.error("Error updating location:", error);
+      return false;
+    }
+    return true;
   }).catch(() => {
     return false;
   });
@@ -125,50 +111,58 @@ async function updateDemotable(field_name, zone_id, is_outdoor) {
 
 async function deleteDemotable(field_name, zone_id) {
   zone_id = parseInt(zone_id);
-  return await withOracleDB(async (connection) => {
-    const result = await connection.execute(
-      // replace with the query in your table.
-      `DELETE FROM LOCATION 
-        WHERE field_name = :field_name 
-        AND zone_id = :zone_id`,
-      [field_name, zone_id],
-      { autoCommit: true }
-    );
-    return result.rowsAffected > 0;
+  return await withSupabase(async (supabase) => {
+    const { data, error } = await supabase
+      .from("location")
+      .delete()
+      .eq("field_name", field_name)
+      .eq("zone_id", zone_id);
+
+    if (error) {
+      console.error("Error deleting location:", error);
+      return false;
+    }
+    return true;
   }).catch(() => {
-    return [];
+    return false;
   });
 }
 
 async function filterDemotable(showOutdoor, showIndoor) {
-  return await withOracleDB(async (connection) => {
-    // Build the WHERE clause dynamically based on input
-    console.log(showOutdoor, showIndoor);
+  return await withSupabase(async (supabase) => {
+    // Build query based on filter options
+    let query = supabase.from("location").select(`
+        field_name,
+        zone_id,
+        is_outdoor,
+        location_irrigation!inner(is_irrigated)
+      `);
+
+    // Apply filters
     const conditions = [];
     if (showOutdoor == 1) {
-      conditions.push("location.is_outdoor = 1");
+      conditions.push("is_outdoor.eq.true");
     }
     if (showIndoor == 1) {
-      conditions.push("location.is_outdoor = 0");
+      conditions.push("is_outdoor.eq.false");
     }
-    console.log(conditions.length, conditions);
-    const whereClause =
-      conditions.length === 2
-        ? `WHERE LOCATION.is_outdoor = Location_irrigation.is_outdoor 
-                                              AND (${conditions.join(" OR ")}) `
-        : conditions.length === 1
-          ? `WHERE LOCATION.is_outdoor = Location_irrigation.is_outdoor AND ${conditions.join()} `
-          : `WHERE LOCATION.is_outdoor = Location_irrigation.is_outdoor`;
 
-    const query = `
-      SELECT LOCATION.field_name, LOCATION.zone_id, LOCATION.is_outdoor, Location_irrigation.is_irrigated
-      FROM LOCATION, Location_irrigation 
-      
-      ${whereClause}
-    `;
+    if (conditions.length === 1) {
+      if (showOutdoor == 1) {
+        query = query.eq("is_outdoor", true);
+      } else {
+        query = query.eq("is_outdoor", false);
+      }
+    }
+    // If both or neither are selected, don't add filters (show all)
 
-    const result = await connection.execute(query);
-    return result.rows;
+    const { data, error } = await query;
+
+    if (error) {
+      console.error("Error filtering locations:", error);
+      return [];
+    }
+    return data || [];
   }).catch((error) => {
     console.error("Error filtering demotable:", error);
     return [];

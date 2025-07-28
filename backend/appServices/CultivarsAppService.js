@@ -1,27 +1,19 @@
-const oracledb = require("oracledb");
-const { withOracleDB } = require("../appService.js");
+const { withSupabase } = require("../appService.js");
 
 // Initialize the Cultivar table
 async function initiateCultivarTable() {
-  return await withOracleDB(async (connection) => {
-    try {
-      // Drop the table if it exists
-      await connection.execute(`DROP TABLE CULTIVAR`);
-    } catch (err) {
-      console.log("Table might not exist, proceeding to create...");
+  return await withSupabase(async (supabase) => {
+    const { error } = await supabase
+      .from("cultivar")
+      .delete()
+      .neq("plant_id", 0);
+
+    if (error) {
+      console.error("Error clearing Cultivar table:", error);
+      return false;
     }
 
-    // Create the Cultivar table
-    // TODO: re-visit the logic here. Refer to ER diagram. 
-    await connection.execute(
-      `CREATE TABLE CULTIVAR (
-        plant_ID INTEGER PRIMARY KEY,
-        cultivar_name VARCHAR(50),
-        FOREIGN KEY (plant_ID) REFERENCES Plant(plant_ID)
-      )`
-    );
-
-    console.log("CULTIVAR table created successfully!");
+    console.log("CULTIVAR table cleared successfully!");
     return true;
   }).catch((err) => {
     console.error("Error initiating Cultivar table:", err);
@@ -31,15 +23,17 @@ async function initiateCultivarTable() {
 
 // Insert a new record into the Cultivar table
 async function insertCultivar(plant_ID, cultivar_name) {
-  return await withOracleDB(async (connection) => {
-    const result = await connection.execute(
-      `INSERT INTO CULTIVAR (plant_ID, cultivar_name) 
-       VALUES (:plant_ID, :cultivar_name)`,
-      [plant_ID, cultivar_name],
-      { autoCommit: true }
-    );
+  return await withSupabase(async (supabase) => {
+    const { data, error } = await supabase.from("cultivar").insert({
+      plant_id: plant_ID,
+      cultivar_name: cultivar_name,
+    });
 
-    return result.rowsAffected > 0;
+    if (error) {
+      console.error("Error inserting cultivar:", error);
+      return false;
+    }
+    return true;
   }).catch((err) => {
     console.error("Error inserting cultivar:", err);
     return false;
@@ -48,18 +42,23 @@ async function insertCultivar(plant_ID, cultivar_name) {
 
 // Fetch all records from the Cultivar table
 async function fetchCultivarsFromDb() {
-  return await withOracleDB(async (connection) => {
-    const result = await connection.execute(
-      `SELECT   Cultivar.plant_ID, 
-                Plant.yield_type, 
-                Plant.common_name, 
-                Plant.scientific_name,
-                Plant.overview_notes,
-                Cultivar.cultivar_name 
-       FROM CULTIVAR, Plant
-       WHERE Cultivar.plant_ID = Plant.plant_ID`
-    );
-    return result.rows;
+  return await withSupabase(async (supabase) => {
+    const { data, error } = await supabase.from("cultivar").select(`
+        plant_id,
+        cultivar_name,
+        plant:plant_id (
+          yield_type,
+          common_name,
+          scientific_name,
+          overview_notes
+        )
+      `);
+
+    if (error) {
+      console.error("Error fetching cultivars:", error);
+      return [];
+    }
+    return data || [];
   }).catch((err) => {
     console.error("Error fetching cultivars:", err);
     return [];
@@ -68,16 +67,17 @@ async function fetchCultivarsFromDb() {
 
 // Update a record in the Cultivar table
 async function updateCultivar(plant_ID, cultivar_name) {
-  return await withOracleDB(async (connection) => {
-    const result = await connection.execute(
-      `UPDATE CULTIVAR 
-       SET cultivar_name = :cultivar_name
-       WHERE plant_ID = :plant_ID`,
-      [cultivar_name, plant_ID],
-      { autoCommit: true }
-    );
+  return await withSupabase(async (supabase) => {
+    const { data, error } = await supabase
+      .from("cultivar")
+      .update({ cultivar_name: cultivar_name })
+      .eq("plant_id", plant_ID);
 
-    return result.rowsAffected > 0;
+    if (error) {
+      console.error("Error updating cultivar:", error);
+      return false;
+    }
+    return true;
   }).catch((err) => {
     console.error("Error updating cultivar:", err);
     return false;
@@ -86,15 +86,17 @@ async function updateCultivar(plant_ID, cultivar_name) {
 
 // Delete a record from the Cultivar table
 async function deleteCultivar(plant_ID) {
-  return await withOracleDB(async (connection) => {
-    const result = await connection.execute(
-      `DELETE FROM CULTIVAR 
-       WHERE plant_ID = :plant_ID`,
-      [plant_ID],
-      { autoCommit: true }
-    );
+  return await withSupabase(async (supabase) => {
+    const { data, error } = await supabase
+      .from("cultivar")
+      .delete()
+      .eq("plant_id", plant_ID);
 
-    return result.rowsAffected > 0;
+    if (error) {
+      console.error("Error deleting cultivar:", error);
+      return false;
+    }
+    return true;
   }).catch((err) => {
     console.error("Error deleting cultivar:", err);
     return false;
