@@ -7,7 +7,10 @@ import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-route
 import HomePage from './HomePage';
 import PlantEventLogs from "./PlantEventLogs";
 
-const supabase = createClient('https://hcwkiyqibkgkluouhkib.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhjd2tpeXFpYmtna2x1b3Voa2liIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjcyNDExODYsImV4cCI6MjA0MjgxNzE4Nn0.DZXk4MZ-x6myPy5XW0N6FRu06T6z53r1asvXlpdRLio');
+const supabase = createClient(
+  "https://hcwkiyqibkgkluouhkib.supabase.co",
+  "sb_publishable_0cvph_i96yjQ1Ckr0GTZ_w_oCsvNIjv"
+);
 
 console.log(supabase);
 

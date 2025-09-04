@@ -1,37 +1,23 @@
-const oracledb = require("oracledb");
-const { withOracleDB } = require("../appService.js");
+const { withSupabase } = require("../appService.js");
 
 async function fetchSupplierDemotableFromDb() {
-  return await withOracleDB(async (connection) => {
-    const result = await connection.execute("SELECT * FROM SUPPLIER");
-    return result.rows;
-  }).catch(() => {
+  return await withSupabase(async (supabase) => {
+    const { data, error } = await supabase.from("SUPPLIER").select("*");
+    if (error) {
+      console.error("Error fetching suppliers:", error);
+      return [];
+    }
+    return data || [];
+  }).catch((err) => {
+    console.error("Error fetching suppliers:", err);
     return [];
   });
 }
 
+// Table creation/reset should be managed in Supabase dashboard.
 async function initiateSupplierDemotable() {
-  return await withOracleDB(async (connection) => {
-    try {
-      await connection.execute(`DROP TABLE SUPPLIER`);
-    } catch (err) {
-      console.log("Table might not exist, proceeding to create...");
-    }
-
-    const result = await connection.execute(
-      `CREATE TABLE SUPPLIER (
-                supplier_id VARCHAR2(50), 
-                supplier_name VARCHAR2(255), 
-                supplier_address VARCHAR2(255), 
-                supplier_tel VARCHAR2(15),
-                PRIMARY KEY (supplier_id)
-            )`
-    );
-    console.log("SUPPLIER table created successfully!");
-    return true;
-  }).catch(() => {
-    return false;
-  });
+  console.log("Table creation/reset should be managed in Supabase dashboard.");
+  return false;
 }
 
 async function insertSupplierDemotable(
@@ -40,20 +26,22 @@ async function insertSupplierDemotable(
   supplier_address,
   supplier_tel
 ) {
-  return await withOracleDB(async (connection) => {
-    const result = await connection.execute(
-      `INSERT INTO SUPPLIER (
-                supplier_id, supplier_name, supplier_address, supplier_tel
-            ) 
-            VALUES (
-                :supplier_id, :supplier_name, :supplier_address, :supplier_tel
-            )`,
-      [supplier_id, supplier_name, supplier_address, supplier_tel],
-      { autoCommit: true }
-    );
-
-    return result.rowsAffected && result.rowsAffected > 0;
-  }).catch(() => {
+  return await withSupabase(async (supabase) => {
+    const { error } = await supabase.from("SUPPLIER").insert([
+      {
+        supplier_id,
+        supplier_name,
+        supplier_address,
+        supplier_tel,
+      },
+    ]);
+    if (error) {
+      console.error("Error inserting supplier:", error);
+      return false;
+    }
+    return true;
+  }).catch((err) => {
+    console.error("Error inserting supplier:", err);
     return false;
   });
 }
@@ -64,36 +52,40 @@ async function updateSupplierDemotable(
   supplier_address,
   supplier_tel
 ) {
-  return await withOracleDB(async (connection) => {
-    const result = await connection.execute(
-      `UPDATE SUPPLIER 
-            SET 
-                supplier_name = :supplier_name, 
-                supplier_address = :supplier_address, 
-                supplier_tel = :supplier_tel
-            WHERE supplier_id = :supplier_id`,
-      [supplier_name, supplier_address, supplier_tel, supplier_id],
-      { autoCommit: true }
-    );
-
-    return result.rowsAffected && result.rowsAffected > 0;
-  }).catch(() => {
+  return await withSupabase(async (supabase) => {
+    const { error } = await supabase
+      .from("SUPPLIER")
+      .update({
+        supplier_name,
+        supplier_address,
+        supplier_tel,
+      })
+      .eq("supplier_id", supplier_id);
+    if (error) {
+      console.error("Error updating supplier:", error);
+      return false;
+    }
+    return true;
+  }).catch((err) => {
+    console.error("Error updating supplier:", err);
     return false;
   });
 }
 
 async function deleteSupplierDemotable(supplier_id) {
-  return await withOracleDB(async (connection) => {
-    const result = await connection.execute(
-      `
-            DELETE FROM SUPPLIER 
-            WHERE supplier_id = :supplier_id`,
-      [supplier_id],
-      { autoCommit: true }
-    );
-    return result.rowsAffected > 0;
-  }).catch(() => {
-    return [];
+  return await withSupabase(async (supabase) => {
+    const { error } = await supabase
+      .from("SUPPLIER")
+      .delete()
+      .eq("supplier_id", supplier_id);
+    if (error) {
+      console.error("Error deleting supplier:", error);
+      return false;
+    }
+    return true;
+  }).catch((err) => {
+    console.error("Error deleting supplier:", err);
+    return false;
   });
 }
 

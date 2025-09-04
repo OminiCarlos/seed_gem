@@ -1,91 +1,79 @@
-const oracledb = require("oracledb");
-const { withOracleDB } = require("../appService.js");
+const { withSupabase } = require("../appService.js");
 
 // Add new services below
+// Table creation/reset should be managed in Supabase dashboard.
 async function resetSoilConditionsTable() {
-  return await withOracleDB(async (connection) => {
-    try {
-      // Drop the existing table
-      await connection.execute(`DROP TABLE SOIL_CONDITIONS`);
-    } catch (err) {
-      console.log("Table might not exist, proceeding to create...");
-    }
-
-    const result = await connection.execute(
-      // Create the SOIL_CONDITIONS table
-      `CREATE TABLE Soil_condition (
-            soil_type VARCHAR(50) PRIMARY KEY,
-            pH NUMBER(5, 2),
-            organic_matter_concentration NUMBER(5, 2)
-        `
-    );
-
-    console.log("SOIL_CONDITIONS table created successfully!");
-    return true;
-  }).catch(() => {
-    return false;
-  });
+  console.log("Table creation/reset should be managed in Supabase dashboard.");
+  return false;
 }
 
 async function insertSoilCondition(soil_type, ph, organic_matter) {
-  return await withOracleDB(async (connection) => {
-    const result = await connection.execute(
-      // Insert a new soil condition entry
-      `INSERT INTO SOIL_CONDITION (soil_type, ph, organic_matter_concentration) 
-                        VALUES (:soil_type, :ph, :organic_matter_concentration)`,
-      [soil_type, ph, organic_matter],
-      { autoCommit: true }
-    );
-
-    return result.rowsAffected && result.rowsAffected > 0;
-  }).catch(() => {
+  return await withSupabase(async (supabase) => {
+    const { error } = await supabase.from("Soil_condition").insert([
+      {
+        soil_type,
+        pH: ph,
+        organic_matter_concentration: organic_matter,
+      },
+    ]);
+    if (error) {
+      console.error("Error inserting soil condition:", error);
+      return false;
+    }
+    return true;
+  }).catch((err) => {
+    console.error("Error inserting soil condition:", err);
     return false;
   });
 }
 
 async function fetchSoilConditionsFromDb() {
-  return await withOracleDB(async (connection) => {
-    const result = await connection.execute(`
-      SELECT soil_type, pH, organic_matter_concentration
-      FROM SOIL_CONDITION
-    `);
-
-    return result.rows;
-  }).catch(() => {
+  return await withSupabase(async (supabase) => {
+    const { data, error } = await supabase
+      .from("Soil_condition")
+      .select("soil_type, pH, organic_matter_concentration");
+    if (error) {
+      console.error("Error fetching soil conditions:", error);
+      return [];
+    }
+    return data || [];
+  }).catch((err) => {
+    console.error("Error fetching soil conditions:", err);
     return [];
   });
 }
 
 async function updateSoilCondition(soil_type, ph, organic_matter) {
-  return await withOracleDB(async (connection) => {
-    const result = await connection.execute(
-      // Update the soil condition entry
-      `UPDATE SOIL_CONDITION 
-         SET ph = :ph, organic_matter_concentration = :organic_matter
-         WHERE soil_type = :soil_type`,
-      [ph, organic_matter, soil_type],
-      { autoCommit: true }
-    );
-
-    return result.rowsAffected && result.rowsAffected > 0;
-  }).catch(() => {
+  return await withSupabase(async (supabase) => {
+    const { error } = await supabase
+      .from("Soil_condition")
+      .update({ pH: ph, organic_matter_concentration: organic_matter })
+      .eq("soil_type", soil_type);
+    if (error) {
+      console.error("Error updating soil condition:", error);
+      return false;
+    }
+    return true;
+  }).catch((err) => {
+    console.error("Error updating soil condition:", err);
     return false;
   });
 }
 
 async function deleteSoilCondition(soil_type) {
-  return await withOracleDB(async (connection) => {
-    const result = await connection.execute(
-      // Delete the soil condition entry
-      `DELETE FROM SOIL_CONDITION 
-         WHERE soil_type = :soil_type`,
-      [soil_type],
-      { autoCommit: true }
-    );
-
-    return result.rowsAffected > 0;
-  }).catch(() => {
-    return [];
+  return await withSupabase(async (supabase) => {
+    const { error } = await supabase
+      .from("Soil_condition")
+      .delete()
+      .eq("soil_type", soil_type);
+    if (error) {
+      console.error("Error deleting soil condition:", error);
+      return false;
+    }
+    return true;
+  }).catch((err) => {
+    console.error("Error deleting soil condition:", err);
+    return false;
   });
 }
 
@@ -102,26 +90,31 @@ async function deleteSoilCondition(soil_type) {
 //   });
 // }
 
-async function filterSoilConditions(conditions) {
-  return await withOracleDB(async (connection) => {
-    const query = `SELECT soil_type, pH, organic_matter_concentration
-                   FROM Soil_condition
-                   WHERE ${conditions}`;
-    const result = await connection.execute(query);
-    return result.rows;
-  }).catch((error) => {
-    console.error("Error filtering soil conditions:", error);
-    throw error; // Rethrow the error to be handled in the controller
+async function filterSoilConditions(filters) {
+  return await withSupabase(async (supabase) => {
+    let query = supabase
+      .from("Soil_condition")
+      .select("soil_type, pH, organic_matter_concentration");
+    if (filters && typeof filters === "object") {
+      Object.entries(filters).forEach(([key, value]) => {
+        query = query.eq(key, value);
+      });
+    }
+    const { data, error } = await query;
+    if (error) {
+      console.error("Error filtering soil conditions:", error);
+      throw error;
+    }
+    return data || [];
   });
 }
 
-
 module.exports = {
-  resetSoilConditionsTable: resetSoilConditionsTable,
-  insertSoilCondition: insertSoilCondition,
-  fetchSoilConditionsFromDb: fetchSoilConditionsFromDb,
-  updateSoilCondition: updateSoilCondition,
-  deleteSoilCondition: deleteSoilCondition,
-  filterSoilConditions: filterSoilConditions,
-//   countSoilConditions: countSoilConditions,
+  resetSoilConditionsTable,
+  insertSoilCondition,
+  fetchSoilConditionsFromDb,
+  updateSoilCondition,
+  deleteSoilCondition,
+  filterSoilConditions,
+  // countSoilConditions,
 };

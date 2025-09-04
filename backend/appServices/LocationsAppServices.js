@@ -1,4 +1,4 @@
-const { supabase, withSupabase } = require("../appService");
+const { withSupabase } = require("../appService");
 
 // adding new services from here!
 async function initiateDemotable() {

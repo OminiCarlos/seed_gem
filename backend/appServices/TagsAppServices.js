@@ -1,91 +1,62 @@
-const oracledb = require("oracledb");
-const { withOracleDB } = require("../appService.js");
+const { withSupabase } = require("../appService.js");
 
 // above should be unchanged
 
 // adding new services from here!
 
 async function fetchDemotableFromDb() {
-  return await withOracleDB(async (connection) => {
-    const result = await connection.execute(
-      `SELECT * 
-       FROM TAG`
-    ); // replace with a join sql statement
-    return result.rows;
-  }).catch(() => {
+  return await withSupabase(async (supabase) => {
+    const { data, error } = await supabase.from("TAG").select("*");
+    if (error) {
+      console.error("Error fetching tags:", error);
+      return [];
+    }
+    return data || [];
+  }).catch((err) => {
+    console.error("Error fetching tags:", err);
     return [];
   });
 }
 
+// Table creation/reset should be managed in Supabase dashboard.
 async function initiateDemotable() {
-  return await withOracleDB(async (connection) => {
-    try {
-      // change the table name to drop.
-      await connection.execute(`DROP TABLE TAG`);
-    } catch (err) {
-      // put the respective table name to help debugging.
-      console.log("Tag Table might not exist, proceeding to create...");
-    }
-
-    const result = await connection.execute(
-      // change the table name and field. The order of field names follows that in seed_gem.sql
-      `
-      CREATE TABLE TAG (
-          tag VARCHAR(50) PRIMARY KEY
-      )
-      `
-    );
-    // change this to your table name
-    console.log("Tag table created successfully!");
-    return true;
-  }).catch(() => {
-    return false;
-  });
+  console.log("Table creation/reset should be managed in Supabase dashboard.");
+  return false;
 }
 
-// 
-async function insertDemotable(
-  // change these to the attributes in your table.
-  tag
-) {
-  return await withOracleDB(async (connection) => {
-    const result = await connection.execute(
-      // change the attributes and the variable names.
-      `INSERT INTO TAG (
-      tag)
-      VALUES (
-        :tag
-      )`,
-      // these are the data you passed in. 
-      [tag],
-      { autoCommit: true }
-    );
-
-    return result.rowsAffected && result.rowsAffected > 0;
-  }).catch(() => {
+//
+async function insertDemotable(tag) {
+  return await withSupabase(async (supabase) => {
+    const { error } = await supabase.from("TAG").insert([{ tag }]);
+    if (error) {
+      console.error("Error inserting tag:", error);
+      return false;
+    }
+    return true;
+  }).catch((err) => {
+    console.error("Error inserting tag:", err);
     return false;
   });
 }
 
 async function deleteDemotable(tag) {
-  console.log("got to delete tag.")
-  return await withOracleDB(async (connection) => {
-    const result = await connection.execute(
-      // replace with the query in your table. 
-       `DELETE FROM TAG 
-        WHERE tag = :tag`,
-      [tag],
-      { autoCommit: true }
-    );
-    return result.rowsAffected > 0;
-  }).catch(() => {
-    return [];
+  console.log("got to delete tag.");
+  return await withSupabase(async (supabase) => {
+    const { error } = await supabase.from("TAG").delete().eq("tag", tag);
+    if (error) {
+      console.error("Error deleting tag:", error);
+      return false;
+    }
+    return true;
+  }).catch((err) => {
+    console.error("Error deleting tag:", err);
+    return false;
   });
 }
 
 module.exports = {
-  initiateDemotable: initiateDemotable,
-  insertDemotable: insertDemotable,
-  fetchDemotableFromDb: fetchDemotableFromDb,
-  deleteDemotable: deleteDemotable,
+  initiateDemotable,
+  insertDemotable,
+  fetchDemotableFromDb,
+  deleteDemotable,
 };
